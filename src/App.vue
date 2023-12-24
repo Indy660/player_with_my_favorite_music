@@ -31,13 +31,17 @@ export default defineComponent({
     const isRandomTracks: Ref<boolean> = ref(false)
 
     const pathToCurrentFile: ComputedRef<string> = computed(() => {
-      return currentTracks.value[currentTrackIndex.value]
+      return currentTracks.value[currentTrackIndex.value] || ''
     })
 
     const fullSongName: ComputedRef<string> = computed(() => {
-      const indexLastSlash: number = pathToCurrentFile.value.lastIndexOf('/')
-      const dotIndex: number = pathToCurrentFile.value.lastIndexOf('.')
-      return pathToCurrentFile.value.substring(indexLastSlash + 1, dotIndex)
+      const indexLastSlash: number | undefined = pathToCurrentFile.value?.lastIndexOf('/')
+      const dotIndex: number | undefined = pathToCurrentFile.value?.lastIndexOf('.')
+      return (
+        (pathToCurrentFile.value &&
+          pathToCurrentFile.value.substring(indexLastSlash + 1, dotIndex)) ||
+        ''
+      )
     })
 
     const currentTracks: ComputedRef<string[]> = computed(() => {
