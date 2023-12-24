@@ -30,4 +30,4 @@ coverage
 *.tsbuildinfo
 
 # Project exclude paths
-/vite.config.js
+#/vite.config.js

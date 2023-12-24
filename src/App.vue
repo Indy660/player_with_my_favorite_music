@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, onBeforeMount, Ref, ComputedRef, computed } from 'vue'
+import { computed, ComputedRef, defineComponent, onBeforeMount, ref, Ref } from 'vue'
 import MainInfoBand from './components/MainInfoBand.vue'
 import VolumeControl from './components/VolumeControl.vue'
 import ProgressControl from './components/ProgressControl.vue'
@@ -10,6 +10,7 @@ interface CustomAudioElement extends HTMLAudioElement {
   currentRange: number
   duration: number
   volume: number
+  currentTime: number
 }
 
 export default defineComponent({
@@ -21,7 +22,7 @@ export default defineComponent({
     OtherControl
   },
   setup() {
-    const audioPlayer: Ref<HTMLAudioElement | null> = ref(null)
+    const audioPlayer: Ref<CustomAudioElement | null> = ref(null)
     const trackList: Ref<string[]> = ref([])
     const currentTrackIndex: Ref<number> = ref(0)
     const totalNumbSongs: Ref<number> = ref(0)
@@ -71,8 +72,11 @@ export default defineComponent({
     }
 
     const handlerTimeChange = (event: Event) => {
-      audioPlayer.value.currentTime =
-        (Number((event.target as HTMLInputElement).value) / 100) * audioPlayer.value.duration
+      if (audioPlayer.value) {
+        const target = event.target as HTMLInputElement
+        audioPlayer.value!.currentTime =
+          (Number(target.value) / 100) * (audioPlayer.value!.duration || 0)
+      }
     }
 
     const onTimeUpdate = (event: Event) => {
@@ -80,7 +84,7 @@ export default defineComponent({
     }
 
     const setVolume = (value: number) => {
-      audioPlayer.value.volume = value / 100
+      audioPlayer.value!.volume = value / 100
     }
 
     const setTotalTime = (event: Event) => {
