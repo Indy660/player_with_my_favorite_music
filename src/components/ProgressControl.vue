@@ -13,7 +13,7 @@ export default defineComponent({
       default: 0
     }
   },
-  emits: ['timeChange'],
+  emits: ['time-change'],
   setup(props, { emit }) {
     const convertToValue: ComputedRef<number> = computed(() => {
       return (props.currentTime / props.totalTime) * 100
@@ -34,7 +34,7 @@ export default defineComponent({
     }
 
     const timeHandler = (event: Event) => {
-      emit('timeChange', event)
+      emit('time-change', event)
     }
 
     return {

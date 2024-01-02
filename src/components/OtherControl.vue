@@ -16,10 +16,10 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['randomClick'],
+  emits: ['random-click'],
   setup(_, { emit }) {
     function iconClickHandler() {
-      emit('randomClick')
+      emit('random-click')
     }
     return { iconClickHandler }
   }
@@ -28,7 +28,11 @@ export default defineComponent({
 
 <template>
   <div class="other">
-    <i class="fa-solid fa-shuffle" :class="{ isRandomTracks: 'red' }" @click="iconClickHandler"></i>
+    <i
+      class="fa-solid fa-shuffle"
+      :class="{ active: isRandomTracks }"
+      @click="iconClickHandler"
+    ></i>
     <div class="song-display">
       <span>{{ currentNumbSong }}</span
       >/<span> {{ totalNumbSong }}</span>
@@ -36,4 +40,8 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.other .active {
+  color: blue;
+}
+</style>

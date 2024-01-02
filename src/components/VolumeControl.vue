@@ -9,14 +9,14 @@ export default defineComponent({
       default: 80
     }
   },
-  emits: ['volumeChange'],
+  emits: ['volume-change'],
   setup(props, { emit }) {
     const convertToValue = computed(() => {
       return props.volume * 100
     })
 
     function volumeHandler(event: InputEvent) {
-      emit('volumeChange', (event.target as HTMLInputElement).value)
+      emit('volume-change', (event.target as HTMLInputElement).value)
     }
 
     return {

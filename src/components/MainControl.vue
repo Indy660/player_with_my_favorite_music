@@ -8,14 +8,14 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['previous', 'playPause', 'next'],
+  emits: ['previous', 'play-pause', 'next'],
   setup(_, { emit }) {
     function previousButtonHandler() {
       emit('previous')
     }
 
     function playerButtonHandler() {
-      emit('playPause')
+      emit('play-pause')
     }
 
     function nextButtonHandler() {
