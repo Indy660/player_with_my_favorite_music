@@ -37,10 +37,13 @@ export default defineComponent({
 
     const fullSongName: ComputedRef<string> = computed(() => {
       const indexLastSlash: number | undefined = pathToCurrentFile.value?.lastIndexOf('/')
-      const dotIndex: number | undefined = pathToCurrentFile.value?.lastIndexOf('.')
+      const indexSlice: number | undefined =
+        process.env.NODE_ENV === 'production'
+          ? pathToCurrentFile.value?.lastIndexOf('-')
+          : pathToCurrentFile.value?.lastIndexOf('.')
       return (
         (pathToCurrentFile.value &&
-          pathToCurrentFile.value.substring(indexLastSlash + 1, dotIndex)) ||
+          pathToCurrentFile.value.substring(indexLastSlash + 1, indexSlice)) ||
         ''
       )
     })
