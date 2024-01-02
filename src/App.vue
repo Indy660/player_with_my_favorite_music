@@ -124,8 +124,13 @@ export default defineComponent({
     }
 
     const previousTrack = () => {
-      currentTrackIndex.value =
-        (currentTrackIndex.value - 1 + trackList.value.length) % trackList.value.length
+      if (currentTime.value <= 20)
+        currentTrackIndex.value =
+          (currentTrackIndex.value - 1 + trackList.value.length) % trackList.value.length
+      else {
+        // TODO: потенциально ошибка может быть
+        audioPlayer.value!.currentTime = 0
+      }
     }
 
     const handlerRandomBtn = () => {
