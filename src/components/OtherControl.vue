@@ -10,17 +10,28 @@ export default defineComponent({
     totalNumbSong: {
       type: Number,
       default: 0
+    },
+    isRandomTracks: {
+      type: Boolean,
+      default: false
     }
+  },
+  emits: ['randomClick'],
+  setup(_, { emit }) {
+    function iconClickHandler() {
+      emit('randomClick')
+    }
+    return { iconClickHandler }
   }
 })
 </script>
 
 <template>
   <div class="other">
-    <i id="randomModeBtn" class="fa-solid fa-shuffle" @click="$emit('randomClick')"></i>
+    <i class="fa-solid fa-shuffle" :class="{ isRandomTracks: 'red' }" @click="iconClickHandler"></i>
     <div class="song-display">
-      <span id="currentSongNum">{{ currentNumbSong }}</span
-      >/<span id="totalSongsNum"> {{ totalNumbSong }}</span>
+      <span>{{ currentNumbSong }}</span
+      >/<span> {{ totalNumbSong }}</span>
     </div>
   </div>
 </template>

@@ -14,6 +14,7 @@ interface CustomAudioElement extends HTMLAudioElement {
 }
 
 export default defineComponent({
+  name: 'MainComponent',
   components: {
     MainInfoBand,
     VolumeControl,
@@ -72,6 +73,10 @@ export default defineComponent({
     const handlerCanPlay = (event: Event) => {
       setTotalTime(event)
       playTrack()
+    }
+
+    const handlerEnded = () => {
+      nextTrack()
     }
 
     const handlerTimeChange = (event: Event) => {
@@ -140,6 +145,7 @@ export default defineComponent({
       fullSongName,
       currentTracks,
       handlerCanPlay,
+      handlerEnded,
       handlerTimeChange,
       onTimeUpdate,
       setVolume,
@@ -172,6 +178,7 @@ export default defineComponent({
     <OtherControl
       :current-numb-song="currentTrackIndex + 1"
       :total-numb-song="totalNumbSongs"
+      :is-random-tracks="isRandomTracks"
       @random-click="handlerRandomBtn"
     />
     <!--      src="./music/Angel Vivaldi - A Martian Winter.mp3"-->
@@ -183,6 +190,7 @@ export default defineComponent({
       preload="metadata"
       @timeupdate="onTimeUpdate"
       @canplay="handlerCanPlay"
+      @ended="handlerEnded"
     />
   </div>
 </template>

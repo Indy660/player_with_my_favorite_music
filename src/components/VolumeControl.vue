@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
   name: 'MainInfoBand',
@@ -9,6 +9,7 @@ export default defineComponent({
       default: 80
     }
   },
+  emits: ['volumeChange'],
   setup(props, { emit }) {
     const convertToValue = computed(() => {
       return props.volume * 100
@@ -38,7 +39,6 @@ export default defineComponent({
       :value="convertToValue"
       min="0"
       max="100"
-      value="80"
       step="1"
       @input="volumeHandler"
     />

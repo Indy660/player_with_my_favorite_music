@@ -7,24 +7,39 @@ export default defineComponent({
       type: Boolean,
       default: false
     }
+  },
+  emits: ['previous', 'playPause', 'next'],
+  setup(_, { emit }) {
+    function previousButtonHandler() {
+      emit('previous')
+    }
+
+    function playerButtonHandler() {
+      emit('playPause')
+    }
+
+    function nextButtonHandler() {
+      emit('next')
+    }
+
+    return {
+      previousButtonHandler,
+      playerButtonHandler,
+      nextButtonHandler
+    }
   }
 })
 </script>
 
 <template>
   <div class="main-control">
-    <button id="previousBtn" class="player-button" @click="$emit('previous')">
+    <button class="player-button" @click="previousButtonHandler">
       <i class="fas fa-step-backward"></i>
     </button>
-    <button
-      id="playPauseBtn"
-      :class="{ playing: isPlaying }"
-      class="player-button"
-      @click="$emit('playPause')"
-    >
+    <button :class="{ playing: isPlaying }" class="player-button" @click="playerButtonHandler">
       <i class="fas fa-play"></i>
     </button>
-    <button id="nextBtn" class="player-button" @click="$emit('next')">
+    <button class="player-button" @click="nextButtonHandler">
       <i class="fas fa-step-forward"></i>
     </button>
   </div>

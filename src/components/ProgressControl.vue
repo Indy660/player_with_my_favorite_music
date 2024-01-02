@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, computed, ComputedRef } from 'vue'
+import { defineComponent, computed, ComputedRef } from 'vue'
 
 export default defineComponent({
   name: 'ProgressControl',
@@ -13,6 +13,7 @@ export default defineComponent({
       default: 0
     }
   },
+  emits: ['timeChange'],
   setup(props, { emit }) {
     const convertToValue: ComputedRef<number> = computed(() => {
       return (props.currentTime / props.totalTime) * 100

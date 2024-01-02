@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, onBeforeMount, ComputedRef, computed } from 'vue'
+import { defineComponent, ref, onBeforeMount, computed } from 'vue'
 
 export default defineComponent({
   name: 'MainInfoBand',
@@ -17,7 +17,7 @@ export default defineComponent({
       for (const path in images) {
         const imageName = path.replace(/^.*\/(.*)\.\w+$/, '$1')
         imagePaths.value[imageName] = (await images[path]()).default
-        console.log('imagePaths', imagePaths.value)
+        // console.log('imagePaths', imagePaths.value)
       }
     })
 
