@@ -36,7 +36,14 @@ export default defineComponent({
     <button class="player-button" @click="previousButtonHandler">
       <i class="fas fa-step-backward"></i>
     </button>
-    <button :class="{ playing: isPlaying }" class="player-button" @click="playerButtonHandler">
+    <!--    <button class="player-button" @click="playerButtonHandler">-->
+    <!--      <i :class="['fas', !isPlaying ? 'fa-play' : 'fa-pause']"></i>-->
+    <!--    </button>-->
+    <!--    TODO: поправить байн в фонт авсам-->
+    <button v-if="isPlaying" class="player-button" @click="playerButtonHandler">
+      <i class="fas fa-pause"></i>
+    </button>
+    <button v-else class="player-button" @click="playerButtonHandler">
       <i class="fas fa-play"></i>
     </button>
     <button class="player-button" @click="nextButtonHandler">
@@ -59,25 +66,6 @@ export default defineComponent({
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
-
-.player-button i {
-  color: #333;
-}
-
-.player-button.playing i {
-  display: none;
-}
-
-.player-button.playing:after {
-  content: '\f04c';
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
-  color: #333;
-}
-
-.player-button.playing:hover {
-  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .player-button:hover {

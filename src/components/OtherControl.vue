@@ -28,11 +28,7 @@ export default defineComponent({
 
 <template>
   <div class="other">
-    <i
-      class="fa-solid fa-shuffle"
-      :class="{ active: isRandomTracks }"
-      @click="iconClickHandler"
-    ></i>
+    <i class="fas fa-shuffle" :class="{ active: isRandomTracks }" @click="iconClickHandler"></i>
     <div class="song-display">
       <span>{{ currentNumbSong }}</span
       >/<span> {{ totalNumbSong }}</span>
