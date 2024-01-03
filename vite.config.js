@@ -15,6 +15,6 @@ export default defineConfig({
   },
   base:
     process.env.NODE_ENV === "production"
-      ? "/player_with_my_favorite_music_new/"
+      ? "/player_with_my_favorite_music/"
       : "/",
 })
