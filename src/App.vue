@@ -1,5 +1,6 @@
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onBeforeMount, ref, Ref } from 'vue'
+import { computed, ComputedRef, defineComponent, onBeforeMount, ref, Ref, reactive } from 'vue'
+import PageTabs from './components/PageTabs.vue'
 import MainInfoBand from './components/MainInfoBand.vue'
 import VolumeControl from './components/VolumeControl.vue'
 import ProgressControl from './components/ProgressControl.vue'
@@ -16,6 +17,7 @@ interface CustomAudioElement extends HTMLAudioElement {
 export default defineComponent({
   name: 'MainComponent',
   components: {
+    PageTabs,
     MainInfoBand,
     VolumeControl,
     ProgressControl,
@@ -31,6 +33,14 @@ export default defineComponent({
     const currentTime: Ref<number> = ref(0)
     const totalTime: Ref<number> = ref(0)
     const isRandomTracks: Ref<boolean> = ref(false)
+
+    const tabsOption = reactive([
+      { label: 'Вся музыка', id: 1, url: '' },
+      { label: 'Топ', id: 2, url: 'top' },
+      { label: 'Shorts', id: 3, url: 'shorts' }
+    ])
+    const tabSelected: Ref<number> = ref(1)
+    // const tabSelected = reactive(tabsOption[0])
 
     const pathToCurrentFile: ComputedRef<string> = computed(() => {
       return currentTracks.value[currentTrackIndex.value] || ''
@@ -77,6 +87,11 @@ export default defineComponent({
 
     const handlerEnded = () => {
       nextTrack()
+    }
+
+    // TODO: поправить
+    const changeTab = (option: Object) => {
+      tabSelected.value = option.id
     }
 
     const handlerTimeChange = (event: Event) => {
@@ -159,7 +174,10 @@ export default defineComponent({
       togglePlayPause,
       nextTrack,
       previousTrack,
-      handlerRandomBtn
+      handlerRandomBtn,
+      tabsOption,
+      tabSelected,
+      changeTab
     }
   }
 })
@@ -167,6 +185,9 @@ export default defineComponent({
 
 <template>
   <div class="container">
+    <!--   v-model="tabSelected"  -->
+    <!--    @change-tab="changeTab"-->
+    <PageTabs :tab-selected="tabSelected" :tab-options="tabsOption" @change-tab="changeTab" />
     <MainInfoBand :full-song-name="fullSongName" />
     <VolumeControl @volume-change="setVolume" />
     <ProgressControl
