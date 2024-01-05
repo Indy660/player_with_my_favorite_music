@@ -15,6 +15,7 @@ export default defineComponent({
     }
 
     function playerButtonHandler() {
+      console.log('playerButtonHandler')
       emit('play-pause')
     }
 
@@ -37,9 +38,14 @@ export default defineComponent({
       <i class="fas fa-step-backward"></i>
     </button>
     <!--    <button class="player-button" @click="playerButtonHandler">-->
-    <!--      <i :class="['fas', !isPlaying ? 'fa-play' : 'fa-pause']"></i>-->
+    <!--      <template v-if="isPlaying">-->
+    <!--        <i class="fas fa-pause"></i>-->
+    <!--      </template>-->
+    <!--      <template v-else>-->
+    <!--        <i class="fas fa-play"></i>-->
+    <!--      </template>-->
     <!--    </button>-->
-    <!--    TODO: поправить байн в фонт авсам-->
+    <!--    todo: хз почему только нижний вариант работает-->
     <button v-if="isPlaying" class="player-button" @click="playerButtonHandler">
       <i class="fas fa-pause"></i>
     </button>
@@ -57,18 +63,5 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.player-button {
-  font-size: 24px;
-  border-radius: 50%;
-  background-color: #fff;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.player-button:hover {
-  background-color: #ddd;
 }
 </style>

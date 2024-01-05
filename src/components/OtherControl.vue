@@ -14,25 +14,37 @@ export default defineComponent({
     isRandomTracks: {
       type: Boolean,
       default: false
+    },
+    isShowTrackList: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['random-click'],
-  setup(_, { emit }) {
-    function iconClickHandler() {
+  emits: ['random-click', 'show-list-click'],
+  setup(props, { emit }) {
+    function iconClickRandomHandler() {
       emit('random-click')
     }
-    return { iconClickHandler }
+    function iconClickShowListHandler() {
+      emit('show-list-click', event)
+    }
+    return { iconClickRandomHandler, iconClickShowListHandler }
   }
 })
 </script>
 
 <template>
   <div class="other">
-    <i class="fas fa-shuffle" :class="{ active: isRandomTracks }" @click="iconClickHandler"></i>
+    <button @click="iconClickRandomHandler">
+      <i class="fas fa-shuffle" :class="{ active: isRandomTracks }"></i>
+    </button>
     <div class="song-display">
       <span>{{ currentNumbSong }}</span
       >/<span> {{ totalNumbSong }}</span>
     </div>
+    <button @click="iconClickShowListHandler">
+      <i class="fas fa-bars" :class="{ active: isShowTrackList }"></i>
+    </button>
   </div>
 </template>
 

@@ -1,5 +1,6 @@
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, onBeforeMount, ref, Ref, reactive } from 'vue'
+import TrackList from './components/TrackList.vue'
 import PageTabs from './components/PageTabs.vue'
 import MainInfoBand from './components/MainInfoBand.vue'
 import VolumeControl from './components/VolumeControl.vue'
@@ -17,6 +18,7 @@ interface CustomAudioElement extends HTMLAudioElement {
 export default defineComponent({
   name: 'MainComponent',
   components: {
+    TrackList,
     PageTabs,
     MainInfoBand,
     VolumeControl,
@@ -33,6 +35,7 @@ export default defineComponent({
     const currentTime: Ref<number> = ref(0)
     const totalTime: Ref<number> = ref(0)
     const isRandomTracks: Ref<boolean> = ref(false)
+    const isShowTrackList: Ref<boolean> = ref(false)
 
     const tabsOption = reactive([
       { label: 'Вся музыка', id: 1, url: '' },
@@ -151,11 +154,16 @@ export default defineComponent({
     const handlerRandomBtn = () => {
       isRandomTracks.value = !isRandomTracks.value
     }
+    const handlerShowListBtn = () => {
+      isShowTrackList.value = !isShowTrackList.value
+    }
+
+    const handlerSelectTrack = (trackIndex: number) => {
+      currentTrackIndex.value = trackIndex
+    }
 
     return {
       audioPlayer,
-      trackList,
-      currentTrackIndex,
       totalNumbSongs,
       isPlaying,
       currentTime,
@@ -163,7 +171,9 @@ export default defineComponent({
       isRandomTracks,
       pathToCurrentFile,
       fullSongName,
+      trackList,
       currentTracks,
+      currentTrackIndex,
       handlerCanPlay,
       handlerEnded,
       handlerTimeChange,
@@ -175,9 +185,12 @@ export default defineComponent({
       nextTrack,
       previousTrack,
       handlerRandomBtn,
+      handlerShowListBtn,
+      handlerSelectTrack,
       tabsOption,
       tabSelected,
-      changeTab
+      changeTab,
+      isShowTrackList
     }
   }
 })
@@ -185,8 +198,17 @@ export default defineComponent({
 
 <template>
   <div class="container">
-    <!--   v-model="tabSelected"  -->
-    <!--    @change-tab="changeTab"-->
+    <!--    :class="{ padding_top: isShowTrackList }"-->
+    <!--    :class="isShowTrackList ? 'show' : 'hide'"-->
+    <transition name="slide">
+      <TrackList
+        v-show="isShowTrackList"
+        :current-track-index="currentTrackIndex"
+        :current-tracks="currentTracks"
+        class="track_list"
+        @select-track-from-list="handlerSelectTrack"
+      />
+    </transition>
     <PageTabs :tab-selected="tabSelected" :tab-options="tabsOption" @change-tab="changeTab" />
     <MainInfoBand :full-song-name="fullSongName" />
     <VolumeControl @volume-change="setVolume" />
@@ -205,10 +227,10 @@ export default defineComponent({
       :current-numb-song="currentTrackIndex + 1"
       :total-numb-song="totalNumbSongs"
       :is-random-tracks="isRandomTracks"
+      :is-show-track-list="isShowTrackList"
       @random-click="handlerRandomBtn"
+      @show-list-click="handlerShowListBtn"
     />
-    <!--      src="./music/Angel Vivaldi - A Martian Winter.mp3"-->
-    <!--      :src="pathToCurrentFile"-->
     <audio
       id="audioPlayer"
       ref="audioPlayer"
@@ -222,6 +244,21 @@ export default defineComponent({
 </template>
 
 <style lang="css">
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.5s;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateY(-100%);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  transform: translateY(0);
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -236,6 +273,12 @@ body {
   box-sizing: content-box;
 }
 
+.track_list {
+  position: absolute;
+  transition: padding 0.5s;
+  height: 420px;
+}
+
 .container {
   width: 400px;
   border: 1px solid #ccc;
@@ -244,6 +287,8 @@ body {
   background-color: #fff;
   box-sizing: border-box;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
 }
 
 @media screen and (max-width: 400px) {
@@ -270,5 +315,18 @@ input[type='range']::-webkit-slider-thumb {
   background-color: #666;
   border-radius: 50%;
   cursor: pointer;
+}
+
+button {
+  font-size: 24px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ddd;
 }
 </style>

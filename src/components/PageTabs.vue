@@ -46,6 +46,8 @@ export default defineComponent({
   background-color: #f2f2f2;
   border: none;
   padding: 10px 20px;
+  border-radius: initial;
+  font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
