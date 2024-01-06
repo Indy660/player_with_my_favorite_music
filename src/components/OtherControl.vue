@@ -35,20 +35,29 @@ export default defineComponent({
 
 <template>
   <div class="other">
-    <button @click="iconClickRandomHandler">
-      <i class="fas fa-shuffle" :class="{ active: isRandomTracks }"></i>
+    <button :class="{ active: isRandomTracks }" @click="iconClickRandomHandler">
+      <i class="fas fa-shuffle"></i>
     </button>
     <div class="song-display">
       <span>{{ currentNumbSong }}</span
       >/<span> {{ totalNumbSong }}</span>
     </div>
-    <button @click="iconClickShowListHandler">
-      <i class="fas fa-bars" :class="{ active: isShowTrackList }"></i>
+    <!--    todo пофиксить-->
+    <button v-if="isShowTrackList" @click="iconClickShowListHandler">
+      <i class="fas fa-bars fa-rotate-90"></i>
+    </button>
+    <button v-else @click="iconClickShowListHandler">
+      <i class="fas fa-bars"></i>
     </button>
   </div>
 </template>
 
 <style scoped>
+.other {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .other .active {
   color: blue;
 }

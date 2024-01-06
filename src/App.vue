@@ -15,6 +15,34 @@ interface CustomAudioElement extends HTMLAudioElement {
   currentTime: number
 }
 
+interface TopTrack {
+  songName: string
+  sort: number
+  path: string
+}
+
+const TOP_MUSIC = [
+  { songName: 'Between The Buried And Me - Swim To The Moon', sort: 10 },
+  { songName: 'August Burns Red - Barbarian', sort: 20 },
+  { songName: 'Ozoi The Maid, Yakui The Maid - Wonderland', sort: 30 },
+  { songName: 'As I Lay Dying - Nothing Left', sort: 40 },
+  { songName: 'Angel Vivaldi - An Erisian Autumn', sort: 50 },
+  { songName: 'As I Lay Dying - The Sound Оf Truth', sort: 60 },
+  { songName: 'August Burns Red - Your Little Suburbia Is in Ruins', sort: 70 },
+  { songName: 'What Mad Universe - Nebula, My Love', sort: 80 },
+  { songName: 'What Mad Universe - Starborne', sort: 90 },
+  { songName: 'zYnthetic - Abandon All v3', sort: 100 },
+  { songName: 'Children Of Bodom - Are You Dead Yet', sort: 110 },
+  { songName: 'Dragonforce - The Flame of Youth', sort: 120 },
+  { songName: 'In Flames - Clayman', sort: 130 },
+  { songName: 'Psygnosis - Lost in Oblivion', sort: 140 },
+  { songName: 'Raunchy - Twelve Feet Tall', sort: 150 },
+  { songName: 'Rise Of The Northstar - What The Fuck', sort: 160 },
+  { songName: 'What Mad Universe - head of column', sort: 170 },
+  { songName: 'Toundra - Bizancio Byzantium', sort: 180 },
+  { songName: 'Raunchy - Wasteland Discotheque', sort: 190 },
+  { songName: 'Between The Buried And Me - Ants Of The Sky', sort: 200 }
+]
 export default defineComponent({
   name: 'MainComponent',
   components: {
@@ -27,8 +55,24 @@ export default defineComponent({
     OtherControl
   },
   setup() {
+    onBeforeMount(async () => {
+      const music = import.meta.glob('@assets/music/*.mp3')
+      for (const path in music) {
+        const songPath = (await music[path]()).default
+        defaultTrackList.value.push(songPath)
+        TOP_MUSIC.forEach((item) => {
+          if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
+        })
+      }
+
+      totalNumbSongs.value =
+        tabSelected.value === 1 ? topTrackList.value.length : defaultTrackList.value.length
+      audioPlayer.value = document.getElementById('audioPlayer') as CustomAudioElement
+    })
+
     const audioPlayer: Ref<CustomAudioElement | null> = ref(null)
-    const trackList: Ref<string[]> = ref([])
+    const defaultTrackList: Ref<string[]> = ref([])
+    const topTrackList: Ref<TopTrack[]> = ref([])
     const currentTrackIndex: Ref<number> = ref(0)
     const totalNumbSongs: Ref<number> = ref(0)
     const isPlaying: Ref<boolean> = ref(false)
@@ -38,8 +82,8 @@ export default defineComponent({
     const isShowTrackList: Ref<boolean> = ref(false)
 
     const tabsOption = reactive([
-      { label: 'Вся музыка', id: 1, url: '' },
-      { label: 'Топ', id: 2, url: 'top' },
+      { label: 'Top', id: 1, url: '' },
+      { label: 'All music', id: 2, url: 'all' },
       { label: 'Shorts', id: 3, url: 'shorts' }
     ])
     const tabSelected: Ref<number> = ref(1)
@@ -62,42 +106,41 @@ export default defineComponent({
       )
     })
 
-    const currentTracks: ComputedRef<string[]> = computed(() => {
-      return isRandomTracks.value ? getRandomTracks() : trackList.value
+    // TODO: totalNumbSongs нужно фиксить
+    const tracksByTab: ComputedRef<string[]> = computed(() => {
+      return tabSelected.value === 1
+        ? [...topTrackList.value].sort((a, b) => a.sort - b.sort).map((item) => item.path)
+        : defaultTrackList.value
     })
 
-    const getRandomTracks = (): string[] => {
-      return trackList.value
+    const currentTracks: ComputedRef<string[]> = computed(() => {
+      return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
+    })
+
+    function getRandomTracks(): string[] {
+      return defaultTrackList.value
         .map((value) => ({ value, sort: Math.random() }))
         .sort((a, b) => a.sort - b.sort)
         .map(({ value }) => value)
     }
 
-    onBeforeMount(async () => {
-      const music = import.meta.glob('@assets/music/*.mp3')
-      //     const music = import.meta.glob('./assets/music/*.mp3');
-      for (const path in music) {
-        trackList.value.push((await music[path]()).default)
-      }
-      totalNumbSongs.value = trackList.value.length
-      audioPlayer.value = document.getElementById('audioPlayer') as CustomAudioElement
-    })
-
-    const handlerCanPlay = (event: Event) => {
+    function handlerCanPlay(event: Event) {
       setTotalTime(event)
       playTrack()
     }
 
-    const handlerEnded = () => {
+    function handlerEnded() {
       nextTrack()
     }
 
     // TODO: поправить
-    const changeTab = (option: Object) => {
+    function changeTab(option: Object) {
       tabSelected.value = option.id
+      currentTrackIndex.value = 0
+      totalNumbSongs.value = currentTracks.value.length
     }
 
-    const handlerTimeChange = (event: Event) => {
+    function handlerTimeChange(event: Event) {
       if (audioPlayer.value) {
         const target = event.target as HTMLInputElement
         audioPlayer.value!.currentTime =
@@ -105,19 +148,19 @@ export default defineComponent({
       }
     }
 
-    const onTimeUpdate = (event: Event) => {
+    function onTimeUpdate(event: Event) {
       currentTime.value = (event.target as HTMLAudioElement).currentTime
     }
 
-    const setVolume = (value: number) => {
+    function setVolume(value: number) {
       audioPlayer.value!.volume = value / 100
     }
 
-    const setTotalTime = (event: Event) => {
+    function setTotalTime(event: Event) {
       totalTime.value = (event.target as HTMLAudioElement).duration
     }
 
-    const playTrack = () => {
+    function playTrack() {
       if (isPlaying.value) {
         try {
           audioPlayer.value?.play().then((r) => r)
@@ -125,7 +168,7 @@ export default defineComponent({
       }
     }
 
-    const togglePlayPause = () => {
+    function togglePlayPause() {
       isPlaying.value = !isPlaying.value
       if (isPlaying.value) {
         audioPlayer.value?.play().then((r) => r)
@@ -134,31 +177,31 @@ export default defineComponent({
       }
     }
 
-    const nextTrack = () => {
+    function nextTrack() {
       currentTrackIndex.value += 1
-      if (currentTrackIndex.value >= trackList.value.length) {
+      if (currentTrackIndex.value >= currentTracks.value.length) {
         currentTrackIndex.value = 0
       }
     }
 
-    const previousTrack = () => {
+    function previousTrack() {
       if (currentTime.value <= 20)
         currentTrackIndex.value =
-          (currentTrackIndex.value - 1 + trackList.value.length) % trackList.value.length
+          (currentTrackIndex.value - 1 + currentTracks.value.length) % currentTracks.value.length
       else {
         // TODO: потенциально ошибка может быть
         audioPlayer.value!.currentTime = 0
       }
     }
 
-    const handlerRandomBtn = () => {
+    function handlerRandomBtn() {
       isRandomTracks.value = !isRandomTracks.value
     }
-    const handlerShowListBtn = () => {
+    function handlerShowListBtn() {
       isShowTrackList.value = !isShowTrackList.value
     }
 
-    const handlerSelectTrack = (trackIndex: number) => {
+    function handlerSelectTrack(trackIndex: number) {
       currentTrackIndex.value = trackIndex
     }
 
@@ -171,7 +214,9 @@ export default defineComponent({
       isRandomTracks,
       pathToCurrentFile,
       fullSongName,
-      trackList,
+      defaultTrackList,
+      topTrackList,
+      tracksByTab,
       currentTracks,
       currentTrackIndex,
       handlerCanPlay,
@@ -200,6 +245,7 @@ export default defineComponent({
   <div class="container">
     <!--    :class="{ padding_top: isShowTrackList }"-->
     <!--    :class="isShowTrackList ? 'show' : 'hide'"-->
+    <!--    TODO: не работает анимация -->
     <transition name="slide">
       <TrackList
         v-show="isShowTrackList"
@@ -308,12 +354,6 @@ input[type='range'] {
   background-color: #ddd;
   border-radius: 2px;
   outline: none;
-}
-input[type='range']::-webkit-slider-thumb {
-  width: 12px;
-  height: 12px;
-  background-color: #666;
-  border-radius: 50%;
   cursor: pointer;
 }
 

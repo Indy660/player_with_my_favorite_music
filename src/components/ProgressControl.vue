@@ -33,7 +33,7 @@ export default defineComponent({
       return `${minutes}:${String(seconds).padStart(2, '0')}`
     }
 
-    const timeHandler = (event: Event) => {
+    function timeHandler(event: Event) {
       emit('time-change', event)
     }
 
