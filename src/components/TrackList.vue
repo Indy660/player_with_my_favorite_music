@@ -68,6 +68,7 @@ export default defineComponent({
 }
 li {
   margin-bottom: 5px;
+  cursor: pointer;
 }
 li:hover {
   background-color: rgb(0 22 255 / 10%);

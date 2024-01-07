@@ -33,16 +33,20 @@ const TOP_MUSIC = [
   { songName: 'What Mad Universe - Starborne', sort: 90 },
   { songName: 'zYnthetic - Abandon All v3', sort: 100 },
   { songName: 'Children Of Bodom - Are You Dead Yet', sort: 110 },
+  { songName: 'Ozoi The Maid, Yakui The Maid - Lanterns', sort: 111 },
   { songName: 'Dragonforce - The Flame of Youth', sort: 120 },
   { songName: 'In Flames - Clayman', sort: 130 },
   { songName: 'Psygnosis - Lost in Oblivion', sort: 140 },
+  { songName: 'August Burns Red - Indonesia', sort: 141 },
+  { songName: 'August Burns Red - A Shot Below The Belt', sort: 142 },
   { songName: 'Raunchy - Twelve Feet Tall', sort: 150 },
   { songName: 'Rise Of The Northstar - What The Fuck', sort: 160 },
   { songName: 'What Mad Universe - head of column', sort: 170 },
   { songName: 'Toundra - Bizancio Byzantium', sort: 180 },
   { songName: 'Raunchy - Wasteland Discotheque', sort: 190 },
   { songName: 'Between The Buried And Me - Ants Of The Sky', sort: 200 },
-  { songName: 'In The Constellation Of The Black Widow', sort: 210 }
+  { songName: 'As I Lay Dying - Forever', sort: 210 },
+  { songName: 'In The Constellation Of The Black Widow', sort: 220 }
 ]
 export default defineComponent({
   name: 'MainComponent',
@@ -66,8 +70,7 @@ export default defineComponent({
         })
       }
 
-      totalNumbSongs.value =
-        tabSelected.value === 1 ? topTrackList.value.length : defaultTrackList.value.length
+      totalNumbSongs.value = currentTracks.value.length
       audioPlayer.value = document.getElementById('audioPlayer') as CustomAudioElement
     })
 
@@ -88,7 +91,6 @@ export default defineComponent({
       // { label: 'Shorts', id: 3, url: 'shorts' }
     ])
     const tabSelected: Ref<number> = ref(1)
-    // const tabSelected = reactive(tabsOption[0])
 
     const pathToCurrentFile: ComputedRef<string> = computed(() => {
       return currentTracks.value[currentTrackIndex.value] || ''
@@ -248,9 +250,6 @@ export default defineComponent({
 <template>
   <main @click="isShowTrackList = false">
     <div class="container">
-      <!--    :class="{ padding_top: isShowTrackList }"-->
-      <!--    :class="isShowTrackList ? 'show' : 'hide'"-->
-      <!--    TODO: не работает анимация -->
       <transition name="slide">
         <TrackList
           v-show="isShowTrackList"
