@@ -42,11 +42,15 @@ export default defineComponent({
       <span>{{ currentNumbSong }}</span
       >/<span> {{ totalNumbSong }}</span>
     </div>
-    <!--    todo пофиксить-->
-    <button v-if="isShowTrackList" @click="iconClickShowListHandler">
+    <!--    todo пофиксить но хз как-->
+    <button
+      v-if="isShowTrackList"
+      :class="{ active: isShowTrackList }"
+      @click="iconClickShowListHandler"
+    >
       <i class="fas fa-bars fa-rotate-90"></i>
     </button>
-    <button v-else @click="iconClickShowListHandler">
+    <button v-else @click.stop="iconClickShowListHandler">
       <i class="fas fa-bars"></i>
     </button>
   </div>
@@ -59,6 +63,6 @@ export default defineComponent({
   align-items: center;
 }
 .other .active {
-  color: blue;
+  color: #0016ff;
 }
 </style>

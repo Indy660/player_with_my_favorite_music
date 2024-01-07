@@ -41,29 +41,35 @@ export default defineComponent({
 
 <template>
   <div>
-    <!--    <button @click="toggleSidebar">Toggle Sidebar</button>-->
-    <div class="sidebar">
-      <div
+    <ul class="sidebar" @click.stop>
+      <li
         v-for="(track, index) in currentTracksWithCorrectNames"
         :key="index"
-        :style="index === currentTrackIndex ? 'background-color: green' : ''"
+        :style="index === currentTrackIndex ? 'background-color:  rgb(0 22 255 / 30%)' : ''"
         @click="selectTrackFromList(index)"
       >
         {{ index + 1 }}. {{ track }}
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </template>
 
 <style scoped>
 .sidebar {
   background-color: #f2f2f2;
-  border: 1px solid #ccc;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   overflow-y: auto;
   z-index: 2;
+  list-style-type: none;
+  margin: 0;
+  padding: 10px 5px;
+  text-align: start;
+}
+li {
+  margin-bottom: 5px;
+}
+li:hover {
+  background-color: rgb(0 22 255 / 10%);
 }
 </style>

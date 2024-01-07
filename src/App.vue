@@ -41,7 +41,8 @@ const TOP_MUSIC = [
   { songName: 'What Mad Universe - head of column', sort: 170 },
   { songName: 'Toundra - Bizancio Byzantium', sort: 180 },
   { songName: 'Raunchy - Wasteland Discotheque', sort: 190 },
-  { songName: 'Between The Buried And Me - Ants Of The Sky', sort: 200 }
+  { songName: 'Between The Buried And Me - Ants Of The Sky', sort: 200 },
+  { songName: 'In The Constellation Of The Black Widow', sort: 210 }
 ]
 export default defineComponent({
   name: 'MainComponent',
@@ -82,9 +83,9 @@ export default defineComponent({
     const isShowTrackList: Ref<boolean> = ref(false)
 
     const tabsOption = reactive([
-      { label: 'Top', id: 1, url: '' },
-      { label: 'All music', id: 2, url: 'all' },
-      { label: 'Shorts', id: 3, url: 'shorts' }
+      { label: 'All music', id: 1, url: 'all' },
+      { label: 'Top', id: 2, url: '' }
+      // { label: 'Shorts', id: 3, url: 'shorts' }
     ])
     const tabSelected: Ref<number> = ref(1)
     // const tabSelected = reactive(tabsOption[0])
@@ -108,7 +109,7 @@ export default defineComponent({
 
     // TODO: totalNumbSongs нужно фиксить
     const tracksByTab: ComputedRef<string[]> = computed(() => {
-      return tabSelected.value === 1
+      return tabSelected.value === 2
         ? [...topTrackList.value].sort((a, b) => a.sort - b.sort).map((item) => item.path)
         : defaultTrackList.value
     })
@@ -201,6 +202,9 @@ export default defineComponent({
       isShowTrackList.value = !isShowTrackList.value
     }
 
+    // const table = this.$refs?.tableWrapper?.$el
+    // table.getBoundingClientRect().top
+
     function handlerSelectTrack(trackIndex: number) {
       currentTrackIndex.value = trackIndex
     }
@@ -242,90 +246,74 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="container">
-    <!--    :class="{ padding_top: isShowTrackList }"-->
-    <!--    :class="isShowTrackList ? 'show' : 'hide'"-->
-    <!--    TODO: не работает анимация -->
-    <transition name="slide">
-      <TrackList
-        v-show="isShowTrackList"
-        :current-track-index="currentTrackIndex"
-        :current-tracks="currentTracks"
-        class="track_list"
-        @select-track-from-list="handlerSelectTrack"
+  <main @click="isShowTrackList = false">
+    <div class="container">
+      <!--    :class="{ padding_top: isShowTrackList }"-->
+      <!--    :class="isShowTrackList ? 'show' : 'hide'"-->
+      <!--    TODO: не работает анимация -->
+      <transition name="slide">
+        <TrackList
+          v-show="isShowTrackList"
+          :current-track-index="currentTrackIndex"
+          :current-tracks="currentTracks"
+          class="track_list"
+          @select-track-from-list="handlerSelectTrack"
+        />
+      </transition>
+      <PageTabs :tab-selected="tabSelected" :tab-options="tabsOption" @change-tab="changeTab" />
+      <MainInfoBand :full-song-name="fullSongName" />
+      <VolumeControl @volume-change="setVolume" />
+      <ProgressControl
+        :current-time="currentTime"
+        :total-time="totalTime"
+        @time-change="handlerTimeChange"
       />
-    </transition>
-    <PageTabs :tab-selected="tabSelected" :tab-options="tabsOption" @change-tab="changeTab" />
-    <MainInfoBand :full-song-name="fullSongName" />
-    <VolumeControl @volume-change="setVolume" />
-    <ProgressControl
-      :current-time="currentTime"
-      :total-time="totalTime"
-      @time-change="handlerTimeChange"
-    />
-    <MainControl
-      :is-playing="isPlaying"
-      @previous="previousTrack"
-      @next="nextTrack"
-      @play-pause="togglePlayPause"
-    />
-    <OtherControl
-      :current-numb-song="currentTrackIndex + 1"
-      :total-numb-song="totalNumbSongs"
-      :is-random-tracks="isRandomTracks"
-      :is-show-track-list="isShowTrackList"
-      @random-click="handlerRandomBtn"
-      @show-list-click="handlerShowListBtn"
-    />
-    <audio
-      id="audioPlayer"
-      ref="audioPlayer"
-      :src="pathToCurrentFile"
-      preload="metadata"
-      @timeupdate="onTimeUpdate"
-      @canplay="handlerCanPlay"
-      @ended="handlerEnded"
-    />
-  </div>
+      <MainControl
+        :is-playing="isPlaying"
+        @previous="previousTrack"
+        @next="nextTrack"
+        @play-pause="togglePlayPause"
+      />
+      <OtherControl
+        :current-numb-song="currentTrackIndex + 1"
+        :total-numb-song="totalNumbSongs"
+        :is-random-tracks="isRandomTracks"
+        :is-show-track-list="isShowTrackList"
+        @random-click="handlerRandomBtn"
+        @show-list-click="handlerShowListBtn"
+      />
+      <audio
+        id="audioPlayer"
+        ref="audioPlayer"
+        :src="pathToCurrentFile"
+        preload="metadata"
+        @timeupdate="onTimeUpdate"
+        @canplay="handlerCanPlay"
+        @ended="handlerEnded"
+      />
+    </div>
+  </main>
 </template>
 
 <style lang="css">
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.5s;
-}
-
-.slide-enter-from,
-.slide-leave-to {
-  transform: translateY(-100%);
-}
-
-.slide-enter-to,
-.slide-leave-from {
-  transform: translateY(0);
-}
-
 body {
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+main {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   text-align: center;
-  background-color: #f7f7f7;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: content-box;
-}
-
-.track_list {
-  position: absolute;
-  transition: padding 0.5s;
-  height: 420px;
-}
-
-.container {
   width: 400px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -333,8 +321,8 @@ body {
   background-color: #fff;
   box-sizing: border-box;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 400px) {
@@ -346,14 +334,22 @@ body {
 
 .container > * {
   margin-bottom: 10px;
+  width: 100%;
+}
+
+.track_list {
+  position: absolute;
+  transition: padding 0.5s;
+  /*todo можно переделать на getBoundingClientRect().top */
+  height: 435px;
+  top: 0;
+  left: 0;
 }
 
 input[type='range'] {
   width: 100%;
   height: 5px;
-  background-color: #ddd;
   border-radius: 2px;
-  outline: none;
   cursor: pointer;
 }
 
@@ -368,5 +364,21 @@ button {
 
 button:hover {
   background-color: #ddd;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.5s ease;
+}
+
+/*todo: баг, -100% недоконца скрывает*/
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateY(-110%);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  transform: translateY(0);
 }
 </style>
