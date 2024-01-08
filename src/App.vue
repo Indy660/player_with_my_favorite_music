@@ -84,7 +84,6 @@ const NOT_AGGRESSIVE_MUSIC = [
   'What Mad Universe - Nebula My Love',
   'What Mad Universe - Starborne',
   'zYnthetic - Abandon All v3',
-  'Psygnosis - Lost in Oblivion',
   'What Mad Universe - head of column',
   'Toundra - Bizancio Byzantium',
   '1.5 кг Отличного Пюре - Эмо',
@@ -136,7 +135,8 @@ export default defineComponent({
       const actionHandlers = [
         [
           'play',
-          async () => {
+          () => {
+            console.log('play')
             togglePlayPause()
             navigator.mediaSession.playbackState = 'playing'
           }
@@ -144,19 +144,22 @@ export default defineComponent({
         [
           'pause',
           () => {
+            console.log('pause')
             togglePlayPause()
             navigator.mediaSession.playbackState = 'paused'
           }
         ],
         [
           'nexttrack',
-          async () => {
+          () => {
+            console.log('nexttrack')
             nextTrack()
           }
         ],
         [
           'previoustrack',
-          async () => {
+          () => {
+            console.log('previoustrack')
             previousTrack()
           }
         ]
@@ -187,7 +190,7 @@ export default defineComponent({
     const tabsOption = reactive([
       { label: 'All music', id: 1, url: 'all' },
       { label: 'Top', id: 2, url: 'top' },
-      { label: 'Not aggressive', id: 3, url: 'shorts' }
+      { label: 'Not aggressive', id: 3, url: 'not_aggressive' }
       // { label: 'Shorts', id: 4, url: 'shorts' }
     ])
     const tabSelected: Ref<number> = ref(1)
@@ -235,7 +238,9 @@ export default defineComponent({
 
     function handlerCanPlay(event: Event) {
       setTotalTime(event)
-      playTrack()
+      if (isPlaying.value) {
+        playTrack()
+      }
     }
 
     function handlerEnded() {
@@ -270,17 +275,15 @@ export default defineComponent({
     }
 
     function playTrack() {
-      if (isPlaying.value) {
-        try {
-          audioPlayer.value?.play().then((r) => r)
-        } catch (error) {}
-      }
+      try {
+        audioPlayer.value?.play().then((r) => r)
+      } catch (error) {}
     }
 
     function togglePlayPause() {
       isPlaying.value = !isPlaying.value
       if (isPlaying.value) {
-        audioPlayer.value?.play().then((r) => r)
+        playTrack()
       } else {
         audioPlayer.value?.pause()
       }
@@ -315,6 +318,8 @@ export default defineComponent({
 
     function handlerSelectTrack(trackIndex: number) {
       currentTrackIndex.value = trackIndex
+      if (!isPlaying.value) togglePlayPause()
+      else playTrack()
     }
 
     return {

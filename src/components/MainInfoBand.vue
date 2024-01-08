@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, onBeforeMount, computed } from 'vue'
+import { defineComponent, ref, onBeforeMount, computed, watch } from 'vue'
 
 export default defineComponent({
   name: 'MainInfoBand',
@@ -32,6 +32,46 @@ export default defineComponent({
       const { bandName } = getInfoBand.value
       return imagePaths.value[bandName] || imagePaths.value.default_logo
     })
+
+    watch(
+      () => getLogoImage.value,
+      () => {
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: getInfoBand.value?.songName || '',
+            artist: getInfoBand.value?.bandName || '',
+            artwork: [
+              { src: getLogoImage.value, sizes: '96x96', type: 'image/jpg' },
+              {
+                src: getLogoImage.value,
+                sizes: '128x128',
+                type: 'image/png'
+              },
+              {
+                src: getLogoImage.value,
+                sizes: '192x192',
+                type: 'image/png'
+              },
+              {
+                src: getLogoImage.value,
+                sizes: '256x256',
+                type: 'image/png'
+              },
+              {
+                src: getLogoImage.value,
+                sizes: '384x384',
+                type: 'image/png'
+              },
+              {
+                src: getLogoImage.value,
+                sizes: '512x512',
+                type: 'image/png'
+              }
+            ]
+          })
+        }
+      }
+    )
 
     return { getInfoBand, getLogoImage }
   }
