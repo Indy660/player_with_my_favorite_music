@@ -1,12 +1,8 @@
 <script lang="ts">
-import { defineComponent, computed, ComputedRef } from 'vue'
+import { defineComponent, computed, ComputedRef, watch } from 'vue'
 export default defineComponent({
   name: 'TrackList',
   props: {
-    // showTrackList: {
-    //   type: Boolean,
-    //   required: true
-    // },
     currentTracks: {
       type: Array,
       default: () => []
@@ -22,10 +18,16 @@ export default defineComponent({
       return props.currentTracks?.map((item) => {
         const indexLastSlash: number | undefined = item.lastIndexOf('/')
         const indexSlice: number | undefined =
-          process.env.NODE_ENV === 'production' ? item?.lastIndexOf('-') : item?.lastIndexOf('.')
+          process.env.NODE_ENV === 'production'
+            ? item?.lastIndexOf('.') - 9
+            : item?.lastIndexOf('.')
         return (item && item.substring(indexLastSlash + 1, indexSlice)) || ''
       })
     })
+
+    // watch(props.currentTrackIndex, (index) => {
+    //   console.log(this.$refs?.sidebar, index)
+    // })
 
     function selectTrackFromList(trackIndex: number) {
       emit('select-track-from-list', trackIndex)
@@ -41,11 +43,11 @@ export default defineComponent({
 
 <template>
   <div>
-    <ul class="sidebar" @click.stop>
+    <ul ref="sidebar" class="sidebar" @click.stop>
       <li
         v-for="(track, index) in currentTracksWithCorrectNames"
         :key="index"
-        :style="index === currentTrackIndex ? 'background-color:  rgb(0 22 255 / 30%)' : ''"
+        :class="{ selected: index === currentTrackIndex }"
         @click="selectTrackFromList(index)"
       >
         {{ index + 1 }}. {{ track }}
@@ -69,6 +71,9 @@ export default defineComponent({
 li {
   margin-bottom: 5px;
   cursor: pointer;
+}
+li.selected {
+  background-color: rgb(0 22 255 / 30%);
 }
 li:hover {
   background-color: rgb(0 22 255 / 10%);

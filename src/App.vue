@@ -47,9 +47,10 @@ const TOP_MUSIC = [
   { songName: '1.5 кг Отличного Пюре - Эмо', sort: 181 },
   { songName: 'Raunchy - Wasteland Discotheque', sort: 190 },
   { songName: 'As I Lay Dying - Forever', sort: 210 },
-  { songName: '1.5 кг Отличного Пюре - Эмо', sort: 211 },
+  { songName: 'Siberian Meat Grinder feat Distemper - Пламя в Груди', sort: 211 },
   { songName: 'In The Constellation Of The Black Widow', sort: 220 }
 ]
+// вариант без сортировки, нужен будет прелоадер для лучших
 // const TOP_MUSIC = [
 //   'Between The Buried And Me - Swim To The Moon',
 //   'August Burns Red - Barbarian',
@@ -78,6 +79,29 @@ const TOP_MUSIC = [
 //   'As I Lay Dying - Forever',
 //   'In The Constellation Of The Black Widow'
 // ]
+const NOT_AGGRESSIVE_MUSIC = [
+  'Angel Vivaldi - An Erisian Autumn',
+  'What Mad Universe - Nebula My Love',
+  'What Mad Universe - Starborne',
+  'zYnthetic - Abandon All v3',
+  'Psygnosis - Lost in Oblivion',
+  'What Mad Universe - head of column',
+  'Toundra - Bizancio Byzantium',
+  '1.5 кг Отличного Пюре - Эмо',
+  'August Burns Red - Meridian',
+  'Cosmonauts Day - The Captain',
+  'If These Trees Could Talk - From Roots to Needles',
+  'Long Distance Calling - Black Paper Planes',
+  'Killing Floor OST - Wake',
+  'Psygnosis - Phrase 7',
+  'The Doors - Alabama song',
+  'The Doors - The End',
+  'The Five Stars - Atom Bomb Baby',
+  'URO & .corridoiokraut. - Nappi',
+  'What Mad Universe - head of column',
+  'What Mad Universe - mythical sacred firebird'
+]
+
 export default defineComponent({
   name: 'MainComponent',
   components: {
@@ -101,16 +125,57 @@ export default defineComponent({
         // TOP_MUSIC.forEach((item) => {
         //   if (songPath.includes(item)) topTrackList.value.push(songPath)
         // })
+        NOT_AGGRESSIVE_MUSIC.forEach((item) => {
+          if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
+        })
       }
 
       totalNumbSongs.value = currentTracks.value.length
       audioPlayer.value = document.getElementById('audioPlayer') as CustomAudioElement
+
+      const actionHandlers = [
+        [
+          'play',
+          async () => {
+            togglePlayPause()
+            navigator.mediaSession.playbackState = 'playing'
+          }
+        ],
+        [
+          'pause',
+          () => {
+            togglePlayPause()
+            navigator.mediaSession.playbackState = 'paused'
+          }
+        ],
+        [
+          'nexttrack',
+          async () => {
+            nextTrack()
+          }
+        ],
+        [
+          'previoustrack',
+          async () => {
+            previousTrack()
+          }
+        ]
+      ]
+
+      for (const [action, handler] of actionHandlers) {
+        try {
+          navigator.mediaSession.setActionHandler(action, handler)
+        } catch (error) {
+          console.log(`The media session action "${action}" is not supported yet.`)
+        }
+      }
     })
 
     const audioPlayer: Ref<CustomAudioElement | null> = ref(null)
     const defaultTrackList: Ref<string[]> = ref([])
-    // const topTrackList: Ref<TopTrack[string]> = ref([])
     const topTrackList: Ref<TopTrack[]> = ref([])
+    // const topTrackList: Ref<TopTrack[string]> = ref([])
+    const notAggressiveTrackList: Ref<string[]> = ref([])
     const currentTrackIndex: Ref<number> = ref(0)
     const totalNumbSongs: Ref<number> = ref(0)
     const isPlaying: Ref<boolean> = ref(false)
@@ -121,8 +186,9 @@ export default defineComponent({
 
     const tabsOption = reactive([
       { label: 'All music', id: 1, url: 'all' },
-      { label: 'Top', id: 2, url: '' }
-      // { label: 'Shorts', id: 3, url: 'shorts' }
+      { label: 'Top', id: 2, url: 'top' },
+      { label: 'Not aggressive', id: 3, url: 'shorts' }
+      // { label: 'Shorts', id: 4, url: 'shorts' }
     ])
     const tabSelected: Ref<number> = ref(1)
 
@@ -145,13 +211,16 @@ export default defineComponent({
 
     // TODO: totalNumbSongs нужно фиксить
     const tracksByTab: ComputedRef<string[]> = computed(() => {
-      return tabSelected.value === 2
-        ? [...topTrackList.value].sort((a, b) => a.sort - b.sort).map((item) => item.path)
-        : defaultTrackList.value
+      switch (tabSelected.value) {
+        case 1:
+          return defaultTrackList.value
+        case 2:
+          return [...topTrackList.value].sort((a, b) => a.sort - b.sort).map((item) => item.path)
+        // return topTrackList.value
+        case 3:
+          return notAggressiveTrackList.value
+      }
     })
-    // const tracksByTab: ComputedRef<string[]> = computed(() => {
-    //   return tabSelected.value === 2 ? topTrackList.value : defaultTrackList.value
-    // })
 
     const currentTracks: ComputedRef<string[]> = computed(() => {
       return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
@@ -335,6 +404,8 @@ export default defineComponent({
 body {
   font-family: Arial, sans-serif;
   box-sizing: border-box;
+  overflow: hidden;
+  margin: 0;
 }
 main {
   width: 100vw;
