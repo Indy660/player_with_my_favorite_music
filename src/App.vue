@@ -97,7 +97,6 @@ const NOT_AGGRESSIVE_MUSIC = [
   'The Doors - The End',
   'The Five Stars - Atom Bomb Baby',
   'URO & .corridoiokraut. - Nappi',
-  'What Mad Universe - head of column',
   'What Mad Universe - mythical sacred firebird'
 ]
 
@@ -161,6 +160,13 @@ export default defineComponent({
           () => {
             console.log('previoustrack')
             previousTrack()
+          }
+        ],
+        [
+          'seekto',
+          (e) => {
+            console.log('seekto')
+            audioPlayer.value!.currentTime = e.seekTime
           }
         ]
       ]

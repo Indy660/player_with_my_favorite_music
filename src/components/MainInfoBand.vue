@@ -34,9 +34,9 @@ export default defineComponent({
     })
 
     watch(
-      () => getLogoImage.value,
+      () => props.fullSongName,
       () => {
-        if ('mediaSession' in navigator) {
+        if ('mediaSession' in navigator && getLogoImage.value) {
           navigator.mediaSession.metadata = new MediaMetadata({
             title: getInfoBand.value?.songName || '',
             artist: getInfoBand.value?.bandName || '',
