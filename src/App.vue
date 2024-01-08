@@ -24,16 +24,17 @@ interface TopTrack {
 const TOP_MUSIC = [
   { songName: 'Between The Buried And Me - Swim To The Moon', sort: 10 },
   { songName: 'August Burns Red - Barbarian', sort: 20 },
-  { songName: 'Ozoi The Maid, Yakui The Maid - Wonderland', sort: 30 },
+  { songName: 'Ozoi The Maid Yakui The Maid - Wonderland', sort: 30 },
   { songName: 'As I Lay Dying - Nothing Left', sort: 40 },
   { songName: 'Angel Vivaldi - An Erisian Autumn', sort: 50 },
   { songName: 'As I Lay Dying - The Sound Оf Truth', sort: 60 },
   { songName: 'August Burns Red - Your Little Suburbia Is in Ruins', sort: 70 },
-  { songName: 'What Mad Universe - Nebula, My Love', sort: 80 },
+  { songName: 'What Mad Universe - Nebula My Love', sort: 80 },
   { songName: 'What Mad Universe - Starborne', sort: 90 },
   { songName: 'zYnthetic - Abandon All v3', sort: 100 },
   { songName: 'Children Of Bodom - Are You Dead Yet', sort: 110 },
-  { songName: 'Ozoi The Maid, Yakui The Maid - Lanterns', sort: 111 },
+  { songName: 'Ozoi The Maid Yakui The Maid - Lanterns', sort: 111 },
+  { songName: 'Between The Buried And Me - Ants Of The Sky', sort: 112 },
   { songName: 'Dragonforce - The Flame of Youth', sort: 120 },
   { songName: 'In Flames - Clayman', sort: 130 },
   { songName: 'Psygnosis - Lost in Oblivion', sort: 140 },
@@ -43,11 +44,40 @@ const TOP_MUSIC = [
   { songName: 'Rise Of The Northstar - What The Fuck', sort: 160 },
   { songName: 'What Mad Universe - head of column', sort: 170 },
   { songName: 'Toundra - Bizancio Byzantium', sort: 180 },
+  { songName: '1.5 кг Отличного Пюре - Эмо', sort: 181 },
   { songName: 'Raunchy - Wasteland Discotheque', sort: 190 },
-  { songName: 'Between The Buried And Me - Ants Of The Sky', sort: 200 },
   { songName: 'As I Lay Dying - Forever', sort: 210 },
+  { songName: '1.5 кг Отличного Пюре - Эмо', sort: 211 },
   { songName: 'In The Constellation Of The Black Widow', sort: 220 }
 ]
+// const TOP_MUSIC = [
+//   'Between The Buried And Me - Swim To The Moon',
+//   'August Burns Red - Barbarian',
+//   'Ozoi The Maid Yakui The Maid - Wonderland',
+//   'As I Lay Dying - Nothing Left',
+//   'Angel Vivaldi - An Erisian Autumn',
+//   'As I Lay Dying - The Sound Оf Truth',
+//   'August Burns Red - Your Little Suburbia Is in Ruins',
+//   'What Mad Universe - Nebula My Love',
+//   'What Mad Universe - Starborne',
+//   'zYnthetic - Abandon All v3',
+//   'Children Of Bodom - Are You Dead Yet',
+//   'Ozoi The Maid Yakui The Maid - Lanterns',
+//   'Between The Buried And Me - Ants Of The Sky',
+//   'Dragonforce - The Flame of Youth',
+//   'In Flames - Clayman',
+//   'Psygnosis - Lost in Oblivion',
+//   'August Burns Red - Indonesia',
+//   'August Burns Red - A Shot Below The Belt',
+//   'Raunchy - Twelve Feet Tall',
+//   'Rise Of The Northstar - What The Fuck',
+//   'What Mad Universe - head of column',
+//   'Toundra - Bizancio Byzantium',
+//   '1.5 кг Отличного Пюре - Эмо',
+//   'Raunchy - Wasteland Discotheque',
+//   'As I Lay Dying - Forever',
+//   'In The Constellation Of The Black Widow'
+// ]
 export default defineComponent({
   name: 'MainComponent',
   components: {
@@ -68,6 +98,9 @@ export default defineComponent({
         TOP_MUSIC.forEach((item) => {
           if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
         })
+        // TOP_MUSIC.forEach((item) => {
+        //   if (songPath.includes(item)) topTrackList.value.push(songPath)
+        // })
       }
 
       totalNumbSongs.value = currentTracks.value.length
@@ -76,6 +109,7 @@ export default defineComponent({
 
     const audioPlayer: Ref<CustomAudioElement | null> = ref(null)
     const defaultTrackList: Ref<string[]> = ref([])
+    // const topTrackList: Ref<TopTrack[string]> = ref([])
     const topTrackList: Ref<TopTrack[]> = ref([])
     const currentTrackIndex: Ref<number> = ref(0)
     const totalNumbSongs: Ref<number> = ref(0)
@@ -100,7 +134,7 @@ export default defineComponent({
       const indexLastSlash: number | undefined = pathToCurrentFile.value?.lastIndexOf('/')
       const indexSlice: number | undefined =
         process.env.NODE_ENV === 'production'
-          ? pathToCurrentFile.value?.lastIndexOf('-')
+          ? pathToCurrentFile.value?.lastIndexOf('.') - 9
           : pathToCurrentFile.value?.lastIndexOf('.')
       return (
         (pathToCurrentFile.value &&
@@ -115,6 +149,9 @@ export default defineComponent({
         ? [...topTrackList.value].sort((a, b) => a.sort - b.sort).map((item) => item.path)
         : defaultTrackList.value
     })
+    // const tracksByTab: ComputedRef<string[]> = computed(() => {
+    //   return tabSelected.value === 2 ? topTrackList.value : defaultTrackList.value
+    // })
 
     const currentTracks: ComputedRef<string[]> = computed(() => {
       return isRandomTracks.value ? getRandomTracks() : tracksByTab.value

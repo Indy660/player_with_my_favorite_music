@@ -17,7 +17,6 @@ export default defineComponent({
       for (const path in images) {
         const imageName = path.replace(/^.*\/(.*)\.\w+$/, '$1')
         imagePaths.value[imageName] = (await images[path]()).default
-        // console.log('imagePaths', imagePaths.value)
       }
     })
 

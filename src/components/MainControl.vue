@@ -15,7 +15,6 @@ export default defineComponent({
     }
 
     function playerButtonHandler() {
-      console.log('playerButtonHandler')
       emit('play-pause')
     }
 
