@@ -10,7 +10,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@assets': path.resolve(__dirname, 'src/assets'),
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@public': path.resolve(__dirname, 'public'),
     }
   },
   base:

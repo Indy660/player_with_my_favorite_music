@@ -113,9 +113,20 @@ export default defineComponent({
   },
   setup() {
     onBeforeMount(async () => {
-      const music = import.meta.glob('@assets/music/*.mp3')
+      console.time('test')
+      // const music =
+      //   process.env?.NODE_ENV === 'production'
+      //     ? import.meta.glob('@assets/*.mp3')
+      //     : import.meta.glob('@assets/music/*.mp3')
+      // const music = import.meta.glob('@assets/*.mp3')
+      // const music = import.meta.glob('/public/music/*.mp3')
+      const music = import.meta.glob('@public/music/*.mp3')
+
+      // const music = import.meta.glob('@assets/music/*.mp3')
+      console.log(music)
       for (const path in music) {
-        const songPath = (await music[path]()).default
+        // const songPath = (await music[path]()).default
+        const songPath = path
         defaultTrackList.value.push(songPath)
         TOP_MUSIC.forEach((item) => {
           if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
@@ -127,6 +138,7 @@ export default defineComponent({
           if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
         })
       }
+      console.timeEnd('test')
 
       totalNumbSongs.value = currentTracks.value.length
       audioPlayer.value = document.getElementById('audioPlayer') as CustomAudioElement
@@ -135,7 +147,6 @@ export default defineComponent({
         [
           'play',
           () => {
-            console.log('play')
             togglePlayPause()
             navigator.mediaSession.playbackState = 'playing'
           }
@@ -143,7 +154,6 @@ export default defineComponent({
         [
           'pause',
           () => {
-            console.log('pause')
             togglePlayPause()
             navigator.mediaSession.playbackState = 'paused'
           }
@@ -151,21 +161,18 @@ export default defineComponent({
         [
           'nexttrack',
           () => {
-            console.log('nexttrack')
             nextTrack()
           }
         ],
         [
           'previoustrack',
           () => {
-            console.log('previoustrack')
             previousTrack()
           }
         ],
         [
           'seekto',
           (e) => {
-            console.log('seekto')
             audioPlayer.value!.currentTime = e.seekTime
           }
         ]
