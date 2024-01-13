@@ -73,35 +73,6 @@ const TOP_MUSIC = [
   { songName: 'Siberian Meat Grinder feat Distemper - Пламя в Груди', sort: 211 },
   { songName: 'In The Constellation Of The Black Widow', sort: 220 }
 ]
-// вариант без сортировки, нужен будет прелоадер для лучших
-// const TOP_MUSIC = [
-//   'Between The Buried And Me - Swim To The Moon',
-//   'August Burns Red - Barbarian',
-//   'Ozoi The Maid Yakui The Maid - Wonderland',
-//   'As I Lay Dying - Nothing Left',
-//   'Angel Vivaldi - An Erisian Autumn',
-//   'As I Lay Dying - The Sound Оf Truth',
-//   'August Burns Red - Your Little Suburbia Is in Ruins',
-//   'What Mad Universe - Nebula My Love',
-//   'What Mad Universe - Starborne',
-//   'zYnthetic - Abandon All v3',
-//   'Children Of Bodom - Are You Dead Yet',
-//   'Ozoi The Maid Yakui The Maid - Lanterns',
-//   'Between The Buried And Me - Ants Of The Sky',
-//   'Dragonforce - The Flame of Youth',
-//   'In Flames - Clayman',
-//   'Psygnosis - Lost in Oblivion',
-//   'August Burns Red - Indonesia',
-//   'August Burns Red - A Shot Below The Belt',
-//   'Raunchy - Twelve Feet Tall',
-//   'Rise Of The Northstar - What The Fuck',
-//   'What Mad Universe - head of column',
-//   'Toundra - Bizancio Byzantium',
-//   '1.5 кг Отличного Пюре - Эмо',
-//   'Raunchy - Wasteland Discotheque',
-//   'As I Lay Dying - Forever',
-//   'In The Constellation Of The Black Widow'
-// ]
 const NOT_AGGRESSIVE_MUSIC = [
   'Angel Vivaldi - An Erisian Autumn',
   'What Mad Universe - Nebula My Love',
@@ -143,9 +114,6 @@ export default defineComponent({
         TOP_MUSIC.forEach((item) => {
           if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
         })
-        // TOP_MUSIC.forEach((item) => {
-        //   if (songPath.includes(item)) topTrackList.value.push(songPath)
-        // })
         NOT_AGGRESSIVE_MUSIC.forEach((item) => {
           if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
         })
@@ -158,7 +126,6 @@ export default defineComponent({
         [
           'play',
           () => {
-            console.log('play')
             togglePlayPause()
             navigator.mediaSession.playbackState = 'playing'
           }
@@ -166,7 +133,6 @@ export default defineComponent({
         [
           'pause',
           () => {
-            console.log('pause')
             togglePlayPause()
             navigator.mediaSession.playbackState = 'paused'
           }
@@ -174,21 +140,18 @@ export default defineComponent({
         [
           'nexttrack',
           () => {
-            console.log('nexttrack')
             nextTrack()
           }
         ],
         [
           'previoustrack',
           () => {
-            console.log('previoustrack')
             previousTrack()
           }
         ],
         [
           'seekto',
           (e) => {
-            console.log('seekto')
             audioPlayer.value!.currentTime = e.seekTime
           }
         ]
@@ -206,12 +169,12 @@ export default defineComponent({
     const audioPlayer: Ref<CustomAudioElement | null> = ref(null)
     const defaultTrackList: Ref<string[]> = ref([])
     const topTrackList: Ref<TopTrack[]> = ref([])
-    // const topTrackList: Ref<TopTrack[string]> = ref([])
     const notAggressiveTrackList: Ref<string[]> = ref([])
     const currentTrackIndex: Ref<number> = ref(0)
     const totalNumbSongs: Ref<number> = ref(0)
     const isPlaying: Ref<boolean> = ref(false)
     const currentTime: Ref<number> = ref(0)
+    const volume: Ref<number> = ref(80)
     const totalTime: Ref<number> = ref(0)
     const isRandomTracks: Ref<boolean> = ref(false)
     const isShowTrackList: Ref<boolean> = ref(false)
@@ -267,7 +230,6 @@ export default defineComponent({
       for (let i = 0; i < currentBestParties.length; i++) {
         const currentBestParty = currentBestParties[i]
         // start song
-        //   && time <= currentBestParty.end
         if (time < currentBestParty.start) {
           console.log('start')
           audioPlayer.value!.currentTime = currentBestParty.start
@@ -335,6 +297,10 @@ export default defineComponent({
       currentTime.value = (event.target as HTMLAudioElement).currentTime
     }
 
+    function onVolumeUpdate(event: Event) {
+      volume.value = (event.target as HTMLAudioElement).volume
+    }
+
     function setVolume(value: number) {
       audioPlayer.value!.volume = value / 100
     }
@@ -396,6 +362,8 @@ export default defineComponent({
       totalNumbSongs,
       isPlaying,
       currentTime,
+      volume,
+      onVolumeUpdate,
       totalTime,
       isRandomTracks,
       pathToCurrentFile,
@@ -442,7 +410,7 @@ export default defineComponent({
       </transition>
       <PageTabs :tab-selected="tabSelected" :tab-options="tabsOption" @change-tab="changeTab" />
       <MainInfoBand :full-song-name="fullSongName" />
-      <VolumeControl @volume-change="setVolume" />
+      <VolumeControl :volume="volume" @volume-change="setVolume" />
       <ProgressControl
         :current-time="currentTime"
         :total-time="totalTime"
@@ -467,6 +435,7 @@ export default defineComponent({
         ref="audioPlayer"
         :src="pathToCurrentFile"
         preload="metadata"
+        @volumechange="onVolumeUpdate"
         @timeupdate="onTimeUpdate"
         @canplay="handlerCanPlay"
         @ended="handlerEnded"
