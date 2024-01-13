@@ -1,5 +1,14 @@
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onBeforeMount, ref, Ref, reactive } from 'vue'
+import {
+  computed,
+  ComputedRef,
+  defineComponent,
+  onBeforeMount,
+  ref,
+  Ref,
+  reactive,
+  watch
+} from 'vue'
 import TrackList from './components/TrackList.vue'
 import PageTabs from './components/PageTabs.vue'
 import MainInfoBand from './components/MainInfoBand.vue'
@@ -22,8 +31,22 @@ interface TopTrack {
 }
 
 const TOP_MUSIC = [
-  { songName: 'Between The Buried And Me - Swim To The Moon', sort: 10 },
-  { songName: 'August Burns Red - Barbarian', sort: 20 },
+  {
+    songName: 'Between The Buried And Me - Swim To The Moon',
+    sort: 10,
+    bestParties: [
+      { start: 53, end: 55 },
+      { start: 83, end: 87 }
+    ]
+  },
+  {
+    songName: 'August Burns Red - Barbarian',
+    sort: 20,
+    bestParties: [
+      { start: 53, end: 67.7 },
+      { start: 83, end: 97.7 }
+    ]
+  },
   { songName: 'Ozoi The Maid Yakui The Maid - Wonderland', sort: 30 },
   { songName: 'As I Lay Dying - Nothing Left', sort: 40 },
   { songName: 'Angel Vivaldi - An Erisian Autumn', sort: 50 },
@@ -196,10 +219,10 @@ export default defineComponent({
     const tabsOption = reactive([
       { label: 'All music', id: 1, url: 'all' },
       { label: 'Top', id: 2, url: 'top' },
-      { label: 'Not aggressive', id: 3, url: 'not_aggressive' }
-      // { label: 'Shorts', id: 4, url: 'shorts' }
+      { label: 'Not aggressive', id: 3, url: 'not_aggressive' },
+      { label: 'Shorts', id: 4, url: 'shorts' }
     ])
-    const tabSelected: Ref<number> = ref(1)
+    const tabSelected: Ref<number> = ref(4)
 
     const pathToCurrentFile: ComputedRef<string> = computed(() => {
       return currentTracks.value[currentTrackIndex.value] || ''
@@ -218,18 +241,58 @@ export default defineComponent({
       )
     })
 
+    const sortingTopTrackList = computed(() => {
+      return [...topTrackList.value].sort((a, b) => a.sort - b.sort)
+    })
+
     // TODO: totalNumbSongs нужно фиксить
     const tracksByTab: ComputedRef<string[]> = computed(() => {
       switch (tabSelected.value) {
         case 1:
           return defaultTrackList.value
         case 2:
-          return [...topTrackList.value].sort((a, b) => a.sort - b.sort).map((item) => item.path)
-        // return topTrackList.value
+          return sortingTopTrackList.value.map((item) => item.path)
         case 3:
           return notAggressiveTrackList.value
+        case 4:
+          return sortingTopTrackList.value
+            .filter((item) => item?.bestParties)
+            .map((item) => item.path)
       }
     })
+
+    function shortTracksObserver(time) {
+      console.log(time)
+      const currentBestParties = sortingTopTrackList.value[currentTrackIndex.value].bestParties
+      for (let i = 0; i < currentBestParties.length; i++) {
+        const currentBestParty = currentBestParties[i]
+        // start song
+        //   && time <= currentBestParty.end
+        if (time < currentBestParty.start) {
+          console.log('start')
+          audioPlayer.value!.currentTime = currentBestParty.start
+          return
+        } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
+          console.log('continue')
+          return
+        }
+      }
+      console.log('nextTrack')
+      nextTrack()
+    }
+
+    watch(
+      () => currentTime.value,
+      () => {
+        if (tabSelected.value === 4) {
+          shortTracksObserver(currentTime.value)
+        }
+      }
+    )
+    // bestParties: [
+    //   { start: 53, end: 67.7 },
+    //   { start: 83, end: 97.7 }
+    // ]
 
     const currentTracks: ComputedRef<string[]> = computed(() => {
       return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
@@ -303,7 +366,7 @@ export default defineComponent({
     }
 
     function previousTrack() {
-      if (currentTime.value <= 20)
+      if (audioPlayer.value!.currentTime <= 20)
         currentTrackIndex.value =
           (currentTrackIndex.value - 1 + currentTracks.value.length) % currentTracks.value.length
       else {
@@ -339,6 +402,7 @@ export default defineComponent({
       fullSongName,
       defaultTrackList,
       topTrackList,
+      sortingTopTrackList,
       tracksByTab,
       currentTracks,
       currentTrackIndex,
