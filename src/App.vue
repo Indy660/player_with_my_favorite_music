@@ -35,8 +35,10 @@ const TOP_MUSIC = [
     songName: 'Between The Buried And Me - Swim To The Moon',
     sort: 10,
     bestParties: [
-      { start: 53, end: 55 },
-      { start: 83, end: 87 }
+      { start: 53, end: 58 },
+      { start: 83, end: 87 },
+      { start: 101, end: 110 },
+      { start: 121, end: 129 }
     ]
   },
   {
@@ -174,7 +176,7 @@ export default defineComponent({
     const totalNumbSongs: Ref<number> = ref(0)
     const isPlaying: Ref<boolean> = ref(false)
     const currentTime: Ref<number> = ref(0)
-    const volume: Ref<number> = ref(80)
+    const volume: Ref<number> = ref(0.8)
     const totalTime: Ref<number> = ref(0)
     const isRandomTracks: Ref<boolean> = ref(false)
     const isShowTrackList: Ref<boolean> = ref(false)
@@ -224,6 +226,38 @@ export default defineComponent({
       }
     })
 
+    // for 1 loop
+    const isVolumeSlowlyDecrease: Ref<boolean> = ref(false)
+    function changeVolumeSlowly(isDecrease = true) {
+      let steps = 40
+      const stepValue = 0.01
+      if (isDecrease && !isVolumeSlowlyDecrease.value) {
+        isVolumeSlowlyDecrease.value = true
+        const intervalId = setInterval(() => {
+          if (steps >= 0 && volume.value >= 0.2) {
+            const newVolume = (volume.value - stepValue).toFixed(2)
+            console.log(newVolume)
+            steps--
+            audioPlayer.value!.volume = newVolume
+          } else {
+            clearInterval(intervalId)
+          }
+        }, 50)
+      } else {
+        isVolumeSlowlyDecrease.value = false
+        const intervalId = setInterval(() => {
+          if (steps >= 0 && volume.value < 1) {
+            const newVolume = (volume.value + stepValue).toFixed(2)
+            console.log(newVolume)
+            steps--
+            audioPlayer.value!.volume = newVolume
+          } else {
+            clearInterval(intervalId)
+          }
+        }, 100)
+      }
+    }
+
     function shortTracksObserver(time) {
       console.log(time)
       const currentBestParties = sortingTopTrackList.value[currentTrackIndex.value].bestParties
@@ -231,11 +265,15 @@ export default defineComponent({
         const currentBestParty = currentBestParties[i]
         // start song
         if (time < currentBestParty.start) {
+          changeVolumeSlowly(false)
           console.log('start')
           audioPlayer.value!.currentTime = currentBestParty.start
           return
         } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
           console.log('continue')
+          if (time >= currentBestParty.end - 2) {
+            changeVolumeSlowly(true)
+          }
           return
         }
       }
