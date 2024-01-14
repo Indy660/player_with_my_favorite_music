@@ -35,45 +35,186 @@ const TOP_MUSIC = [
     songName: 'Between The Buried And Me - Swim To The Moon',
     sort: 10,
     bestParties: [
-      { start: 53, end: 58 },
-      { start: 83, end: 87 },
-      { start: 101, end: 110 },
-      { start: 121, end: 129 }
+      { start: 135, end: 160 },
+      { start: 500, end: 551 },
+      { start: 980, end: 1022 }
     ]
   },
   {
     songName: 'August Burns Red - Barbarian',
     sort: 20,
     bestParties: [
-      { start: 53, end: 67.7 },
-      { start: 83, end: 97.7 }
+      { start: 21, end: 32 },
+      { start: 70, end: 88 },
+      { start: 113, end: 152 }
     ]
   },
-  { songName: 'Ozoi The Maid Yakui The Maid - Wonderland', sort: 30 },
-  { songName: 'As I Lay Dying - Nothing Left', sort: 40 },
-  { songName: 'Angel Vivaldi - An Erisian Autumn', sort: 50 },
-  { songName: 'As I Lay Dying - The Sound Оf Truth', sort: 60 },
-  { songName: 'August Burns Red - Your Little Suburbia Is in Ruins', sort: 70 },
-  { songName: 'What Mad Universe - Nebula My Love', sort: 80 },
-  { songName: 'What Mad Universe - Starborne', sort: 90 },
-  { songName: 'zYnthetic - Abandon All v3', sort: 100 },
-  { songName: 'Children Of Bodom - Are You Dead Yet', sort: 110 },
-  { songName: 'Ozoi The Maid Yakui The Maid - Lanterns', sort: 111 },
-  { songName: 'Between The Buried And Me - Ants Of The Sky', sort: 112 },
-  { songName: 'Dragonforce - The Flame of Youth', sort: 120 },
-  { songName: 'In Flames - Clayman', sort: 130 },
-  { songName: 'Psygnosis - Lost in Oblivion', sort: 140 },
-  { songName: 'August Burns Red - Indonesia', sort: 141 },
-  { songName: 'August Burns Red - A Shot Below The Belt', sort: 142 },
-  { songName: 'Raunchy - Twelve Feet Tall', sort: 150 },
-  { songName: 'Rise Of The Northstar - What The Fuck', sort: 160 },
-  { songName: 'What Mad Universe - head of column', sort: 170 },
-  { songName: 'Toundra - Bizancio Byzantium', sort: 180 },
-  { songName: '1.5 кг Отличного Пюре - Эмо', sort: 181 },
-  { songName: 'Raunchy - Wasteland Discotheque', sort: 190 },
-  { songName: 'As I Lay Dying - Forever', sort: 210 },
-  { songName: 'Siberian Meat Grinder feat Distemper - Пламя в Груди', sort: 211 },
-  { songName: 'In The Constellation Of The Black Widow', sort: 220 }
+  {
+    songName: 'Ozoi The Maid Yakui The Maid - Wonderland',
+    sort: 30,
+    bestParties: [
+      { start: 115, end: 243 },
+      { start: 355, end: 442 }
+    ]
+  },
+  {
+    songName: 'As I Lay Dying - Nothing Left',
+    sort: 40,
+    bestParties: [{ start: 0, end: 57 }]
+  },
+  {
+    songName: 'Angel Vivaldi - An Erisian Autumn',
+    sort: 50,
+    bestParties: [
+      { start: 78, end: 104 },
+      { start: 246, end: 268 }
+    ]
+  },
+  {
+    songName: 'As I Lay Dying - The Sound Оf Truth',
+    sort: 60,
+    bestParties: [
+      { start: 0, end: 36 },
+      { start: 59, end: 121 }
+    ]
+  },
+  {
+    songName: 'August Burns Red - Your Little Suburbia Is in Ruins',
+    sort: 70,
+    bestParties: [
+      { start: 12, end: 27 },
+      { start: 107, end: 125 },
+      { start: 146, end: 178 }
+    ]
+  },
+  {
+    songName: 'What Mad Universe - Nebula My Love',
+    sort: 80,
+    bestParties: [
+      { start: 162, end: 246 },
+      { start: 260, end: 358 }
+    ]
+  },
+  {
+    songName: 'What Mad Universe - Starborne',
+    sort: 90,
+    bestParties: [
+      { start: 85, end: 105 },
+      { start: 144, end: 185 }
+    ]
+  },
+  {
+    songName: 'zYnthetic - Abandon All v3',
+    sort: 100,
+    bestParties: [
+      { start: 0, end: 30 },
+      { start: 60, end: 89 }
+    ]
+  },
+  {
+    songName: 'Children Of Bodom - Are You Dead Yet',
+    sort: 110,
+    bestParties: [{ start: 82, end: 114 }]
+  },
+  {
+    songName: 'Ozoi The Maid Yakui The Maid - Lanterns',
+    sort: 111,
+    bestParties: [{ start: 146, end: 218 }]
+  },
+  {
+    songName: 'Between The Buried And Me - Ants Of The Sky',
+    sort: 112,
+    bestParties: [{ start: 0, end: 108 }]
+  },
+  {
+    songName: 'Dragonforce - The Flame of Youth',
+    sort: 120,
+    bestParties: [
+      { start: 46, end: 65 },
+      { start: 289, end: 317 }
+    ]
+  },
+  {
+    songName: 'In Flames - Clayman',
+    sort: 130,
+    bestParties: [{ start: 0, end: 21 }]
+  },
+  {
+    songName: 'Psygnosis - Lost in Oblivion',
+    sort: 140,
+    bestParties: [{ start: 292, end: 356 }]
+  },
+  {
+    songName: 'August Burns Red - Indonesia',
+    sort: 141,
+    bestParties: [
+      { start: 84, end: 117 },
+      { start: 161, end: 180 }
+    ]
+  },
+  {
+    songName: 'August Burns Red - A Shot Below The Belt',
+    sort: 142,
+    bestParties: [
+      { start: 0, end: 30 },
+      { start: 90, end: 114 },
+      { start: 164, end: 175 }
+    ]
+  },
+  {
+    songName: 'Raunchy - Twelve Feet Tall',
+    sort: 150,
+    bestParties: [{ start: 65, end: 96 }]
+  },
+  {
+    songName: 'Rise Of The Northstar - What The Fuck',
+    sort: 160,
+    bestParties: [{ start: 45, end: 79 }]
+  },
+  {
+    songName: 'What Mad Universe - head of column',
+    sort: 170,
+    bestParties: [{ start: 30, end: 65 }]
+  },
+  {
+    songName: 'Toundra - Bizancio Byzantium',
+    sort: 180,
+    bestParties: [
+      { start: 127, end: 224 },
+      { start: 406, end: 480 }
+    ]
+  },
+  {
+    songName: '1.5 кг Отличного Пюре - Эмо',
+    sort: 181,
+    bestParties: [{ start: 25, end: 84 }]
+  },
+  {
+    songName: 'Raunchy - Wasteland Discotheque',
+    sort: 190,
+    bestParties: [
+      { start: 0, end: 34 },
+      { start: 63, end: 101 }
+    ]
+  },
+  {
+    songName: 'As I Lay Dying - Forever',
+    sort: 210,
+    bestParties: [{ start: 0, end: 25 }]
+  },
+  {
+    songName: 'Siberian Meat Grinder feat Distemper - Пламя в Груди',
+    sort: 211,
+    bestParties: [{ start: 49, end: 68 }]
+  },
+  {
+    songName: 'In The Constellation Of The Black Widow',
+    sort: 220,
+    bestParties: [
+      { start: 65, end: 85 },
+      { start: 114, end: 141 }
+    ]
+  }
 ]
 const NOT_AGGRESSIVE_MUSIC = [
   'Angel Vivaldi - An Erisian Autumn',
@@ -187,7 +328,7 @@ export default defineComponent({
       { label: 'Not aggressive', id: 3, url: 'not_aggressive' },
       { label: 'Shorts', id: 4, url: 'shorts' }
     ])
-    const tabSelected: Ref<number> = ref(4)
+    const tabSelected: Ref<number> = ref(1)
 
     const pathToCurrentFile: ComputedRef<string> = computed(() => {
       return currentTracks.value[currentTrackIndex.value] || ''
@@ -227,35 +368,35 @@ export default defineComponent({
     })
 
     // for 1 loop
-    const isVolumeSlowlyDecrease: Ref<boolean> = ref(false)
+    // const isVolumeSlowlyDecrease: Ref<boolean> = ref(false)
     function changeVolumeSlowly(isDecrease = true) {
-      let steps = 40
-      const stepValue = 0.01
-      if (isDecrease && !isVolumeSlowlyDecrease.value) {
-        isVolumeSlowlyDecrease.value = true
-        const intervalId = setInterval(() => {
-          if (steps >= 0 && volume.value >= 0.2) {
-            const newVolume = (volume.value - stepValue).toFixed(2)
-            console.log(newVolume)
-            steps--
-            audioPlayer.value!.volume = newVolume
-          } else {
-            clearInterval(intervalId)
-          }
-        }, 50)
-      } else {
-        isVolumeSlowlyDecrease.value = false
-        const intervalId = setInterval(() => {
-          if (steps >= 0 && volume.value < 1) {
-            const newVolume = (volume.value + stepValue).toFixed(2)
-            console.log(newVolume)
-            steps--
-            audioPlayer.value!.volume = newVolume
-          } else {
-            clearInterval(intervalId)
-          }
-        }, 100)
-      }
+      // let steps = 40
+      // const stepValue = 0.01
+      // if (isDecrease && !isVolumeSlowlyDecrease.value) {
+      //   isVolumeSlowlyDecrease.value = true
+      //   const intervalId = setInterval(() => {
+      //     if (steps >= 0 && volume.value >= 0.2) {
+      //       const newVolume = (volume.value - stepValue).toFixed(2)
+      //       console.log(newVolume)
+      //       steps--
+      //       audioPlayer.value!.volume = newVolume
+      //     } else {
+      //       clearInterval(intervalId)
+      //     }
+      //   }, 50)
+      // } else {
+      //   isVolumeSlowlyDecrease.value = false
+      //   const intervalId = setInterval(() => {
+      //     if (steps >= 0 && volume.value < 1) {
+      //       const newVolume = (volume.value + stepValue).toFixed(2)
+      //       console.log(newVolume)
+      //       steps--
+      //       audioPlayer.value!.volume = newVolume
+      //     } else {
+      //       clearInterval(intervalId)
+      //     }
+      //   }, 100)
+      // }
     }
 
     function shortTracksObserver(time) {
@@ -265,14 +406,14 @@ export default defineComponent({
         const currentBestParty = currentBestParties[i]
         // start song
         if (time < currentBestParty.start) {
-          changeVolumeSlowly(false)
+          // changeVolumeSlowly(false)
           console.log('start')
           audioPlayer.value!.currentTime = currentBestParty.start
           return
         } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
           console.log('continue')
           if (time >= currentBestParty.end - 2) {
-            changeVolumeSlowly(true)
+            // changeVolumeSlowly(true)
           }
           return
         }
@@ -370,7 +511,7 @@ export default defineComponent({
     }
 
     function previousTrack() {
-      if (audioPlayer.value!.currentTime <= 20)
+      if (audioPlayer.value!.currentTime <= 20 || tabSelected.value === 4)
         currentTrackIndex.value =
           (currentTrackIndex.value - 1 + currentTracks.value.length) % currentTracks.value.length
       else {
