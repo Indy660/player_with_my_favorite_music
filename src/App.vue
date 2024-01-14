@@ -261,6 +261,33 @@ export default defineComponent({
           if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
         })
       }
+      // TODO: разобраться с загрузкой
+      // console.time('test')
+      // const music =
+      //   process.env?.NODE_ENV === 'production'
+      //     ? import.meta.glob('@assets/*.mp3')
+      //     : import.meta.glob('@assets/music/*.mp3')
+      // // const music = import.meta.glob('@assets/*.mp3')
+      // // const music = import.meta.glob('/public/music/*.mp3')
+      // // const music = import.meta.glob('@public/music/*.mp3')
+      //
+      // // const music = import.meta.glob('@assets/music/*.mp3')
+      // console.log(music)
+      // for (const path in music) {
+      //   // const songPath = (await music[path]()).default
+      //   const songPath = path
+      //   defaultTrackList.value.push(songPath)
+      //   TOP_MUSIC.forEach((item) => {
+      //     if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
+      //   })
+      //   // TOP_MUSIC.forEach((item) => {
+      //   //   if (songPath.includes(item)) topTrackList.value.push(songPath)
+      //   // })
+      //   NOT_AGGRESSIVE_MUSIC.forEach((item) => {
+      //     if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
+      //   })
+      // }
+      // console.timeEnd('test')
 
       totalNumbSongs.value = currentTracks.value.length
       audioPlayer.value = document.getElementById('audioPlayer') as CustomAudioElement
