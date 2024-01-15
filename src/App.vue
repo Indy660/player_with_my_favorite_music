@@ -250,9 +250,11 @@ export default defineComponent({
   },
   setup() {
     onBeforeMount(async () => {
-      const music = import.meta.glob('@assets/music/*.mp3')
+      const music = import.meta.glob('/public/music/*.mp3')
+      console.log(music)
       for (const path in music) {
         const songPath = (await music[path]()).default
+        console.log('songPath', songPath)
         defaultTrackList.value.push(songPath)
         TOP_MUSIC.forEach((item) => {
           if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
@@ -363,10 +365,7 @@ export default defineComponent({
 
     const fullSongName: ComputedRef<string> = computed(() => {
       const indexLastSlash: number | undefined = pathToCurrentFile.value?.lastIndexOf('/')
-      const indexSlice: number | undefined =
-        process.env.NODE_ENV === 'production'
-          ? pathToCurrentFile.value?.lastIndexOf('.') - 9
-          : pathToCurrentFile.value?.lastIndexOf('.')
+      const indexSlice: number | undefined = pathToCurrentFile.value?.lastIndexOf('.')
       return (
         (pathToCurrentFile.value &&
           pathToCurrentFile.value.substring(indexLastSlash + 1, indexSlice)) ||
