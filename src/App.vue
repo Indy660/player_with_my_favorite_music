@@ -378,7 +378,6 @@ export default defineComponent({
       return [...topTrackList.value].sort((a, b) => a.sort - b.sort)
     })
 
-    // TODO: totalNumbSongs нужно фиксить
     const tracksByTab: ComputedRef<string[]> = computed(() => {
       switch (tabSelected.value) {
         case 1:
@@ -450,9 +449,9 @@ export default defineComponent({
     }
 
     watch(
-      () => currentTime.value,
+      () => [currentTime.value, isPlaying.value],
       () => {
-        if (tabSelected.value === 4) {
+        if (tabSelected.value === 4 && isPlaying.value) {
           shortTracksObserver(currentTime.value)
         }
       }
