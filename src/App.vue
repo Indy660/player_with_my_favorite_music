@@ -457,10 +457,6 @@ export default defineComponent({
         }
       }
     )
-    // bestParties: [
-    //   { start: 53, end: 67.7 },
-    //   { start: 83, end: 97.7 }
-    // ]
 
     const currentTracks: ComputedRef<string[]> = computed(() => {
       return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
