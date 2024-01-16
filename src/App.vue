@@ -250,6 +250,13 @@ export default defineComponent({
   },
   setup() {
     onBeforeMount(async () => {
+      if (window.matchMedia && !window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // пользователь предпочитает темную тему
+        document.body.classList.add('dark-mode')
+      } else {
+        // пользователь предпочитает светлую тему
+        document.body.classList.add('light-mode')
+      }
       const music = import.meta.glob('@assets/music/*.mp3')
       for (const path in music) {
         const songPath = (await music[path]()).default
@@ -664,12 +671,50 @@ export default defineComponent({
 </template>
 
 <style lang="css">
+/*:root {*/
+/*  color-scheme: light dark;*/
+/*  --main-color: #000000ff;*/
+/*  --main-bg-color: #ffffffff;*/
+/*  --main-bg-color-secondary: #ffffffcc;*/
+
+/*  --main-color-dark: #ffffffff;*/
+/*  --main-bg-color-dark: #000000ff;*/
+/*  --main-bg-color-secondary-dark: #000000cc;*/
+/*}*/
+:root {
+  color-scheme: dark;
+  --main-color: #ffffffff;
+  --main-bg-color: #000000ff;
+  --main-bg-color-secondary: #000000cc;
+}
+
+:root {
+  color-scheme: light;
+  --main-color: #000000ff;
+  --main-bg-color: #ffffffff;
+  --main-bg-color-secondary: #ffffffcc;
+}
+
 body {
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   overflow: hidden;
   margin: 0;
 }
+
+/*.light-mode {*/
+/*  background-color: var(--main-bg-color);*/
+/*  border-color: #333;*/
+/*  color: var(--main-color);*/
+/*  color-scheme: light;*/
+/*}*/
+
+/*.dark-mode {*/
+/*  background-color: var(--main-bg-color-dark);*/
+/*  border-color: #333;*/
+/*  color: var(--main-color-dark);*/
+/*  color-scheme: dark;*/
+/*}*/
 main {
   width: 100vw;
   height: 100vh;
@@ -685,10 +730,10 @@ main {
   justify-content: center;
   text-align: center;
   width: 400px;
-  border: 1px solid #ccc;
+  border: 1px solid;
   border-radius: 5px;
   padding: 20px;
-  background-color: #fff;
+  /*background-color: #fff;*/
   box-sizing: border-box;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -726,14 +771,14 @@ input[type='range'] {
 button {
   font-size: 24px;
   border-radius: 50%;
-  background-color: #fff;
+  /*background-color: #fff;*/
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #ddd;
+  /*background-color: #ddd;*/
 }
 
 .slide-enter-active,
