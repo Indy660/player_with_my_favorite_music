@@ -15,20 +15,27 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    isRepeatMode: {
+      type: Boolean,
+      default: false
+    },
     isShowTrackList: {
       type: Boolean,
       default: false
     }
   },
-  emits: ['random-click', 'show-list-click'],
+  emits: ['random-click', 'show-list-click', 'repeat-mode-click'],
   setup(props, { emit }) {
     function iconClickRandomHandler() {
       emit('random-click')
     }
+    function iconClickRepeatModeHandler() {
+      emit('repeat-mode-click')
+    }
     function iconClickShowListHandler() {
       emit('show-list-click', event)
     }
-    return { iconClickRandomHandler, iconClickShowListHandler }
+    return { iconClickRandomHandler, iconClickRepeatModeHandler, iconClickShowListHandler }
   }
 })
 </script>
@@ -38,10 +45,19 @@ export default defineComponent({
     <button :class="{ active: isRandomTracks }" @click="iconClickRandomHandler">
       <i class="fas fa-shuffle"></i>
     </button>
+    <button :class="{ active: isRepeatMode }" @click="iconClickRepeatModeHandler">
+      <i class="fas fa-repeat"></i>
+    </button>
     <div class="song-display">
       <span>{{ currentNumbSong }}</span
       >/<span> {{ totalNumbSong }}</span>
     </div>
+    <button v-if="isShowTrackList" @click="iconClickShowListHandler">
+      <i class="fa-solid fa-toggle-off"></i>
+    </button>
+    <button v-else @click="iconClickShowListHandler">
+      <i class="fa-solid fa-toggle-on"></i>
+    </button>
     <!--    todo пофиксить но хз как-->
     <button
       v-if="isShowTrackList"

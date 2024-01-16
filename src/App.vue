@@ -337,41 +337,18 @@ export default defineComponent({
     })
 
     const audioPlayer: Ref<CustomAudioElement | null> = ref(null)
+
     const defaultTrackList: Ref<string[]> = ref([])
     const topTrackList: Ref<TopTrack[]> = ref([])
     const notAggressiveTrackList: Ref<string[]> = ref([])
+
     const currentTrackIndex: Ref<number> = ref(0)
     const totalNumbSongs: Ref<number> = ref(0)
-    const isPlaying: Ref<boolean> = ref(false)
     const currentTime: Ref<number> = ref(0)
     const volume: Ref<number> = ref(0.8)
-    const totalTime: Ref<number> = ref(0)
-    const isRandomTracks: Ref<boolean> = ref(false)
-    const isShowTrackList: Ref<boolean> = ref(false)
-
-    const tabsOption = reactive([
-      { label: 'All music', id: 1, url: 'all' },
-      { label: 'Top', id: 2, url: 'top' },
-      { label: 'Not aggressive', id: 3, url: 'not_aggressive' },
-      { label: 'Shorts', id: 4, url: 'shorts' }
-    ])
-    const tabSelected: Ref<number> = ref(1)
 
     const pathToCurrentFile: ComputedRef<string> = computed(() => {
       return currentTracks.value[currentTrackIndex.value] || ''
-    })
-
-    const fullSongName: ComputedRef<string> = computed(() => {
-      const indexLastSlash: number | undefined = pathToCurrentFile.value?.lastIndexOf('/')
-      const indexSlice: number | undefined =
-        process.env.NODE_ENV === 'production'
-          ? pathToCurrentFile.value?.lastIndexOf('.') - 9
-          : pathToCurrentFile.value?.lastIndexOf('.')
-      return (
-        (pathToCurrentFile.value &&
-          pathToCurrentFile.value.substring(indexLastSlash + 1, indexSlice)) ||
-        ''
-      )
     })
 
     const sortingTopTrackList = computed(() => {
@@ -392,6 +369,99 @@ export default defineComponent({
             .map((item) => item.path)
       }
     })
+
+    const fullSongName: ComputedRef<string> = computed(() => {
+      const indexLastSlash: number | undefined = pathToCurrentFile.value?.lastIndexOf('/')
+      const indexSlice: number | undefined =
+        process.env.NODE_ENV === 'production'
+          ? pathToCurrentFile.value?.lastIndexOf('.') - 9
+          : pathToCurrentFile.value?.lastIndexOf('.')
+      return (
+        (pathToCurrentFile.value &&
+          pathToCurrentFile.value.substring(indexLastSlash + 1, indexSlice)) ||
+        ''
+      )
+    })
+
+    const currentTracks: ComputedRef<string[]> = computed(() => {
+      return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
+    })
+
+    function getRandomTracks(): string[] {
+      return tracksByTab.value
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+    }
+
+    function handlerCanPlay(event: Event) {
+      setTotalTime(event)
+      if (isPlaying.value) {
+        playTrack()
+      }
+    }
+
+    function handlerEnded() {
+      if (!isRepeatMode.value) {
+        nextTrack()
+      } else {
+        audioPlayer.value!.currentTime = 0
+      }
+    }
+
+    const tabsOption = reactive([
+      { label: 'All music', id: 1, url: 'all' },
+      { label: 'Top', id: 2, url: 'top' },
+      { label: 'Not aggressive', id: 3, url: 'not_aggressive' },
+      { label: 'Shorts', id: 4, url: 'shorts' }
+    ])
+    const tabSelected: Ref<number> = ref(1)
+    function changeTab(option: Object) {
+      tabSelected.value = option.id
+      currentTrackIndex.value = 0
+      totalNumbSongs.value = currentTracks.value.length
+    }
+
+    function handlerTimeChange(event: Event) {
+      if (audioPlayer.value) {
+        const target = event.target as HTMLInputElement
+        audioPlayer.value!.currentTime =
+          (Number(target.value) / 100) * (audioPlayer.value!.duration || 0)
+      }
+    }
+
+    function onTimeUpdate(event: Event) {
+      currentTime.value = (event.target as HTMLAudioElement).currentTime
+    }
+
+    function onVolumeUpdate(event: Event) {
+      volume.value = (event.target as HTMLAudioElement).volume
+    }
+
+    function setVolume(value: number) {
+      audioPlayer.value!.volume = value / 100
+    }
+
+    const totalTime: Ref<number> = ref(0)
+    function setTotalTime(event: Event) {
+      totalTime.value = (event.target as HTMLAudioElement).duration
+    }
+
+    function playTrack() {
+      try {
+        audioPlayer.value?.play().then((r) => r)
+      } catch (error) {}
+    }
+
+    const isPlaying: Ref<boolean> = ref(false)
+    function togglePlayPause() {
+      isPlaying.value = !isPlaying.value
+      if (isPlaying.value) {
+        playTrack()
+      } else {
+        audioPlayer.value?.pause()
+      }
+    }
 
     // for 1 loop
     // const isVolumeSlowlyDecrease: Ref<boolean> = ref(false)
@@ -445,7 +515,7 @@ export default defineComponent({
         }
       }
       console.log('nextTrack')
-      nextTrack()
+      handlerEnded()
     }
 
     watch(
@@ -456,74 +526,6 @@ export default defineComponent({
         }
       }
     )
-
-    const currentTracks: ComputedRef<string[]> = computed(() => {
-      return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
-    })
-
-    function getRandomTracks(): string[] {
-      return tracksByTab.value
-        .map((value) => ({ value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value)
-    }
-
-    function handlerCanPlay(event: Event) {
-      setTotalTime(event)
-      if (isPlaying.value) {
-        playTrack()
-      }
-    }
-
-    function handlerEnded() {
-      nextTrack()
-    }
-
-    // TODO: поправить
-    function changeTab(option: Object) {
-      tabSelected.value = option.id
-      currentTrackIndex.value = 0
-      totalNumbSongs.value = currentTracks.value.length
-    }
-
-    function handlerTimeChange(event: Event) {
-      if (audioPlayer.value) {
-        const target = event.target as HTMLInputElement
-        audioPlayer.value!.currentTime =
-          (Number(target.value) / 100) * (audioPlayer.value!.duration || 0)
-      }
-    }
-
-    function onTimeUpdate(event: Event) {
-      currentTime.value = (event.target as HTMLAudioElement).currentTime
-    }
-
-    function onVolumeUpdate(event: Event) {
-      volume.value = (event.target as HTMLAudioElement).volume
-    }
-
-    function setVolume(value: number) {
-      audioPlayer.value!.volume = value / 100
-    }
-
-    function setTotalTime(event: Event) {
-      totalTime.value = (event.target as HTMLAudioElement).duration
-    }
-
-    function playTrack() {
-      try {
-        audioPlayer.value?.play().then((r) => r)
-      } catch (error) {}
-    }
-
-    function togglePlayPause() {
-      isPlaying.value = !isPlaying.value
-      if (isPlaying.value) {
-        playTrack()
-      } else {
-        audioPlayer.value?.pause()
-      }
-    }
 
     function nextTrack() {
       currentTrackIndex.value += 1
@@ -542,9 +544,12 @@ export default defineComponent({
       }
     }
 
+    const isRandomTracks: Ref<boolean> = ref(false)
     function handlerRandomBtn() {
       isRandomTracks.value = !isRandomTracks.value
     }
+
+    const isShowTrackList: Ref<boolean> = ref(false)
     function handlerShowListBtn() {
       isShowTrackList.value = !isShowTrackList.value
     }
@@ -554,8 +559,16 @@ export default defineComponent({
 
     function handlerSelectTrack(trackIndex: number) {
       currentTrackIndex.value = trackIndex
-      if (!isPlaying.value) togglePlayPause()
-      else playTrack()
+      if (!isPlaying.value) {
+        togglePlayPause()
+      } else {
+        playTrack()
+      }
+    }
+
+    const isRepeatMode: Ref<boolean> = ref(false)
+    function repeatModeChange() {
+      isRepeatMode.value = !isRepeatMode.value
     }
 
     return {
@@ -591,7 +604,10 @@ export default defineComponent({
       tabsOption,
       tabSelected,
       changeTab,
-      isShowTrackList
+      isShowTrackList,
+
+      repeatModeChange,
+      isRepeatMode
     }
   }
 })
@@ -628,6 +644,8 @@ export default defineComponent({
         :total-numb-song="totalNumbSongs"
         :is-random-tracks="isRandomTracks"
         :is-show-track-list="isShowTrackList"
+        :is-repeat-mode="isRepeatMode"
+        @repeat-mode-click="repeatModeChange"
         @random-click="handlerRandomBtn"
         @show-list-click="handlerShowListBtn"
       />
