@@ -30,213 +30,215 @@ interface TopTrack {
   path: string
 }
 
-const TOP_MUSIC = [
-  {
-    songName: 'Between The Buried And Me - Swim To The Moon',
-    sort: 10,
-    bestParties: [
-      { start: 135, end: 160 },
-      { start: 500, end: 551 },
-      { start: 980, end: 1022 }
-    ]
-  },
-  {
-    songName: 'August Burns Red - Barbarian',
-    sort: 20,
-    bestParties: [
-      { start: 21, end: 32 },
-      { start: 70, end: 88 },
-      { start: 113, end: 152 }
-    ]
-  },
-  {
-    songName: 'Ozoi The Maid Yakui The Maid - Wonderland',
-    sort: 30,
-    bestParties: [
-      { start: 115, end: 243 },
-      { start: 355, end: 442 }
-    ]
-  },
-  {
-    songName: 'As I Lay Dying - Nothing Left',
-    sort: 40,
-    bestParties: [{ start: 0, end: 57 }]
-  },
-  {
-    songName: 'Angel Vivaldi - An Erisian Autumn',
-    sort: 50,
-    bestParties: [
-      { start: 78, end: 104 },
-      { start: 246, end: 268 }
-    ]
-  },
-  {
-    songName: 'As I Lay Dying - The Sound Оf Truth',
-    sort: 60,
-    bestParties: [
-      { start: 0, end: 36 },
-      { start: 59, end: 121 }
-    ]
-  },
-  {
-    songName: 'August Burns Red - Your Little Suburbia Is in Ruins',
-    sort: 70,
-    bestParties: [
-      { start: 12, end: 27 },
-      { start: 107, end: 125 },
-      { start: 146, end: 178 }
-    ]
-  },
-  {
-    songName: 'What Mad Universe - Nebula My Love',
-    sort: 80,
-    bestParties: [
-      { start: 162, end: 246 },
-      { start: 260, end: 358 }
-    ]
-  },
-  {
-    songName: 'What Mad Universe - Starborne',
-    sort: 90,
-    bestParties: [
-      { start: 85, end: 105 },
-      { start: 144, end: 185 }
-    ]
-  },
-  {
-    songName: 'zYnthetic - Abandon All v3',
-    sort: 100,
-    bestParties: [
-      { start: 0, end: 30 },
-      { start: 60, end: 89 }
-    ]
-  },
-  {
-    songName: 'Children Of Bodom - Are You Dead Yet',
-    sort: 110,
-    bestParties: [{ start: 82, end: 114 }]
-  },
-  {
-    songName: 'Ozoi The Maid Yakui The Maid - Lanterns',
-    sort: 111,
-    bestParties: [{ start: 146, end: 218 }]
-  },
-  {
-    songName: 'Between The Buried And Me - Ants Of The Sky',
-    sort: 112,
-    bestParties: [{ start: 0, end: 108 }]
-  },
-  {
-    songName: 'Dragonforce - The Flame of Youth',
-    sort: 120,
-    bestParties: [
-      { start: 46, end: 65 },
-      { start: 289, end: 317 }
-    ]
-  },
-  {
-    songName: 'In Flames - Clayman',
-    sort: 130,
-    bestParties: [{ start: 0, end: 21 }]
-  },
-  {
-    songName: 'Psygnosis - Lost in Oblivion',
-    sort: 140,
-    bestParties: [{ start: 292, end: 356 }]
-  },
-  {
-    songName: 'August Burns Red - Indonesia',
-    sort: 141,
-    bestParties: [
-      { start: 84, end: 117 },
-      { start: 161, end: 180 }
-    ]
-  },
-  {
-    songName: 'August Burns Red - A Shot Below The Belt',
-    sort: 142,
-    bestParties: [
-      { start: 0, end: 30 },
-      { start: 90, end: 114 },
-      { start: 164, end: 175 }
-    ]
-  },
-  {
-    songName: 'Raunchy - Twelve Feet Tall',
-    sort: 150,
-    bestParties: [{ start: 65, end: 96 }]
-  },
-  {
-    songName: 'Rise Of The Northstar - What The Fuck',
-    sort: 160,
-    bestParties: [{ start: 45, end: 79 }]
-  },
-  {
-    songName: 'What Mad Universe - head of column',
-    sort: 170,
-    bestParties: [{ start: 30, end: 65 }]
-  },
-  {
-    songName: 'Toundra - Bizancio Byzantium',
-    sort: 180,
-    bestParties: [
-      { start: 127, end: 224 },
-      { start: 406, end: 480 }
-    ]
-  },
-  {
-    songName: '1.5 кг Отличного Пюре - Эмо',
-    sort: 181,
-    bestParties: [{ start: 25, end: 84 }]
-  },
-  {
-    songName: 'Raunchy - Wasteland Discotheque',
-    sort: 190,
-    bestParties: [
-      { start: 0, end: 34 },
-      { start: 63, end: 101 }
-    ]
-  },
-  {
-    songName: 'As I Lay Dying - Forever',
-    sort: 210,
-    bestParties: [{ start: 0, end: 25 }]
-  },
-  {
-    songName: 'Siberian Meat Grinder feat Distemper - Пламя в Груди',
-    sort: 211,
-    bestParties: [{ start: 49, end: 68 }]
-  },
-  {
-    songName: 'In The Constellation Of The Black Widow',
-    sort: 220,
-    bestParties: [
-      { start: 65, end: 85 },
-      { start: 114, end: 141 }
-    ]
-  }
-]
-const NOT_AGGRESSIVE_MUSIC = [
-  'Angel Vivaldi - An Erisian Autumn',
-  'What Mad Universe - Nebula My Love',
-  'What Mad Universe - Starborne',
-  'zYnthetic - Abandon All v3',
-  'What Mad Universe - head of column',
-  'Toundra - Bizancio Byzantium',
-  '1.5 кг Отличного Пюре - Эмо',
-  'August Burns Red - Meridian',
-  'Cosmonauts Day - The Captain',
-  'If These Trees Could Talk - From Roots to Needles',
-  'Long Distance Calling - Black Paper Planes',
-  'Killing Floor OST - Wake',
-  'Psygnosis - Phrase 7',
-  'The Doors - Alabama song',
-  'The Doors - The End',
-  'The Five Stars - Atom Bomb Baby',
-  'URO & .corridoiokraut. - Nappi',
-  'What Mad Universe - mythical sacred firebird'
-]
+// const TOP_MUSIC = [
+//   {
+//     songName: 'Between The Buried And Me - Swim To The Moon',
+//     sort: 10,
+//     bestParties: [
+//       { start: 135, end: 160 },
+//       { start: 500, end: 551 },
+//       { start: 980, end: 1022 }
+//     ]
+//   },
+//   {
+//     songName: 'August Burns Red - Barbarian',
+//     sort: 20,
+//     bestParties: [
+//       { start: 21, end: 32 },
+//       { start: 70, end: 88 },
+//       { start: 113, end: 152 }
+//     ]
+//   },
+//   {
+//     songName: 'Ozoi The Maid Yakui The Maid - Wonderland',
+//     sort: 30,
+//     bestParties: [
+//       { start: 115, end: 243 },
+//       { start: 355, end: 442 }
+//     ]
+//   },
+//   {
+//     songName: 'As I Lay Dying - Nothing Left',
+//     sort: 40,
+//     bestParties: [{ start: 0, end: 57 }]
+//   },
+//   {
+//     songName: 'Angel Vivaldi - An Erisian Autumn',
+//     sort: 50,
+//     bestParties: [
+//       { start: 78, end: 104 },
+//       { start: 246, end: 268 }
+//     ]
+//   },
+//   {
+//     songName: 'As I Lay Dying - The Sound Оf Truth',
+//     sort: 60,
+//     bestParties: [
+//       { start: 0, end: 36 },
+//       { start: 59, end: 121 }
+//     ]
+//   },
+//   {
+//     songName: 'August Burns Red - Your Little Suburbia Is in Ruins',
+//     sort: 70,
+//     bestParties: [
+//       { start: 12, end: 27 },
+//       { start: 107, end: 125 },
+//       { start: 146, end: 178 }
+//     ]
+//   },
+//   {
+//     songName: 'What Mad Universe - Nebula My Love',
+//     sort: 80,
+//     bestParties: [
+//       { start: 162, end: 246 },
+//       { start: 260, end: 358 }
+//     ]
+//   },
+//   {
+//     songName: 'What Mad Universe - Starborne',
+//     sort: 90,
+//     bestParties: [
+//       { start: 85, end: 105 },
+//       { start: 144, end: 185 }
+//     ]
+//   },
+//   {
+//     songName: 'zYnthetic - Abandon All v3',
+//     sort: 100,
+//     bestParties: [
+//       { start: 0, end: 30 },
+//       { start: 60, end: 89 }
+//     ]
+//   },
+//   {
+//     songName: 'Children Of Bodom - Are You Dead Yet',
+//     sort: 110,
+//     bestParties: [{ start: 82, end: 114 }]
+//   },
+//   {
+//     songName: 'Ozoi The Maid Yakui The Maid - Lanterns',
+//     sort: 111,
+//     bestParties: [{ start: 146, end: 218 }]
+//   },
+//   {
+//     songName: 'Between The Buried And Me - Ants Of The Sky',
+//     sort: 112,
+//     bestParties: [{ start: 0, end: 108 }]
+//   },
+//   {
+//     songName: 'Dragonforce - The Flame of Youth',
+//     sort: 120,
+//     bestParties: [
+//       { start: 46, end: 65 },
+//       { start: 289, end: 317 }
+//     ]
+//   },
+//   {
+//     songName: 'In Flames - Clayman',
+//     sort: 130,
+//     bestParties: [{ start: 0, end: 21 }]
+//   },
+//   {
+//     songName: 'Psygnosis - Lost in Oblivion',
+//     sort: 140,
+//     bestParties: [{ start: 292, end: 356 }]
+//   },
+//   {
+//     songName: 'August Burns Red - Indonesia',
+//     sort: 141,
+//     bestParties: [
+//       { start: 84, end: 117 },
+//       { start: 161, end: 180 }
+//     ]
+//   },
+//   {
+//     songName: 'August Burns Red - A Shot Below The Belt',
+//     sort: 142,
+//     bestParties: [
+//       { start: 0, end: 30 },
+//       { start: 90, end: 114 },
+//       { start: 164, end: 175 }
+//     ]
+//   },
+//   {
+//     songName: 'Raunchy - Twelve Feet Tall',
+//     sort: 150,
+//     bestParties: [{ start: 65, end: 96 }]
+//   },
+//   {
+//     songName: 'Rise Of The Northstar - What The Fuck',
+//     sort: 160,
+//     bestParties: [{ start: 45, end: 79 }]
+//   },
+//   {
+//     songName: 'What Mad Universe - head of column',
+//     sort: 170,
+//     bestParties: [{ start: 30, end: 65 }]
+//   },
+//   {
+//     songName: 'Toundra - Bizancio Byzantium',
+//     sort: 180,
+//     bestParties: [
+//       { start: 127, end: 224 },
+//       { start: 406, end: 480 }
+//     ]
+//   },
+//   {
+//     songName: '1.5 кг Отличного Пюре - Эмо',
+//     sort: 181,
+//     bestParties: [{ start: 25, end: 84 }]
+//   },
+//   {
+//     songName: 'Raunchy - Wasteland Discotheque',
+//     sort: 190,
+//     bestParties: [
+//       { start: 0, end: 34 },
+//       { start: 63, end: 101 }
+//     ]
+//   },
+//   {
+//     songName: 'As I Lay Dying - Forever',
+//     sort: 210,
+//     bestParties: [{ start: 0, end: 25 }]
+//   },
+//   {
+//     songName: 'Siberian Meat Grinder feat Distemper - Пламя в Груди',
+//     sort: 211,
+//     bestParties: [{ start: 49, end: 68 }]
+//   },
+//   {
+//     songName: 'In The Constellation Of The Black Widow',
+//     sort: 220,
+//     bestParties: [
+//       { start: 65, end: 85 },
+//       { start: 114, end: 141 }
+//     ]
+//   }
+// ]
+// const NOT_AGGRESSIVE_MUSIC = [
+//   'Angel Vivaldi - An Erisian Autumn',
+//   'What Mad Universe - Nebula My Love',
+//   'What Mad Universe - Starborne',
+//   'zYnthetic - Abandon All v3',
+//   'What Mad Universe - head of column',
+//   'Toundra - Bizancio Byzantium',
+//   '1.5 кг Отличного Пюре - Эмо',
+//   'August Burns Red - Meridian',
+//   'Cosmonauts Day - The Captain',
+//   'If These Trees Could Talk - From Roots to Needles',
+//   'Long Distance Calling - Black Paper Planes',
+//   'Killing Floor OST - Wake',
+//   'Psygnosis - Phrase 7',
+//   'The Doors - Alabama song',
+//   'The Doors - The End',
+//   'The Five Stars - Atom Bomb Baby',
+//   'URO & .corridoiokraut. - Nappi',
+//   'What Mad Universe - mythical sacred firebird'
+// ]
 
+// @ts-expect-error
+import { MUSIC_LIST } from './const/music_list'
 export default defineComponent({
   name: 'MainComponent',
   components: {
@@ -250,117 +252,10 @@ export default defineComponent({
   },
   setup() {
     onBeforeMount(async () => {
-      console.time('test')
-      // const music =
-      //   process.env?.NODE_ENV === 'production'
-      //     ? import.meta.glob('@assets/*.mp3')
-      //     : import.meta.glob('@assets/music/*.mp3')
-      // const music = import.meta.glob('@assets/*.mp3')
-      // const music = import.meta.glob('/public/music/*.mp3')
-      const music = [
-        '1.5 кг Отличного Пюре - Эмо.mp3',
-        'Anaal Nathrakh - Between Shit and Piss We Are Born.mp3',
-        'Anaal Nathrakh - In The Constellation Of The Black Widow.mp3',
-        'Angel Vivaldi - A Martian Winter.mp3',
-        'Angel Vivaldi - An Erisian Autumn.mp3',
-        'As I Lay Dying - Forever.mp3',
-        'As I Lay Dying - Nothing Left [2007].mp3',
-        'As I Lay Dying - The Sound Оf Truth.mp3',
-        'Aspirin Rose - Fucking Perfect (Pink cover).mp3',
-        'August Burns Red - A Shot Below The Belt.mp3',
-        'August Burns Red - Barbarian.mp3',
-        'August Burns Red - Consumer.mp3',
-        'August Burns Red - Indonesia.mp3',
-        'August Burns Red - Meridian.mp3',
-        'August Burns Red - Truth of a Liar.mp3',
-        'August Burns Red - Your Little Suburbia Is in Ruins.mp3',
-        'Between the Buried and Me - All Bodies.mp3',
-        'Between The Buried And Me - Ants Of The Sky.mp3',
-        'Between The Buried And Me - Sun Of Nothing.mp3',
-        'Between The Buried And Me - Swim To The Moon.mp3',
-        'Breakwater - Eleven.mp3',
-        'Breakwater - five.mp3',
-        'Bullet For My Valentine - Hand Of Blood.mp3',
-        'Cerebral Bore - The Bald Cadaver.mp3',
-        'Children Of Bodom - Are You Dead Yet.mp3',
-        'Cosmonauts Day - The Captain.mp3',
-        'Death In Vegas - Dirge.mp3',
-        'Dragonforce - The Flame of Youth.mp3',
-        'If These Trees Could Talk - From Roots to Needles.mp3',
-        'In Flames - Clayman.mp3',
-        'In Flames - Reflect the Storm.mp3',
-        'Killing Floor - Abandon All.mp3',
-        'Killing Floor OST - Wake.mp3',
-        'Long Distance Calling - Black Paper Planes.mp3',
-        'Machine Head - Beautiful Mourning.mp3',
-        'Machine Head - Hallowed Be Thy Name.mp3',
-        'Machine Head - Halo.mp3',
-        'Ozoi The Maid - Unfortunately.mp3',
-        'Ozoi The Maid Yakui The Maid - Lanterns.mp3',
-        'Ozoi The Maid Yakui The Maid - Wonderland.mp3',
-        'Ozoi The Maid, Yakui The Maid - Frontier.mp3',
-        'Psygnosis - FIIIX 2.0.mp3',
-        'Psygnosis - Lost in Oblivion.mp3',
-        'Psygnosis - MehMeh.mp3',
-        'Psygnosis - Phrase 7.mp3',
-        'Psygnosis - Synaptic Plasticity.mp3',
-        'Psygnosis - The Judgement.mp3',
-        'Raunchy - To the Lighthouse.mp3',
-        'Raunchy - Twelve Feet Tall.mp3',
-        'Raunchy - Wasteland Discotheque.mp3',
-        'Rhapsody - The Mighty Ride of the Firelord.mp3',
-        'Rhapsody of Fire - Wisdom of the Kings.mp3',
-        'Rise Of The Northstar - The New Path.mp3',
-        'Rise Of The Northstar - What The Fuck.mp3',
-        'Siberian Meat Grinder feat Distemper - Пламя в Груди.mp3',
-        'The Doors - Alabama song.mp3',
-        'The Doors - The End.mp3',
-        'The Faceless - Shake The Disease.mp3',
-        'The Five Stars - Atom Bomb Baby.mp3',
-        'The HAARP Machine - Esoteric Agenda.mp3',
-        'Toundra - Bizancio Byzantium.mp3',
-        'URO & .corridoiokraut. - Nappi.mp3',
-        'What Mad Universe - colossus.mp3',
-        'What Mad Universe - head of column.mp3',
-        'What Mad Universe - mythical sacred firebird.mp3',
-        'What Mad Universe - Nebula My Love.mp3',
-        'What Mad Universe - Starborne.mp3',
-        'Within The Ruins - Ataxia II.mp3',
-        'Within The Ruins - Beautiful Agony.mp3',
-        'ZEROMANCER - Dr. Online.mp3',
-        'zYnthetic - Abandon All v3.mp3',
-        'zYnthetic - SSplug.mp3'
-      ]
-
+      // старый способ импорта музыки прямо из папки
       // const music = import.meta.glob('@assets/music/*.mp3')
-      console.log(music)
-      for (const path of music) {
-        // const songPath = (await music[path]()).default
-        const songPath = path
-        defaultTrackList.value.push(songPath)
-        TOP_MUSIC.forEach((item) => {
-          if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
-        })
-        NOT_AGGRESSIVE_MUSIC.forEach((item) => {
-          if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
-        })
-      }
-      console.timeEnd('test')
-      // TODO: разобраться с загрузкой
-      // console.time('test')
-      // const music =
-      //   process.env?.NODE_ENV === 'production'
-      //     ? import.meta.glob('@assets/*.mp3')
-      //     : import.meta.glob('@assets/music/*.mp3')
-      // // const music = import.meta.glob('@assets/*.mp3')
-      // // const music = import.meta.glob('/public/music/*.mp3')
-      // // const music = import.meta.glob('@public/music/*.mp3')
-      //
-      // // const music = import.meta.glob('@assets/music/*.mp3')
-      // console.log(music)
       // for (const path in music) {
-      //   // const songPath = (await music[path]()).default
-      //   const songPath = path
+      //   const songPath = (await music[path]()).default
       //   defaultTrackList.value.push(songPath)
       //   TOP_MUSIC.forEach((item) => {
       //     if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
@@ -372,7 +267,9 @@ export default defineComponent({
       //     if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
       //   })
       // }
-      // console.timeEnd('test')
+      defaultTrackList.value = MUSIC_LIST
+      topTrackList.value = MUSIC_LIST.filter((item) => item.sort)
+      notAggressiveTrackList.value = MUSIC_LIST.filter((item) => item.notAggressive)
 
       totalNumbSongs.value = currentTracks.value.length
       audioPlayer.value = document.getElementById('audioPlayer') as CustomAudioElement
@@ -447,15 +344,15 @@ export default defineComponent({
     const tracksByTab: ComputedRef<string[]> = computed(() => {
       switch (tabSelected.value) {
         case 1:
-          return defaultTrackList.value
+          return defaultTrackList.value.map((item) => item.songName)
         case 2:
-          return sortingTopTrackList.value.map((item) => item.path)
+          return sortingTopTrackList.value.map((item) => item.songName)
         case 3:
-          return notAggressiveTrackList.value
+          return notAggressiveTrackList.value.map((item) => item.songName)
         case 4:
           return sortingTopTrackList.value
             .filter((item) => item?.bestParties)
-            .map((item) => item.path)
+            .map((item) => item.songName)
       }
     })
 
