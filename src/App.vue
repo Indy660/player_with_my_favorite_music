@@ -250,9 +250,93 @@ export default defineComponent({
   },
   setup() {
     onBeforeMount(async () => {
-      const music = import.meta.glob('@assets/music/*.mp3')
-      for (const path in music) {
-        const songPath = (await music[path]()).default
+      console.time('test')
+      // const music =
+      //   process.env?.NODE_ENV === 'production'
+      //     ? import.meta.glob('@assets/*.mp3')
+      //     : import.meta.glob('@assets/music/*.mp3')
+      // const music = import.meta.glob('@assets/*.mp3')
+      // const music = import.meta.glob('/public/music/*.mp3')
+      const music = [
+        '1.5 кг Отличного Пюре - Эмо.mp3',
+        'Anaal Nathrakh - Between Shit and Piss We Are Born.mp3',
+        'Anaal Nathrakh - In The Constellation Of The Black Widow.mp3',
+        'Angel Vivaldi - A Martian Winter.mp3',
+        'Angel Vivaldi - An Erisian Autumn.mp3',
+        'As I Lay Dying - Forever.mp3',
+        'As I Lay Dying - Nothing Left [2007].mp3',
+        'As I Lay Dying - The Sound Оf Truth.mp3',
+        'Aspirin Rose - Fucking Perfect (Pink cover).mp3',
+        'August Burns Red - A Shot Below The Belt.mp3',
+        'August Burns Red - Barbarian.mp3',
+        'August Burns Red - Consumer.mp3',
+        'August Burns Red - Indonesia.mp3',
+        'August Burns Red - Meridian.mp3',
+        'August Burns Red - Truth of a Liar.mp3',
+        'August Burns Red - Your Little Suburbia Is in Ruins.mp3',
+        'Between the Buried and Me - All Bodies.mp3',
+        'Between The Buried And Me - Ants Of The Sky.mp3',
+        'Between The Buried And Me - Sun Of Nothing.mp3',
+        'Between The Buried And Me - Swim To The Moon.mp3',
+        'Breakwater - Eleven.mp3',
+        'Breakwater - five.mp3',
+        'Bullet For My Valentine - Hand Of Blood.mp3',
+        'Cerebral Bore - The Bald Cadaver.mp3',
+        'Children Of Bodom - Are You Dead Yet.mp3',
+        'Cosmonauts Day - The Captain.mp3',
+        'Death In Vegas - Dirge.mp3',
+        'Dragonforce - The Flame of Youth.mp3',
+        'If These Trees Could Talk - From Roots to Needles.mp3',
+        'In Flames - Clayman.mp3',
+        'In Flames - Reflect the Storm.mp3',
+        'Killing Floor - Abandon All.mp3',
+        'Killing Floor OST - Wake.mp3',
+        'Long Distance Calling - Black Paper Planes.mp3',
+        'Machine Head - Beautiful Mourning.mp3',
+        'Machine Head - Hallowed Be Thy Name.mp3',
+        'Machine Head - Halo.mp3',
+        'Ozoi The Maid - Unfortunately.mp3',
+        'Ozoi The Maid Yakui The Maid - Lanterns.mp3',
+        'Ozoi The Maid Yakui The Maid - Wonderland.mp3',
+        'Ozoi The Maid, Yakui The Maid - Frontier.mp3',
+        'Psygnosis - FIIIX 2.0.mp3',
+        'Psygnosis - Lost in Oblivion.mp3',
+        'Psygnosis - MehMeh.mp3',
+        'Psygnosis - Phrase 7.mp3',
+        'Psygnosis - Synaptic Plasticity.mp3',
+        'Psygnosis - The Judgement.mp3',
+        'Raunchy - To the Lighthouse.mp3',
+        'Raunchy - Twelve Feet Tall.mp3',
+        'Raunchy - Wasteland Discotheque.mp3',
+        'Rhapsody - The Mighty Ride of the Firelord.mp3',
+        'Rhapsody of Fire - Wisdom of the Kings.mp3',
+        'Rise Of The Northstar - The New Path.mp3',
+        'Rise Of The Northstar - What The Fuck.mp3',
+        'Siberian Meat Grinder feat Distemper - Пламя в Груди.mp3',
+        'The Doors - Alabama song.mp3',
+        'The Doors - The End.mp3',
+        'The Faceless - Shake The Disease.mp3',
+        'The Five Stars - Atom Bomb Baby.mp3',
+        'The HAARP Machine - Esoteric Agenda.mp3',
+        'Toundra - Bizancio Byzantium.mp3',
+        'URO & .corridoiokraut. - Nappi.mp3',
+        'What Mad Universe - colossus.mp3',
+        'What Mad Universe - head of column.mp3',
+        'What Mad Universe - mythical sacred firebird.mp3',
+        'What Mad Universe - Nebula My Love.mp3',
+        'What Mad Universe - Starborne.mp3',
+        'Within The Ruins - Ataxia II.mp3',
+        'Within The Ruins - Beautiful Agony.mp3',
+        'ZEROMANCER - Dr. Online.mp3',
+        'zYnthetic - Abandon All v3.mp3',
+        'zYnthetic - SSplug.mp3'
+      ]
+
+      // const music = import.meta.glob('@assets/music/*.mp3')
+      console.log(music)
+      for (const path of music) {
+        // const songPath = (await music[path]()).default
+        const songPath = path
         defaultTrackList.value.push(songPath)
         TOP_MUSIC.forEach((item) => {
           if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
@@ -261,6 +345,7 @@ export default defineComponent({
           if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
         })
       }
+      console.timeEnd('test')
       // TODO: разобраться с загрузкой
       // console.time('test')
       // const music =
@@ -348,7 +433,11 @@ export default defineComponent({
     const volume: Ref<number> = ref(0.8)
 
     const pathToCurrentFile: ComputedRef<string> = computed(() => {
-      return currentTracks.value[currentTrackIndex.value] || ''
+      // TODO: хз как сделать по другому
+      const basePath = import.meta.env.DEV ? '/' : '/player_with_my_favorite_music/'
+      return currentTracks.value[currentTrackIndex.value]
+        ? `${basePath}music/${currentTracks.value[currentTrackIndex.value]}`
+        : ``
     })
 
     const sortingTopTrackList = computed(() => {
@@ -372,10 +461,7 @@ export default defineComponent({
 
     const fullSongName: ComputedRef<string> = computed(() => {
       const indexLastSlash: number | undefined = pathToCurrentFile.value?.lastIndexOf('/')
-      const indexSlice: number | undefined =
-        process.env.NODE_ENV === 'production'
-          ? pathToCurrentFile.value?.lastIndexOf('.') - 9
-          : pathToCurrentFile.value?.lastIndexOf('.')
+      const indexSlice: number | undefined = pathToCurrentFile.value?.lastIndexOf('.')
       return (
         (pathToCurrentFile.value &&
           pathToCurrentFile.value.substring(indexLastSlash + 1, indexSlice)) ||
@@ -450,7 +536,9 @@ export default defineComponent({
     function playTrack() {
       try {
         audioPlayer.value?.play().then((r) => r)
-      } catch (error) {}
+      } catch (error) {
+        console.log('error', error)
+      }
     }
 
     const isPlaying: Ref<boolean> = ref(false)
