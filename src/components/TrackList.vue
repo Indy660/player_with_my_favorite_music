@@ -25,8 +25,7 @@ export default defineComponent({
     const currentTracksWithCorrectNames: ComputedRef<string[]> = computed(() => {
       return props.currentTracks?.map((item) => {
         const indexLastSlash: number | undefined = item.lastIndexOf('/')
-        const indexSlice: number | undefined =
-          process.env.NODE_ENV === 'production' ? item?.lastIndexOf('.') : item?.lastIndexOf('.')
+        const indexSlice: number | undefined = item?.lastIndexOf('.')
         return (item && item.substring(indexLastSlash + 1, indexSlice)) || ''
       })
     })
