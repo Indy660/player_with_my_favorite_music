@@ -428,6 +428,11 @@ export default defineComponent({
     const totalTime: Ref<number> = ref(0)
     function setTotalTime(event: Event) {
       totalTime.value = (event.target as HTMLAudioElement).duration
+      navigator.mediaSession.setPositionState({
+        duration: (event.target as HTMLAudioElement).duration,
+        playbackRate: 1,
+        position: 0
+      })
     }
 
     function playTrack() {
