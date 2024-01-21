@@ -77,7 +77,6 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  z-index: 2;
   list-style-type: none;
   margin: 0;
   padding: 10px 5px;

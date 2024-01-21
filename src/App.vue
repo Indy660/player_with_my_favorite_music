@@ -27,7 +27,7 @@ interface CustomAudioElement extends HTMLAudioElement {
 interface TopTrack {
   songName: string
   sort: number
-  path: string
+  bestParties: true
 }
 
 // const TOP_MUSIC = [
@@ -356,6 +356,15 @@ export default defineComponent({
       }
     })
 
+    const currentBestParties = computed(() => {
+      // todo:TS2367
+      return (
+        (tabSelected.value === 4 &&
+          sortingTopTrackList.value[currentTrackIndex.value]?.bestParties) ||
+        []
+      )
+    })
+
     const fullSongName: ComputedRef<string> = computed(() => {
       const indexLastSlash: number | undefined = pathToCurrentFile.value?.lastIndexOf('/')
       const indexSlice: number | undefined = pathToCurrentFile.value?.lastIndexOf('.')
@@ -597,7 +606,8 @@ export default defineComponent({
       isShowTrackList,
 
       repeatModeChange,
-      isRepeatMode
+      isRepeatMode,
+      currentBestParties
     }
   }
 })
@@ -619,6 +629,7 @@ export default defineComponent({
       <MainInfoBand :full-song-name="fullSongName" />
       <VolumeControl :volume="volume" @volume-change="setVolume" />
       <ProgressControl
+        :best-parties="currentBestParties"
         :current-time="currentTime"
         :total-time="totalTime"
         @time-change="handlerTimeChange"
@@ -704,6 +715,7 @@ main {
   height: 435px;
   top: 0;
   left: 0;
+  z-index: 2;
 }
 
 input[type='range'] {
@@ -711,6 +723,7 @@ input[type='range'] {
   height: 5px;
   border-radius: 2px;
   cursor: pointer;
+  margin: 0;
 }
 
 button {
