@@ -1,10 +1,10 @@
 <script lang="ts">
-import { defineComponent, ref, onBeforeMount, computed, watch } from 'vue'
+import { defineComponent, ref, onBeforeMount, computed, watch, ComputedRef } from 'vue'
 
 export default defineComponent({
   name: 'MainInfoBand',
   props: {
-    fullSongName: {
+    songName: {
       type: String,
       default: ''
     }
@@ -20,8 +20,13 @@ export default defineComponent({
       }
     })
 
+    const fullSongName: ComputedRef<string> = computed(() => {
+      const indexSlice: number | undefined = props.songName?.lastIndexOf('.')
+      return (props.songName && props.songName.substring(0, indexSlice)) || ''
+    })
+
     const getInfoBand = computed(() => {
-      const [bandName, songName] = props.fullSongName.split(' - ')
+      const [bandName, songName] = fullSongName.value.split(' - ')
       return {
         bandName,
         songName
@@ -34,7 +39,7 @@ export default defineComponent({
     })
 
     watch(
-      () => props.fullSongName,
+      () => props.songName,
       () => {
         if ('mediaSession' in navigator && getLogoImage.value) {
           navigator.mediaSession.metadata = new MediaMetadata({

@@ -1,14 +1,6 @@
 <script lang="ts">
-import {
-  computed,
-  ComputedRef,
-  defineComponent,
-  onBeforeMount,
-  ref,
-  Ref,
-  reactive,
-  watch
-} from 'vue'
+import { defineComponent, onBeforeMount, ref, Ref, watchEffect } from 'vue'
+import { tracksApi } from './composable/tracks'
 import TrackList from './components/TrackList.vue'
 import PageTabs from './components/PageTabs.vue'
 import MainInfoBand from './components/MainInfoBand.vue'
@@ -24,221 +16,6 @@ interface CustomAudioElement extends HTMLAudioElement {
   currentTime: number
 }
 
-interface TopTrack {
-  songName: string
-  sort: number
-  bestParties: true
-}
-
-// const TOP_MUSIC = [
-//   {
-//     songName: 'Between The Buried And Me - Swim To The Moon',
-//     sort: 10,
-//     bestParties: [
-//       { start: 135, end: 160 },
-//       { start: 500, end: 551 },
-//       { start: 980, end: 1022 }
-//     ]
-//   },
-//   {
-//     songName: 'August Burns Red - Barbarian',
-//     sort: 20,
-//     bestParties: [
-//       { start: 21, end: 32 },
-//       { start: 70, end: 88 },
-//       { start: 113, end: 152 }
-//     ]
-//   },
-//   {
-//     songName: 'Ozoi The Maid Yakui The Maid - Wonderland',
-//     sort: 30,
-//     bestParties: [
-//       { start: 115, end: 243 },
-//       { start: 355, end: 442 }
-//     ]
-//   },
-//   {
-//     songName: 'As I Lay Dying - Nothing Left',
-//     sort: 40,
-//     bestParties: [{ start: 0, end: 57 }]
-//   },
-//   {
-//     songName: 'Angel Vivaldi - An Erisian Autumn',
-//     sort: 50,
-//     bestParties: [
-//       { start: 78, end: 104 },
-//       { start: 246, end: 268 }
-//     ]
-//   },
-//   {
-//     songName: 'As I Lay Dying - The Sound Оf Truth',
-//     sort: 60,
-//     bestParties: [
-//       { start: 0, end: 36 },
-//       { start: 59, end: 121 }
-//     ]
-//   },
-//   {
-//     songName: 'August Burns Red - Your Little Suburbia Is in Ruins',
-//     sort: 70,
-//     bestParties: [
-//       { start: 12, end: 27 },
-//       { start: 107, end: 125 },
-//       { start: 146, end: 178 }
-//     ]
-//   },
-//   {
-//     songName: 'What Mad Universe - Nebula My Love',
-//     sort: 80,
-//     bestParties: [
-//       { start: 162, end: 246 },
-//       { start: 260, end: 358 }
-//     ]
-//   },
-//   {
-//     songName: 'What Mad Universe - Starborne',
-//     sort: 90,
-//     bestParties: [
-//       { start: 85, end: 105 },
-//       { start: 144, end: 185 }
-//     ]
-//   },
-//   {
-//     songName: 'zYnthetic - Abandon All v3',
-//     sort: 100,
-//     bestParties: [
-//       { start: 0, end: 30 },
-//       { start: 60, end: 89 }
-//     ]
-//   },
-//   {
-//     songName: 'Children Of Bodom - Are You Dead Yet',
-//     sort: 110,
-//     bestParties: [{ start: 82, end: 114 }]
-//   },
-//   {
-//     songName: 'Ozoi The Maid Yakui The Maid - Lanterns',
-//     sort: 111,
-//     bestParties: [{ start: 146, end: 218 }]
-//   },
-//   {
-//     songName: 'Between The Buried And Me - Ants Of The Sky',
-//     sort: 112,
-//     bestParties: [{ start: 0, end: 108 }]
-//   },
-//   {
-//     songName: 'Dragonforce - The Flame of Youth',
-//     sort: 120,
-//     bestParties: [
-//       { start: 46, end: 65 },
-//       { start: 289, end: 317 }
-//     ]
-//   },
-//   {
-//     songName: 'In Flames - Clayman',
-//     sort: 130,
-//     bestParties: [{ start: 0, end: 21 }]
-//   },
-//   {
-//     songName: 'Psygnosis - Lost in Oblivion',
-//     sort: 140,
-//     bestParties: [{ start: 292, end: 356 }]
-//   },
-//   {
-//     songName: 'August Burns Red - Indonesia',
-//     sort: 141,
-//     bestParties: [
-//       { start: 84, end: 117 },
-//       { start: 161, end: 180 }
-//     ]
-//   },
-//   {
-//     songName: 'August Burns Red - A Shot Below The Belt',
-//     sort: 142,
-//     bestParties: [
-//       { start: 0, end: 30 },
-//       { start: 90, end: 114 },
-//       { start: 164, end: 175 }
-//     ]
-//   },
-//   {
-//     songName: 'Raunchy - Twelve Feet Tall',
-//     sort: 150,
-//     bestParties: [{ start: 65, end: 96 }]
-//   },
-//   {
-//     songName: 'Rise Of The Northstar - What The Fuck',
-//     sort: 160,
-//     bestParties: [{ start: 45, end: 79 }]
-//   },
-//   {
-//     songName: 'What Mad Universe - head of column',
-//     sort: 170,
-//     bestParties: [{ start: 30, end: 65 }]
-//   },
-//   {
-//     songName: 'Toundra - Bizancio Byzantium',
-//     sort: 180,
-//     bestParties: [
-//       { start: 127, end: 224 },
-//       { start: 406, end: 480 }
-//     ]
-//   },
-//   {
-//     songName: '1.5 кг Отличного Пюре - Эмо',
-//     sort: 181,
-//     bestParties: [{ start: 25, end: 84 }]
-//   },
-//   {
-//     songName: 'Raunchy - Wasteland Discotheque',
-//     sort: 190,
-//     bestParties: [
-//       { start: 0, end: 34 },
-//       { start: 63, end: 101 }
-//     ]
-//   },
-//   {
-//     songName: 'As I Lay Dying - Forever',
-//     sort: 210,
-//     bestParties: [{ start: 0, end: 25 }]
-//   },
-//   {
-//     songName: 'Siberian Meat Grinder feat Distemper - Пламя в Груди',
-//     sort: 211,
-//     bestParties: [{ start: 49, end: 68 }]
-//   },
-//   {
-//     songName: 'In The Constellation Of The Black Widow',
-//     sort: 220,
-//     bestParties: [
-//       { start: 65, end: 85 },
-//       { start: 114, end: 141 }
-//     ]
-//   }
-// ]
-// const NOT_AGGRESSIVE_MUSIC = [
-//   'Angel Vivaldi - An Erisian Autumn',
-//   'What Mad Universe - Nebula My Love',
-//   'What Mad Universe - Starborne',
-//   'zYnthetic - Abandon All v3',
-//   'What Mad Universe - head of column',
-//   'Toundra - Bizancio Byzantium',
-//   '1.5 кг Отличного Пюре - Эмо',
-//   'August Burns Red - Meridian',
-//   'Cosmonauts Day - The Captain',
-//   'If These Trees Could Talk - From Roots to Needles',
-//   'Long Distance Calling - Black Paper Planes',
-//   'Killing Floor OST - Wake',
-//   'Psygnosis - Phrase 7',
-//   'The Doors - Alabama song',
-//   'The Doors - The End',
-//   'The Five Stars - Atom Bomb Baby',
-//   'URO & .corridoiokraut. - Nappi',
-//   'What Mad Universe - mythical sacred firebird'
-// ]
-
-// @ts-expect-error
-import { MUSIC_LIST } from './const/music_list'
 export default defineComponent({
   name: 'MainComponent',
   components: {
@@ -251,6 +28,24 @@ export default defineComponent({
     OtherControl
   },
   setup() {
+    const {
+      defaultTrackList,
+      topTrackList,
+      currentBestParties,
+      nextTrack,
+      previousTrack,
+      pathToCurrentFile,
+      sortingTopTrackList,
+      currentTrackIndex,
+      changeTab,
+      selectTrack,
+      tabsOption,
+      tabSelected,
+      isRandomTracks,
+      handlerRandomBtn,
+      totalNumbSongs,
+      currentTracks
+    } = tracksApi()
     onBeforeMount(async () => {
       // старый способ импорта музыки прямо из папки
       // const music = import.meta.glob('@assets/music/*.mp3')
@@ -267,11 +62,6 @@ export default defineComponent({
       //     if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
       //   })
       // }
-      defaultTrackList.value = MUSIC_LIST
-      topTrackList.value = MUSIC_LIST.filter((item) => item.sort)
-      notAggressiveTrackList.value = MUSIC_LIST.filter((item) => item.notAggressive)
-
-      totalNumbSongs.value = currentTracks.value.length
       audioPlayer.value = document.getElementById('audioPlayer') as CustomAudioElement
 
       const actionHandlers = [
@@ -320,71 +110,8 @@ export default defineComponent({
 
     const audioPlayer: Ref<CustomAudioElement | null> = ref(null)
 
-    const defaultTrackList: Ref<string[]> = ref([])
-    const topTrackList: Ref<TopTrack[]> = ref([])
-    const notAggressiveTrackList: Ref<string[]> = ref([])
-
-    const currentTrackIndex: Ref<number> = ref(0)
-    const totalNumbSongs: Ref<number> = ref(0)
     const currentTime: Ref<number> = ref(0)
     const volume: Ref<number> = ref(0.8)
-
-    const pathToCurrentFile: ComputedRef<string> = computed(() => {
-      // TODO: хз как сделать по другому
-      const basePath = import.meta.env.DEV ? '/' : '/player_with_my_favorite_music/'
-      return currentTracks.value[currentTrackIndex.value]
-        ? `${basePath}music/${currentTracks.value[currentTrackIndex.value]}`
-        : ``
-    })
-
-    const sortingTopTrackList = computed(() => {
-      return [...topTrackList.value].sort((a, b) => a.sort - b.sort)
-    })
-
-    const tracksByTab: ComputedRef<string[]> = computed(() => {
-      switch (tabSelected.value) {
-        case 1:
-          return defaultTrackList.value.map((item) => item.songName)
-        case 2:
-          return sortingTopTrackList.value.map((item) => item.songName)
-        case 3:
-          return notAggressiveTrackList.value.map((item) => item.songName)
-        case 4:
-          return sortingTopTrackList.value
-            .filter((item) => item?.bestParties)
-            .map((item) => item.songName)
-      }
-    })
-
-    const currentBestParties = computed(() => {
-      // todo:TS2367
-      return (
-        (tabSelected.value === 4 &&
-          sortingTopTrackList.value[currentTrackIndex.value]?.bestParties) ||
-        []
-      )
-    })
-
-    const fullSongName: ComputedRef<string> = computed(() => {
-      const indexLastSlash: number | undefined = pathToCurrentFile.value?.lastIndexOf('/')
-      const indexSlice: number | undefined = pathToCurrentFile.value?.lastIndexOf('.')
-      return (
-        (pathToCurrentFile.value &&
-          pathToCurrentFile.value.substring(indexLastSlash + 1, indexSlice)) ||
-        ''
-      )
-    })
-
-    const currentTracks: ComputedRef<string[]> = computed(() => {
-      return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
-    })
-
-    function getRandomTracks(): string[] {
-      return tracksByTab.value
-        .map((value) => ({ value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value)
-    }
 
     function handlerCanPlay(event: Event) {
       setTotalTime(event)
@@ -401,24 +128,17 @@ export default defineComponent({
       }
     }
 
-    const tabsOption = reactive([
-      { label: 'All music', id: 1, url: 'all' },
-      { label: 'Top', id: 2, url: 'top' },
-      { label: 'Not aggressive', id: 3, url: 'not_aggressive' },
-      { label: 'Shorts', id: 4, url: 'shorts' }
-    ])
-    const tabSelected: Ref<number> = ref(1)
-    function changeTab(option: Object) {
-      tabSelected.value = option.id
-      currentTrackIndex.value = 0
-      totalNumbSongs.value = currentTracks.value.length
-    }
-
     function handlerTimeChange(event: Event) {
       if (audioPlayer.value) {
         const target = event.target as HTMLInputElement
         audioPlayer.value!.currentTime =
           (Number(target.value) / 100) * (audioPlayer.value!.duration || 0)
+      }
+    }
+
+    function handlerTimeChangeLine(number: number) {
+      if (audioPlayer.value) {
+        audioPlayer.value!.currentTime = number * (audioPlayer.value!.duration || 0)
       }
     }
 
@@ -436,9 +156,10 @@ export default defineComponent({
 
     const totalTime: Ref<number> = ref(0)
     function setTotalTime(event: Event) {
-      totalTime.value = (event.target as HTMLAudioElement).duration
+      const target = event.target as HTMLAudioElement
+      totalTime.value = target.duration
       navigator.mediaSession.setPositionState({
-        duration: (event.target as HTMLAudioElement).duration,
+        duration: target.duration,
         playbackRate: 1,
         position: 0
       })
@@ -517,35 +238,17 @@ export default defineComponent({
       handlerEnded()
     }
 
-    watch(
-      () => [currentTime.value, isPlaying.value],
-      () => {
-        if (tabSelected.value === 4 && isPlaying.value) {
-          shortTracksObserver(currentTime.value)
-        }
+    watchEffect(() => {
+      if (tabSelected.value === 4 && isPlaying.value) {
+        shortTracksObserver(currentTime.value)
       }
-    )
+    })
 
-    function nextTrack() {
-      currentTrackIndex.value += 1
-      if (currentTrackIndex.value >= currentTracks.value.length) {
-        currentTrackIndex.value = 0
-      }
-    }
-
-    function previousTrack() {
-      if (audioPlayer.value!.currentTime <= 20 || tabSelected.value === 4)
-        currentTrackIndex.value =
-          (currentTrackIndex.value - 1 + currentTracks.value.length) % currentTracks.value.length
+    function previousTrackHandler() {
+      if (audioPlayer.value!.currentTime <= 20 || tabSelected.value === 4) previousTrack()
       else {
-        // TODO: потенциально ошибка может быть
         audioPlayer.value!.currentTime = 0
       }
-    }
-
-    const isRandomTracks: Ref<boolean> = ref(false)
-    function handlerRandomBtn() {
-      isRandomTracks.value = !isRandomTracks.value
     }
 
     const isShowTrackList: Ref<boolean> = ref(false)
@@ -557,7 +260,7 @@ export default defineComponent({
     // table.getBoundingClientRect().top
 
     function handlerSelectTrack(trackIndex: number) {
-      currentTrackIndex.value = trackIndex
+      selectTrack(trackIndex)
       if (!isPlaying.value) {
         togglePlayPause()
       } else {
@@ -580,23 +283,22 @@ export default defineComponent({
       totalTime,
       isRandomTracks,
       pathToCurrentFile,
-      fullSongName,
       defaultTrackList,
       topTrackList,
       sortingTopTrackList,
-      tracksByTab,
       currentTracks,
       currentTrackIndex,
       handlerCanPlay,
       handlerEnded,
       handlerTimeChange,
+      handlerTimeChangeLine,
       onTimeUpdate,
       setVolume,
       setTotalTime,
       playTrack,
       togglePlayPause,
       nextTrack,
-      previousTrack,
+      previousTrackHandler,
       handlerRandomBtn,
       handlerShowListBtn,
       handlerSelectTrack,
@@ -604,7 +306,6 @@ export default defineComponent({
       tabSelected,
       changeTab,
       isShowTrackList,
-
       repeatModeChange,
       isRepeatMode,
       currentBestParties
@@ -626,17 +327,18 @@ export default defineComponent({
         />
       </transition>
       <PageTabs :tab-selected="tabSelected" :tab-options="tabsOption" @change-tab="changeTab" />
-      <MainInfoBand :full-song-name="fullSongName" />
+      <MainInfoBand :song-name="currentTracks[currentTrackIndex]" />
       <VolumeControl :volume="volume" @volume-change="setVolume" />
       <ProgressControl
         :best-parties="currentBestParties"
         :current-time="currentTime"
         :total-time="totalTime"
         @time-change="handlerTimeChange"
+        @time-change-line="handlerTimeChangeLine"
       />
       <MainControl
         :is-playing="isPlaying"
-        @previous="previousTrack"
+        @previous="previousTrackHandler"
         @next="nextTrack"
         @play-pause="togglePlayPause"
       />

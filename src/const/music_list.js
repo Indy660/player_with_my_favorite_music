@@ -5,15 +5,6 @@ const MUSIC_LIST = [
     bestParties: [{ start: 25, end: 84 }],
     notAggressive: true
   },
-  { songName: 'Anaal Nathrakh - Between Shit and Piss We Are Born.mp3' },
-  {
-    songName: 'Anaal Nathrakh - In The Constellation Of The Black Widow.mp3',
-    sort: 220,
-    bestParties: [
-      { start: 65, end: 85 },
-      { start: 114, end: 141 }
-    ]
-  },
   { songName: 'Angel Vivaldi - A Martian Winter.mp3' },
   {
     songName: 'Angel Vivaldi - An Erisian Autumn.mp3',
@@ -77,6 +68,15 @@ const MUSIC_LIST = [
       { start: 146, end: 178 }
     ]
   },
+  { songName: 'Anaal Nathrakh - Between Shit and Piss We Are Born.mp3' },
+  {
+    songName: 'Anaal Nathrakh - In The Constellation Of The Black Widow.mp3',
+    sort: 220,
+    bestParties: [
+      { start: 65, end: 85 },
+      { start: 114, end: 141 }
+    ]
+  },
   { songName: 'Between the Buried and Me - All Bodies.mp3' },
   {
     songName: 'Between The Buried And Me - Ants Of The Sky.mp3',
@@ -90,13 +90,17 @@ const MUSIC_LIST = [
     bestParties: [
       { start: 135, end: 160 },
       { start: 500, end: 551 },
-      { start: 980, end: 1022 }
+      { start: 982, end: 1022 }
     ]
   },
   { songName: 'Breakwater - Eleven.mp3' },
   { songName: 'Breakwater - five.mp3' },
   { songName: 'Bullet For My Valentine - Hand Of Blood.mp3' },
-  { songName: 'Cerebral Bore - The Bald Cadaver.mp3' },
+  {
+    songName: 'Cerebral Bore - The Bald Cadaver.mp3',
+    sort: 280,
+    bestParties: [{ start: 5.5, end: 50 }]
+  },
   {
     songName: 'Children Of Bodom - Are You Dead Yet.mp3',
     sort: 110,

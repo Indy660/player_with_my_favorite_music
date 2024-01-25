@@ -17,7 +17,7 @@ export default defineComponent({
       default: () => []
     }
   },
-  emits: ['time-change'],
+  emits: ['time-change', 'time-change-line'],
   setup(props, { emit }) {
     const convertToValue: ComputedRef<number> = computed(() => {
       return (props.currentTime / props.totalTime) * 100
@@ -45,7 +45,16 @@ export default defineComponent({
       return `${minutes}:${String(seconds).padStart(2, '0')}`
     }
 
+    function timeHandlerEmit(e) {
+      const parentLine = e.currentTarget.parentNode
+      const { clientWidth } = parentLine
+      const rect = parentLine.getBoundingClientRect()
+      const x = e.clientX - rect.left // Позиция по оси X относительно родительского элемента
+      emit('time-change-line', x / clientWidth)
+    }
+
     function timeHandler(event: Event) {
+      // console.log(event)
       emit('time-change', event)
     }
 
@@ -54,6 +63,7 @@ export default defineComponent({
       convertCurrentTime,
       convertTotalTime,
       timeHandler,
+      timeHandlerEmit,
       convertBestPartiesInPercentage
     }
   }
@@ -82,6 +92,7 @@ export default defineComponent({
           :key="key"
           :style="{ left: party.start, right: party.end }"
           class="best-section"
+          @click="timeHandlerEmit"
         ></div>
       </div>
     </template>
@@ -111,5 +122,6 @@ export default defineComponent({
   top: 0;
   bottom: 0;
   background-color: blue;
+  cursor: pointer;
 }
 </style>
