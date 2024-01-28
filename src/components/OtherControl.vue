@@ -22,9 +22,13 @@ export default defineComponent({
     isShowTrackList: {
       type: Boolean,
       default: false
+    },
+    isDarkTheme: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['random-click', 'show-list-click', 'repeat-mode-click'],
+  emits: ['random-click', 'show-list-click', 'repeat-mode-click', 'change-theme'],
   setup(props, { emit }) {
     function iconClickRandomHandler() {
       emit('random-click')
@@ -35,7 +39,15 @@ export default defineComponent({
     function iconClickShowListHandler() {
       emit('show-list-click', event)
     }
-    return { iconClickRandomHandler, iconClickRepeatModeHandler, iconClickShowListHandler }
+    function iconClickChangeThemeHandler() {
+      emit('change-theme', event)
+    }
+    return {
+      iconClickRandomHandler,
+      iconClickRepeatModeHandler,
+      iconClickShowListHandler,
+      iconClickChangeThemeHandler
+    }
   }
 })
 </script>
@@ -52,10 +64,10 @@ export default defineComponent({
       <span>{{ currentNumbSong }}</span
       >/<span> {{ totalNumbSong }}</span>
     </div>
-    <button v-if="isShowTrackList" @click="iconClickShowListHandler">
+    <button v-if="!isDarkTheme" @click="iconClickChangeThemeHandler">
       <i class="fa-solid fa-toggle-off"></i>
     </button>
-    <button v-else @click="iconClickShowListHandler">
+    <button v-else @click="iconClickChangeThemeHandler">
       <i class="fa-solid fa-toggle-on"></i>
     </button>
     <!--    todo пофиксить но хз как-->

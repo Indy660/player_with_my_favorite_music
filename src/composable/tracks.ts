@@ -43,8 +43,16 @@ export function tracksApi() {
   ])
   const tabSelected: Ref<number> = ref(1)
   function changeTab(option: Object) {
+    // TODO: как добавить ещё одно условие?
+    if (
+      tabSelected.value !== 4 &&
+      option.id !== 2
+      // ||
+      // (tabSelected.value !== 2 && option.id !== 4)
+    ) {
+      currentTrackIndex.value = 0
+    }
     tabSelected.value = option.id
-    currentTrackIndex.value = 0
     totalNumbSongs.value = currentTracks.value.length
   }
 

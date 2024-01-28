@@ -29,8 +29,6 @@ export default defineComponent({
   },
   setup() {
     const {
-      defaultTrackList,
-      topTrackList,
       currentBestParties,
       nextTrack,
       previousTrack,
@@ -62,6 +60,9 @@ export default defineComponent({
       //     if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
       //   })
       // }
+
+      changeColorScheme()
+
       audioPlayer.value = document.getElementById('audioPlayer') as CustomAudioElement
 
       const actionHandlers = [
@@ -107,6 +108,47 @@ export default defineComponent({
         }
       }
     })
+
+    const isDarkTheme: Ref<boolean> = ref(null)
+    function changeColorScheme() {
+      const theme =
+        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+      if (theme === 'dark') {
+        isDarkTheme.value = true
+        import('./assets/css/dark-theme.css')
+      } else {
+        isDarkTheme.value = false
+        import('./assets/css/light-theme.css')
+      }
+    }
+
+    async function handlerChangeThemeBtn() {
+      isDarkTheme.value = !isDarkTheme.value
+      // TODO: не работает пока
+      // const oldLink = document.querySelector(
+      //   `link[href*="${isDarkTheme.value ? 'light' : 'dark'}"]`
+      // )
+      // if (oldLink) {
+      //   oldLink.remove()
+      // }
+      // const newColor = isDarkTheme.value ? 'dark' : 'light'
+      // // ./assets/css/dark-theme.css
+      // await loadCss(`./assets/css/${newColor}-theme.css`)
+
+      if (isDarkTheme.value) {
+        import('./assets/css/dark-theme.css')
+      } else {
+        import('./assets/css/light-theme.css')
+      }
+    }
+    // async function loadCss(file) {
+    //   const link = document.createElement('link')
+    //   link.rel = 'stylesheet'
+    //   link.href = file
+    //   document.head.appendChild(link)
+    // }
 
     const audioPlayer: Ref<CustomAudioElement | null> = ref(null)
 
@@ -283,9 +325,6 @@ export default defineComponent({
       totalTime,
       isRandomTracks,
       pathToCurrentFile,
-      defaultTrackList,
-      topTrackList,
-      sortingTopTrackList,
       currentTracks,
       currentTrackIndex,
       handlerCanPlay,
@@ -308,7 +347,9 @@ export default defineComponent({
       isShowTrackList,
       repeatModeChange,
       isRepeatMode,
-      currentBestParties
+      currentBestParties,
+      isDarkTheme,
+      handlerChangeThemeBtn
     }
   }
 })
@@ -348,9 +389,11 @@ export default defineComponent({
         :is-random-tracks="isRandomTracks"
         :is-show-track-list="isShowTrackList"
         :is-repeat-mode="isRepeatMode"
+        :is-dark-theme="isDarkTheme"
         @repeat-mode-click="repeatModeChange"
         @random-click="handlerRandomBtn"
         @show-list-click="handlerShowListBtn"
+        @change-theme="handlerChangeThemeBtn"
       />
       <audio
         id="audioPlayer"
@@ -377,19 +420,6 @@ export default defineComponent({
 /*  --main-bg-color-dark: #000000ff;*/
 /*  --main-bg-color-secondary-dark: #000000cc;*/
 /*}*/
-:root {
-  color-scheme: dark;
-  --main-color: #ffffffff;
-  --main-bg-color: #000000ff;
-  --main-bg-color-secondary: #000000cc;
-}
-
-:root {
-  color-scheme: light;
-  --main-color: #000000ff;
-  --main-bg-color: #ffffffff;
-  --main-bg-color-secondary: #ffffffcc;
-}
 
 body {
   font-family: Arial, sans-serif;
@@ -417,6 +447,11 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--main-bg-color);
+}
+
+main.dark {
+  color-scheme: dark;
 }
 
 .container {
@@ -470,6 +505,7 @@ button {
   font-size: 24px;
   border-radius: 50%;
   /*background-color: #fff;*/
+  background-color: var(--main-bg-color);
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
