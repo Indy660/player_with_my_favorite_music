@@ -73,7 +73,7 @@ export default defineComponent({
 
 <style scoped>
 .sidebar {
-  background-color: #f2f2f2;
+  background-color: var(--main-bg-color);
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -83,11 +83,12 @@ export default defineComponent({
   text-align: start;
 }
 li {
+  color: var(--main-color);
   margin-bottom: 5px;
   cursor: pointer;
 }
 li.selected {
-  background-color: rgb(0 22 255 / 30%);
+  background-color: var(--main-bg-color-secondary);
 }
 li:hover {
   background-color: rgb(0 22 255 / 10%);

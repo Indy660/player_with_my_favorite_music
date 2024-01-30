@@ -89,6 +89,7 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: var(--main-color);
 }
 .other .active {
   color: #0016ff;

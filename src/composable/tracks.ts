@@ -38,17 +38,14 @@ export function tracksApi() {
   const tabsOption = reactive([
     { label: 'All music', id: 1, url: 'all' },
     { label: 'Top', id: 2, url: 'top' },
-    { label: 'Not aggressive', id: 3, url: 'not_aggressive' },
-    { label: 'Shorts', id: 4, url: 'shorts' }
+    { label: 'Top Shorts', id: 4, url: 'shorts' },
+    { label: 'Not aggressive', id: 3, url: 'not_aggressive' }
   ])
   const tabSelected: Ref<number> = ref(1)
   function changeTab(option: Object) {
-    // TODO: как добавить ещё одно условие?
     if (
-      tabSelected.value !== 4 &&
-      option.id !== 2
-      // ||
-      // (tabSelected.value !== 2 && option.id !== 4)
+      !(tabSelected.value === 4 && option.id === 2) &&
+      !(tabSelected.value === 2 && option.id === 4)
     ) {
       currentTrackIndex.value = 0
     }

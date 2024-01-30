@@ -98,12 +98,14 @@ export default defineComponent({
 }
 
 .artist-info .band {
+  color: var(--main-color);
   font-size: 16px;
   margin-bottom: 10px;
   font-weight: 500;
 }
 
 .artist-info .song {
+  color: var(--main-color);
   font-size: 18px;
   font-weight: 600;
 }

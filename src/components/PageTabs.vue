@@ -13,9 +13,11 @@ export default defineComponent({
     }
   },
   emits: ['change-tab'],
-  setup(_, { emit }) {
+  setup(props, { emit }) {
     function btnHandler(option) {
-      emit('change-tab', option)
+      if (props.tabSelected !== option.id) {
+        emit('change-tab', option)
+      }
     }
     return {
       btnHandler
@@ -43,7 +45,8 @@ export default defineComponent({
 }
 
 .tabs button {
-  background-color: #f2f2f2;
+  color: var(--main-color);
+  background-color: var(--main-bg-color-secondary);
   border: none;
   padding: 10px 20px;
   border-radius: initial;
@@ -53,6 +56,6 @@ export default defineComponent({
 }
 
 .tabs button.active {
-  background-color: #e4e4e4;
+  background-color: var(--main-bg-color);
 }
 </style>

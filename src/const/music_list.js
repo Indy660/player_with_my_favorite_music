@@ -99,7 +99,7 @@ const MUSIC_LIST = [
   {
     songName: 'Cerebral Bore - The Bald Cadaver.mp3',
     sort: 280,
-    // TODO: не работает
+    // TODO: не работает bestParties
     bestParties: [{ start: 5.5, end: 50 }]
   },
   {
@@ -189,7 +189,11 @@ const MUSIC_LIST = [
     notAggressive: true
   },
   { songName: 'URO & .corridoiokraut. - Nappi.mp3', notAggressive: true },
-  { songName: 'What Mad Universe - colossus (shorted).mp3', notAggressive: true },
+  { songName: 'What Mad Universe - Colossus.mp3', notAggressive: true },
+  {
+    songName: 'What Mad Universe - the world of leviathan.mp3',
+    notAggressive: true
+  },
   {
     songName: 'What Mad Universe - head of column.mp3',
     sort: 170,
@@ -227,11 +231,7 @@ const MUSIC_LIST = [
     ],
     notAggressive: true
   },
-  { songName: 'zYnthetic - SSplug.mp3' },
-  {
-    songName: ' What Mad Universe - the world of leviathan.mp3',
-    notAggressive: true
-  }
+  { songName: 'zYnthetic - SSplug.mp3' }
 ]
 
 export { MUSIC_LIST }

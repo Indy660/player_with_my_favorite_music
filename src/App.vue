@@ -117,10 +117,10 @@ export default defineComponent({
           : 'light'
       if (theme === 'dark') {
         isDarkTheme.value = true
-        import('./assets/css/dark-theme.css')
+        // import('./assets/css/dark-theme.css')
       } else {
         isDarkTheme.value = false
-        import('./assets/css/light-theme.css')
+        // import('./assets/css/light-theme.css')
       }
     }
 
@@ -137,16 +137,17 @@ export default defineComponent({
       // // ./assets/css/dark-theme.css
       // await loadCss(`./assets/css/${newColor}-theme.css`)
 
-      if (isDarkTheme.value) {
-        import('./assets/css/dark-theme.css')
-      } else {
-        import('./assets/css/light-theme.css')
-      }
+      // if (isDarkTheme.value) {
+      //   import('./assets/css/dark-theme.css')
+      // } else {
+      //   import('./assets/css/light-theme.css')
+      // }
     }
     // async function loadCss(file) {
     //   const link = document.createElement('link')
     //   link.rel = 'stylesheet'
     //   link.href = file
+    //   // link.type = 'text/css'
     //   document.head.appendChild(link)
     // }
 
@@ -356,7 +357,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <main @click="isShowTrackList = false">
+  <main :class="[isDarkTheme ? 'dark' : 'light']" @click="isShowTrackList = false">
     <div class="container">
       <transition name="slide">
         <TrackList
@@ -410,48 +411,34 @@ export default defineComponent({
 </template>
 
 <style lang="css">
-/*:root {*/
-/*  color-scheme: light dark;*/
-/*  --main-color: #000000ff;*/
-/*  --main-bg-color: #ffffffff;*/
-/*  --main-bg-color-secondary: #ffffffcc;*/
-
-/*  --main-color-dark: #ffffffff;*/
-/*  --main-bg-color-dark: #000000ff;*/
-/*  --main-bg-color-secondary-dark: #000000cc;*/
-/*}*/
-
 body {
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   overflow: hidden;
   margin: 0;
+  /*transition: all 0.3s linear;*/
 }
-
-/*.light-mode {*/
-/*  background-color: var(--main-bg-color);*/
-/*  border-color: #333;*/
-/*  color: var(--main-color);*/
-/*  color-scheme: light;*/
-/*}*/
-
-/*.dark-mode {*/
-/*  background-color: var(--main-bg-color-dark);*/
-/*  border-color: #333;*/
-/*  color: var(--main-color-dark);*/
-/*  color-scheme: dark;*/
-/*}*/
 main {
   width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--main-bg-color);
+  background-color: var(--main-bg-color-secondary);
+}
+
+main.light {
+  color-scheme: light;
+  --main-color: #000000ff;
+  --main-bg-color: #ffffffff;
+  --main-bg-color-secondary: rgba(210, 211, 223, 0.39);
 }
 
 main.dark {
   color-scheme: dark;
+  --main-color: #ffffffff;
+  --main-bg-color: #000000ff;
+  --main-bg-color-secondary: rgb(48, 49, 53);
 }
 
 .container {
@@ -464,7 +451,7 @@ main.dark {
   border: 1px solid;
   border-radius: 5px;
   padding: 20px;
-  /*background-color: #fff;*/
+  background-color: var(--main-bg-color);
   box-sizing: border-box;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -504,8 +491,7 @@ input[type='range'] {
 button {
   font-size: 24px;
   border-radius: 50%;
-  /*background-color: #fff;*/
-  background-color: var(--main-bg-color);
+  background: none;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;

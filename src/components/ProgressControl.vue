@@ -107,7 +107,7 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  color: #333;
+  color: var(--main-color);
 }
 
 .line {
@@ -115,7 +115,7 @@ export default defineComponent({
   position: relative;
   width: 100%;
   height: 2px;
-  background-color: #ccc;
+  background-color: var(--main-bg-color-secondary);
 }
 .best-section {
   position: absolute;
