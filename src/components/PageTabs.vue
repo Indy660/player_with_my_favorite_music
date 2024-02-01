@@ -57,5 +57,6 @@ export default defineComponent({
 
 .tabs button.active {
   background-color: var(--main-bg-color);
+  border: 1px solid var(--main-color);
 }
 </style>

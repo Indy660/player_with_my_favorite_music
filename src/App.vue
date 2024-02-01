@@ -411,12 +411,12 @@ export default defineComponent({
 </template>
 
 <style lang="css">
-body {
+* {
+  transition: all 0.3s linear;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   overflow: hidden;
   margin: 0;
-  /*transition: all 0.3s linear;*/
 }
 main {
   width: 100vw;
