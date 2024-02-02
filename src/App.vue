@@ -415,7 +415,6 @@ export default defineComponent({
   transition: all 0.3s linear;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
-  overflow: hidden;
   margin: 0;
 }
 main {
@@ -425,6 +424,7 @@ main {
   justify-content: center;
   align-items: center;
   background-color: var(--main-bg-color-secondary);
+  overflow: hidden;
 }
 
 main.light {
