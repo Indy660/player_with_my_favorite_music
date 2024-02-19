@@ -80,7 +80,7 @@ const MUSIC_LIST = [
   { songName: 'Between the Buried and Me - All Bodies.mp3' },
   {
     songName: 'Between The Buried And Me - Ants Of The Sky.mp3',
-    sort: 112,
+    sort: 113,
     bestParties: [{ start: 0, end: 108 }]
   },
   { songName: 'Between The Buried And Me - Sun Of Nothing.mp3' },
@@ -126,7 +126,15 @@ const MUSIC_LIST = [
   { songName: 'Machine Head - Beautiful Mourning.mp3' },
   { songName: 'Machine Head - Hallowed Be Thy Name.mp3' },
   { songName: 'Machine Head - Halo.mp3' },
-  { songName: 'Ozoi The Maid - Unfortunately.mp3' },
+  {
+    songName: 'Ozoi The Maid - Unfortunately.mp3',
+    sort: 112,
+    bestParties: [
+      { start: 59, end: 84 },
+      { start: 165, end: 218 },
+      { start: 240, end: 253 }
+    ]
+  },
   {
     songName: 'Ozoi The Maid Yakui The Maid - Lanterns.mp3',
     sort: 111,

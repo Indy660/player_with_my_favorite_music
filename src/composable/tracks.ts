@@ -1,5 +1,5 @@
 import { MUSIC_LIST } from '../const/music_list'
-import { onBeforeMount, ref, computed, reactive } from 'vue'
+import { onBeforeMount, ref, computed, reactive, watchEffect } from 'vue'
 // TODO: какого хрена рефы вызывают ошибку
 // Ref, ComputedRef,
 interface Track {
@@ -52,6 +52,26 @@ export function tracksApi() {
     tabSelected.value = option.id
     totalNumbSongs.value = currentTracks.value.length
   }
+
+  // Метод для обновления значений по URL
+  const updateValuesFromUrl = () => {
+    const urlParts = window.location.pathname.split('/')
+    const tabUrl = urlParts[1]
+    const trackIndex = parseInt(urlParts[2], 10)
+    const selectedTab = tabsOption.find((tab) => tab.url === tabUrl)
+    if (selectedTab) {
+      tabSelected.value = selectedTab.id
+      currentTrackIndex.value = !isNaN(trackIndex) ? trackIndex : 0
+    }
+  }
+  updateValuesFromUrl()
+  watchEffect(() => {
+    const currentTab = tabsOption.find((tab) => tab.id === tabSelected.value)
+    const tabUrl = currentTab ? currentTab.url : ''
+    const trackUrl = currentTrackIndex.value.toString()
+    const currentUrl = `/${tabUrl}/${trackUrl}`
+    window.history.pushState({}, '', currentUrl)
+  })
 
   const tracksByTab: ComputedRef<string[]> = computed(() => {
     switch (tabSelected.value) {
