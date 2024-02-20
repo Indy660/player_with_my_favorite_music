@@ -56,8 +56,8 @@ export function tracksApi() {
   // Метод для обновления значений по URL
   const updateValuesFromUrl = () => {
     const urlParts = window.location.pathname.split('/')
-    const tabUrl = urlParts[1]
-    const trackIndex = parseInt(urlParts[2], 10)
+    const tabUrl = urlParts[urlParts.length - 2]
+    const trackIndex = parseInt(urlParts[urlParts.length - 1], 10)
     const selectedTab = tabsOption.find((tab) => tab.url === tabUrl)
     if (selectedTab) {
       tabSelected.value = selectedTab.id
@@ -69,7 +69,9 @@ export function tracksApi() {
     const currentTab = tabsOption.find((tab) => tab.id === tabSelected.value)
     const tabUrl = currentTab ? currentTab.url : ''
     const trackUrl = currentTrackIndex.value.toString()
-    const currentUrl = `/${tabUrl}/${trackUrl}`
+    const currentUrl = import.meta.env.DEV
+      ? `/${tabUrl}/${trackUrl}`
+      : `/player_with_my_favorite_music/${tabUrl}/${trackUrl}`
     window.history.pushState({}, '', currentUrl)
   })
 
