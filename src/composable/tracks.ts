@@ -10,6 +10,9 @@ interface TopTrack extends Track {
   sort: number
   bestParties: true
 }
+
+// const BASE_URL = import.meta.env.VITE_BASE_URL
+// console.log(BASE_URL, import.meta.env)
 export function tracksApi() {
   onBeforeMount(() => {
     defaultTrackList.value = MUSIC_LIST
@@ -24,7 +27,11 @@ export function tracksApi() {
   const totalNumbSongs: Ref<number> = ref(0)
 
   const pathToCurrentFile: ComputedRef<string> = computed(() => {
-    // TODO: хз как сделать по другому
+    // TODO: не работает
+    // const basePath = BASE_URL
+    // const basePath = import.meta.env.DEV ? '/' : BASE_URL
+    // const basePath = import.meta.env.DEV ? '' : BASE_URL
+    // console.log('basePath', basePath, process.env.NODE_ENV, BASE_URL)
     const basePath = import.meta.env.DEV ? '/' : '/player_with_my_favorite_music/'
     return currentTracks.value[currentTrackIndex.value]
       ? `${basePath}music/${currentTracks.value[currentTrackIndex.value]}`
@@ -66,13 +73,15 @@ export function tracksApi() {
   }
   updateValuesFromUrl()
   watchEffect(() => {
-    const currentTab = tabsOption.find((tab) => tab.id === tabSelected.value)
-    const tabUrl = currentTab ? currentTab.url : ''
-    const trackUrl = currentTrackIndex.value.toString()
-    const currentUrl = import.meta.env.DEV
-      ? `/${tabUrl}/${trackUrl}`
-      : `/player_with_my_favorite_music/${tabUrl}/${trackUrl}`
-    window.history.pushState({}, '', currentUrl)
+    // const currentTab = tabsOption.find((tab) => tab.id === tabSelected.value)
+    // const tabUrl = currentTab ? currentTab.url : ''
+    // const trackUrl = currentTrackIndex.value.toString()
+    // // import.meta.env.DEV
+    // //   ? `/${tabUrl}/${trackUrl}`
+    // //   :
+    // console.log(basePath)
+    // const currentUrl = `${basePath}/${tabUrl}/${trackUrl}`
+    // window.history.pushState({}, '', currentUrl)
   })
 
   const tracksByTab: ComputedRef<string[]> = computed(() => {
