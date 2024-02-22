@@ -62,9 +62,9 @@ export function tracksApi() {
 
   // Метод для обновления значений по URL
   const updateValuesFromUrl = () => {
-    const urlParts = window.location.pathname.split('/')
-    const tabUrl = urlParts[urlParts.length - 2]
-    const trackIndex = parseInt(urlParts[urlParts.length - 1], 10)
+    const queryParts = window.location.pathname.split('&')
+    const tabUrl = queryParts[0].split('=')[1]
+    const trackIndex = parseInt(queryParts[1].split('=')[1])
     const selectedTab = tabsOption.find((tab) => tab.url === tabUrl)
     if (selectedTab) {
       tabSelected.value = selectedTab.id
@@ -73,15 +73,11 @@ export function tracksApi() {
   }
   updateValuesFromUrl()
   watchEffect(() => {
-    // const currentTab = tabsOption.find((tab) => tab.id === tabSelected.value)
-    // const tabUrl = currentTab ? currentTab.url : ''
-    // const trackUrl = currentTrackIndex.value.toString()
-    // // import.meta.env.DEV
-    // //   ? `/${tabUrl}/${trackUrl}`
-    // //   :
-    // console.log(basePath)
-    // const currentUrl = `${basePath}/${tabUrl}/${trackUrl}`
-    // window.history.pushState({}, '', currentUrl)
+    const currentTab = tabsOption.find((tab) => tab.id === tabSelected.value)
+    const tabUrl = currentTab ? currentTab.url : ''
+    const trackUrl = currentTrackIndex.value.toString()
+    const params = new URLSearchParams(`tab=${tabUrl}&track=${trackUrl}`)
+    window.history.pushState({}, '', params)
   })
 
   const tracksByTab: ComputedRef<string[]> = computed(() => {
