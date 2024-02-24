@@ -75,12 +75,13 @@ export function tracksApi() {
     // }
   }
   updateValuesFromUrl()
+  // TODO: в github ломает при обновлении, нужно добавить ? вместо /
   watchEffect(() => {
-    const currentTab = tabsOption.find((tab) => tab.id === tabSelected.value)
-    const tabUrl = currentTab ? currentTab.url : ''
-    const trackUrl = currentTrackIndex.value.toString()
-    const params = new URLSearchParams(`tab=${tabUrl}&track=${trackUrl}`)
-    window.history.pushState({}, '', params)
+    // const currentTab = tabsOption.find((tab) => tab.id === tabSelected.value)
+    // const tabUrl = currentTab ? currentTab.url : ''
+    // const trackUrl = currentTrackIndex.value.toString()
+    // const params = new URLSearchParams(`tab=${tabUrl}&track=${trackUrl}`)
+    // window.history.pushState({}, '', params)
   })
 
   const tracksByTab: ComputedRef<string[]> = computed(() => {
