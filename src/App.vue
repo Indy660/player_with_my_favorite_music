@@ -282,7 +282,7 @@ export default defineComponent({
     }
 
     watchEffect(() => {
-      if (tabSelected.value === 4 && isPlaying.value) {
+      if (tabSelected.value === 4 && isPlaying.value && currentTrackIndex) {
         shortTracksObserver(currentTime.value)
       }
     })
@@ -386,7 +386,7 @@ export default defineComponent({
       />
       <OtherControl
         :current-numb-song="currentTrackIndex + 1"
-        :total-numb-song="totalNumbSongs"
+        :total-numb-songs="totalNumbSongs"
         :is-random-tracks="isRandomTracks"
         :is-show-track-list="isShowTrackList"
         :is-repeat-mode="isRepeatMode"

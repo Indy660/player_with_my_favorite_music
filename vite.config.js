@@ -13,6 +13,10 @@ export default defineConfig({
       '@public': path.resolve(__dirname, 'public'),
     }
   },
+  // TODO: похоже не работает с .js https://github.com/vitejs/vite/discussions/14649
+  // server: {
+  //   hmr: { overlay: false }
+  // },
   define: {
     'import.meta.env.BASE_URL': JSON.stringify(process.env.VITE_BASE_URL),
   },

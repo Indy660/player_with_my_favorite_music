@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
+// import { tracksApi } from '../composable/tracks'
 export default defineComponent({
   name: 'OtherControl',
   props: {
@@ -7,7 +8,7 @@ export default defineComponent({
       type: Number,
       default: 0
     },
-    totalNumbSong: {
+    totalNumbSongs: {
       type: Number,
       default: 0
     },
@@ -30,6 +31,8 @@ export default defineComponent({
   },
   emits: ['random-click', 'show-list-click', 'repeat-mode-click', 'change-theme'],
   setup(props, { emit }) {
+    //TODO: не обновляются данные из компонетс
+    // const { totalNumbSongs, isRandomTracks } = tracksApi()
     function iconClickRandomHandler() {
       emit('random-click')
     }
@@ -43,6 +46,9 @@ export default defineComponent({
       emit('change-theme', event)
     }
     return {
+      // totalNumbSongs,
+      // isShowTrackList,
+      // isRandomTracks,
       iconClickRandomHandler,
       iconClickRepeatModeHandler,
       iconClickShowListHandler,
@@ -62,7 +68,7 @@ export default defineComponent({
     </button>
     <div class="song-display">
       <span>{{ currentNumbSong }}</span
-      >/<span> {{ totalNumbSong }}</span>
+      >/<span> {{ totalNumbSongs }}</span>
     </div>
     <button v-if="!isDarkTheme" @click="iconClickChangeThemeHandler">
       <i class="fa-solid fa-toggle-off"></i>

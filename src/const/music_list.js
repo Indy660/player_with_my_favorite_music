@@ -11,6 +11,7 @@ const MUSIC_LIST = [
     sort: 50,
     bestParties: [
       { start: 78, end: 104 },
+      { start: 176, end: 220 },
       { start: 246, end: 268 }
     ],
     notAggressive: true
