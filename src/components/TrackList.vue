@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, computed, ComputedRef, ref, Ref, watch, onMounted } from 'vue'
+import { defineComponent, computed, ComputedRef, watch, nextTick } from 'vue'
 export default defineComponent({
   name: 'TrackList',
   props: {
@@ -14,14 +14,6 @@ export default defineComponent({
   },
   emits: ['select-track-from-list'],
   setup(props, { emit }) {
-    onMounted(() => {
-      if (selectedTrackRef.value) {
-        scrollTo(selectedTrackRef)
-      }
-    })
-
-    const sidebarRef = ref<HTMLElement | null>(null)
-    const selectedTrackRef = ref<HTMLElement | null>(null)
     const currentTracksWithCorrectNames: ComputedRef<string[]> = computed(() => {
       return props.currentTracks?.map((item) => {
         const indexLastSlash: number | undefined = item.lastIndexOf('/')
@@ -33,15 +25,13 @@ export default defineComponent({
     watch(
       () => props.currentTrackIndex,
       () => {
-        scrollTo(sidebarRef)
+        scrollTo()
       }
     )
-
-    // TODO: не работает скролл до текущего элемента
-    function scrollTo(view: Ref<HTMLElement | null>) {
-      const selected = view.value?.querySelector('.selected')
-      // console.log(selected)
-      selected?.scrollIntoView({ behavior: 'smooth' })
+    async function scrollTo() {
+      await nextTick()
+      const selected = document.querySelector('.selected')
+      selected?.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
 
     function selectTrackFromList(trackIndex: number) {
