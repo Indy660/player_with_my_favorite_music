@@ -11,6 +11,12 @@ interface TopTrack extends Track {
   bestParties: true
 }
 
+interface TabsOption {
+  label: string
+  id: number
+  url: string
+}
+
 // const BASE_URL = import.meta.env.VITE_BASE_URL
 // console.log(BASE_URL, import.meta.env)
 export function tracksApi() {
@@ -42,14 +48,14 @@ export function tracksApi() {
     return [...topTrackList.value].sort((a, b) => a.sort - b.sort)
   })
 
-  const tabsOption = reactive([
+  const tabsOption: Ref<TabsOption[]> = reactive([
     { label: 'All music', id: 1, url: 'all' },
     { label: 'Top', id: 2, url: 'top' },
     { label: 'Top Shorts', id: 4, url: 'shorts' },
     { label: 'Not aggressive', id: 3, url: 'not_aggressive' }
   ])
   const tabSelected: Ref<number> = ref(1)
-  function changeTab(option: Object) {
+  function changeTab(option: TabsOption) {
     if (
       !(tabSelected.value === 4 && option.id === 2) &&
       !(tabSelected.value === 2 && option.id === 4)
@@ -113,8 +119,8 @@ export function tracksApi() {
 
   function getRandomTracks(): string[] {
     return tracksByTab.value
-      .map((value) => ({ value, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
+      .map((value: string) => ({ value, sort: Math.random() }))
+      .sort((a: number, b: number) => a.sort - b.sort)
       .map(({ value }) => value)
   }
 

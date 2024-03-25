@@ -258,7 +258,7 @@ export default defineComponent({
       // }
     }
 
-    function shortTracksObserver(time) {
+    function shortTracksObserver(time: number) {
       console.log(time)
       const currentBestParties = sortingTopTrackList.value[currentTrackIndex.value].bestParties
       for (let i = 0; i < currentBestParties.length; i++) {
