@@ -2,11 +2,11 @@
 import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
-  name: 'MainInfoBand',
+  name: 'VolumeControl',
   props: {
     volume: {
       type: Number,
-      default: 80
+      default: 0.8
     }
   },
   emits: ['volume-change'],
@@ -14,14 +14,37 @@ export default defineComponent({
     const convertToValue = computed(() => {
       return props.volume * 100
     })
+    // TODO: не работает
+    // iconVolume
+    // const iconVolume = computed(() => {
+    //   return props.volume > 0 ? 'fa-volume-up' : 'fa-volume-off'
+    // })
+    const iconVolume = computed(() => {
+      return props.volume > 0 ? '<i class="fas fa-volume-up"/>' : '<i class="fas fa-volume-off"/>'
+    })
 
     function volumeHandler(event: InputEvent) {
-      emit('volume-change', (event.target as HTMLInputElement).value)
+      emit('volume-change', (event.target as HTMLInputElement).value / 100)
+    }
+
+    function volumeHandlerByClick(number: number) {
+      emit('volume-change', number)
+    }
+
+    function onIconVolumeClick() {
+      const defaultVolume = 0.8
+      if (props.volume > 0) {
+        volumeHandlerByClick(0)
+      } else {
+        volumeHandlerByClick(defaultVolume)
+      }
     }
 
     return {
       convertToValue,
-      volumeHandler
+      volumeHandler,
+      onIconVolumeClick,
+      iconVolume
     }
   }
 })
@@ -29,19 +52,12 @@ export default defineComponent({
 
 <template>
   <div class="volume-control">
-    <button id="volumeDownBtn" class="player-button">
-      <i class="fas fa-volume-up"></i>
+    <button class="player-button" @click="onIconVolumeClick">
+      <!--      // TODO: можно ли без span?-->
+      <span v-html="iconVolume"></span>
+      <!--      <i class="fas" :class="iconVolume" />-->
     </button>
-    <input
-      id="volumeRange"
-      class="volume-control"
-      type="range"
-      :value="convertToValue"
-      min="0"
-      max="100"
-      step="1"
-      @input="volumeHandler"
-    />
+    <input type="range" :value="convertToValue" min="0" max="100" step="1" @input="volumeHandler" />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 export default defineComponent({
   name: 'MainControl',
   props: {
@@ -9,10 +9,14 @@ export default defineComponent({
     }
   },
   emits: ['previous', 'play-pause', 'next'],
-  setup(_, { emit }) {
+  setup(props, { emit }) {
     function previousButtonHandler() {
       emit('previous')
     }
+
+    const iconPlayerButton = computed(() => {
+      return props.isPlaying ? '<i class="fas fa-pause"/>' : ' <i class="fas fa-play"/>'
+    })
 
     function playerButtonHandler() {
       emit('play-pause')
@@ -25,6 +29,7 @@ export default defineComponent({
     return {
       previousButtonHandler,
       playerButtonHandler,
+      iconPlayerButton,
       nextButtonHandler
     }
   }
@@ -36,20 +41,8 @@ export default defineComponent({
     <button class="player-button" @click="previousButtonHandler">
       <i class="fas fa-step-backward"></i>
     </button>
-    <!--    <button class="player-button" @click="playerButtonHandler">-->
-    <!--      <template v-if="isPlaying">-->
-    <!--        <i class="fas fa-pause"></i>-->
-    <!--      </template>-->
-    <!--      <template v-else>-->
-    <!--        <i class="fas fa-play"></i>-->
-    <!--      </template>-->
-    <!--    </button>-->
-    <!--    todo: хз почему только нижний вариант работает-->
-    <button v-if="isPlaying" class="player-button" @click="playerButtonHandler">
-      <i class="fas fa-pause"></i>
-    </button>
-    <button v-else class="player-button" @click="playerButtonHandler">
-      <i class="fas fa-play"></i>
+    <button class="player-button" @click="playerButtonHandler">
+      <span v-html="iconPlayerButton"></span>
     </button>
     <button class="player-button" @click="nextButtonHandler">
       <i class="fas fa-step-forward"></i>

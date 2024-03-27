@@ -84,10 +84,12 @@ export default defineComponent({
 </script>
 
 <template>
-  <img :src="getLogoImage" class="album-image" alt="" />
-  <div class="artist-info">
-    <div class="band">{{ getInfoBand.bandName }}</div>
-    <div class="song">{{ getInfoBand.songName }}</div>
+  <div>
+    <img :src="getLogoImage" class="album-image" alt="" />
+    <div class="artist-info">
+      <div class="band">{{ getInfoBand.bandName }}</div>
+      <div class="song">{{ getInfoBand.songName }}</div>
+    </div>
   </div>
 </template>
 

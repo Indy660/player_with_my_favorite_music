@@ -109,7 +109,7 @@ export default defineComponent({
       }
     })
 
-    const isDarkTheme: Ref<boolean> = ref(null)
+    const isDarkTheme: Ref<boolean> = ref(false)
     function changeColorScheme() {
       const theme =
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -194,7 +194,8 @@ export default defineComponent({
     }
 
     function setVolume(value: number) {
-      audioPlayer.value!.volume = value / 100
+      // audioPlayer.value!.volume = value / 100
+      audioPlayer.value!.volume = value
     }
 
     const totalTime: Ref<number> = ref(0)
@@ -506,7 +507,7 @@ button:hover {
   transition: all 0.5s ease;
 }
 
-/*todo: баг, -100% недоконца скрывает*/
+/*TODO: баг, -100% недоконца скрывает*/
 .slide-enter-from,
 .slide-leave-to {
   transform: translateY(-110%);
