@@ -1,5 +1,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
+import type { ComputedRef } from 'vue'
+// import { ComputedRef } from 'vue/dist/vue'
 export default defineComponent({
   name: 'MainControl',
   props: {
@@ -14,7 +16,7 @@ export default defineComponent({
       emit('previous')
     }
 
-    const iconPlayerButton = computed(() => {
+    const iconPlayerButton: ComputedRef<string> = computed(() => {
       return props.isPlaying ? '<i class="fas fa-pause"/>' : ' <i class="fas fa-play"/>'
     })
 
