@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, computed, ComputedRef, watch, nextTick } from 'vue'
+import { defineComponent, computed, watch, nextTick } from 'vue'
+import type { ComputedRef } from 'vue'
 export default defineComponent({
   name: 'TrackList',
   props: {

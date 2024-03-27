@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref, onBeforeMount, computed, watch, ComputedRef } from 'vue'
+import { defineComponent, ref, onBeforeMount, computed, watch } from 'vue'
+import type { ComputedRef } from 'vue'
 
 export default defineComponent({
   name: 'MainInfoBand',

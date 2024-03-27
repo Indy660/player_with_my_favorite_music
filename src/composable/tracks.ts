@@ -1,7 +1,6 @@
 import { MUSIC_LIST } from '../const/music_list'
 import { onBeforeMount, ref, computed, reactive, watchEffect } from 'vue'
-// TODO: какого хрена рефы вызывают ошибку
-// Ref, ComputedRef,
+import type { Ref, ComputedRef } from 'vue'
 interface Track {
   songName: string
 }
@@ -38,6 +37,7 @@ export function tracksApi() {
     // const basePath = import.meta.env.DEV ? '/' : BASE_URL
     // const basePath = import.meta.env.DEV ? '' : BASE_URL
     // console.log('basePath', basePath, process.env.NODE_ENV, BASE_URL)
+    // TODO: как вынести /player_with_my_favorite_music/, чтобы потом везде использовалось
     const basePath = import.meta.env.DEV ? '/' : '/player_with_my_favorite_music/'
     return currentTracks.value[currentTrackIndex.value]
       ? `${basePath}music/${currentTracks.value[currentTrackIndex.value]}`
@@ -48,12 +48,12 @@ export function tracksApi() {
     return [...topTrackList.value].sort((a, b) => a.sort - b.sort)
   })
 
-  const tabsOption: Ref<TabsOption[]> = reactive([
+  const tabsOption: TabsOption[] = [
     { label: 'All music', id: 1, url: 'all' },
     { label: 'Top', id: 2, url: 'top' },
     { label: 'Top Shorts', id: 4, url: 'shorts' },
     { label: 'Not aggressive', id: 3, url: 'not_aggressive' }
-  ])
+  ]
   const tabSelected: Ref<number> = ref(1)
   function changeTab(option: TabsOption) {
     if (

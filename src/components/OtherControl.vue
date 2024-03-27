@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
+import type { ComputedRef } from 'vue'
 // import { tracksApi } from '../composable/tracks'
 export default defineComponent({
   name: 'OtherControl',
@@ -45,6 +46,17 @@ export default defineComponent({
     function iconClickChangeThemeHandler() {
       emit('change-theme', event)
     }
+
+    const iconToggle: ComputedRef<string> = computed(() => {
+      return props.isDarkTheme
+        ? '<i class="fa-solid fa-toggle-on"/>'
+        : '<i class="fa-solid fa-toggle-off"/>'
+    })
+    const iconBar: ComputedRef<string> = computed(() => {
+      return props.isShowTrackList
+        ? '<i class="fas fa-bars fa-rotate-90"/>'
+        : '  <i class="fas fa-bars"/>'
+    })
     return {
       // totalNumbSongs,
       // isShowTrackList,
@@ -52,7 +64,9 @@ export default defineComponent({
       iconClickRandomHandler,
       iconClickRepeatModeHandler,
       iconClickShowListHandler,
-      iconClickChangeThemeHandler
+      iconClickChangeThemeHandler,
+      iconToggle,
+      iconBar
     }
   }
 })
@@ -70,22 +84,11 @@ export default defineComponent({
       <span>{{ currentNumbSong }}</span
       >/<span> {{ totalNumbSongs }}</span>
     </div>
-    <button v-if="!isDarkTheme" @click="iconClickChangeThemeHandler">
-      <i class="fa-solid fa-toggle-off"></i>
+    <button @click="iconClickChangeThemeHandler">
+      <span v-html="iconToggle"></span>
     </button>
-    <button v-else @click="iconClickChangeThemeHandler">
-      <i class="fa-solid fa-toggle-on"></i>
-    </button>
-    <!--    todo пофиксить но хз как-->
-    <button
-      v-if="isShowTrackList"
-      :class="{ active: isShowTrackList }"
-      @click="iconClickShowListHandler"
-    >
-      <i class="fas fa-bars fa-rotate-90"></i>
-    </button>
-    <button v-else @click.stop="iconClickShowListHandler">
-      <i class="fas fa-bars"></i>
+    <button :class="{ active: isShowTrackList }" @click.stop="iconClickShowListHandler">
+      <span v-html="iconBar"></span>
     </button>
   </div>
 </template>

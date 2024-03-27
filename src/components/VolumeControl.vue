@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
+import type { ComputedRef } from 'vue'
 
 export default defineComponent({
   name: 'VolumeControl',
@@ -11,7 +12,7 @@ export default defineComponent({
   },
   emits: ['volume-change'],
   setup(props, { emit }) {
-    const convertToValue = computed(() => {
+    const convertToValue: ComputedRef<number> = computed(() => {
       return props.volume * 100
     })
     // TODO: не работает
@@ -19,7 +20,7 @@ export default defineComponent({
     // const iconVolume = computed(() => {
     //   return props.volume > 0 ? 'fa-volume-up' : 'fa-volume-off'
     // })
-    const iconVolume = computed(() => {
+    const iconVolume: ComputedRef<string> = computed(() => {
       return props.volume > 0 ? '<i class="fas fa-volume-up"/>' : '<i class="fas fa-volume-off"/>'
     })
 

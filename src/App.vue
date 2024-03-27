@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref, Ref, watchEffect } from 'vue'
+import { defineComponent, onBeforeMount, ref, watchEffect } from 'vue'
+import type { Ref } from 'vue'
 import { tracksApi } from './composable/tracks'
 import TrackList from './components/TrackList.vue'
 import PageTabs from './components/PageTabs.vue'
@@ -474,7 +475,7 @@ main.dark {
 .track_list {
   position: absolute;
   transition: padding 0.5s;
-  /*todo можно переделать на getBoundingClientRect().top */
+  /*TODO: можно переделать на getBoundingClientRect().top */
   height: 435px;
   top: 0;
   left: 0;

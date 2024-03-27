@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, computed, ComputedRef } from 'vue'
+import { defineComponent, computed } from 'vue'
+import type { ComputedRef } from 'vue'
 
 export default defineComponent({
   name: 'ProgressControl',
@@ -81,15 +82,7 @@ export default defineComponent({
 
 <template>
   <div class="progress-control">
-    <input
-      id="progressRange"
-      type="range"
-      min="0"
-      max="100"
-      :value="convertToValue"
-      step="1"
-      @input="timeHandler"
-    />
+    <input type="range" min="0" max="100" :value="convertToValue" step="1" @input="timeHandler" />
     <div class="time-display">
       <span>{{ convertCurrentTime }}</span>
       <span>{{ convertCurrentTimeSeconds }}</span>
