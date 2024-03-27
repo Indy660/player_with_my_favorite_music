@@ -36,11 +36,17 @@ export default defineComponent({
       return formatTime(props.totalTime)
     })
 
-    const convertBestPartiesInPercentage: ComputedRef<string[]> = computed(() => {
-      const oneSecondSongInPercent = (100 / props.totalTime).toFixed(2)
+    // type TypeParties = 'start' | 'end'
+    interface BestPartiesPosition {
+      left: string
+      right: string
+    }
+    const convertBestPartiesInPercentage: ComputedRef<BestPartiesPosition[]> = computed(() => {
+      const oneSecondSongInPercent: number = Number((100 / props.totalTime).toFixed(2))
+      // TODO: хз как defineProps в props.bestParties проверить типы
       return props.bestParties?.map((item) => ({
-        start: `${item.start * oneSecondSongInPercent}%`,
-        end: `${100 - item.end * oneSecondSongInPercent}%`
+        left: `${item.start * oneSecondSongInPercent}%`,
+        right: `${100 - item.end * oneSecondSongInPercent}%`
       }))
     })
 
@@ -54,16 +60,15 @@ export default defineComponent({
       return `${minutes}:${String(seconds).padStart(2, '0')}`
     }
 
-    function timeHandlerEmit(e) {
-      const parentLine = e.currentTarget.parentNode
+    function timeHandlerEmit(e: MouseEvent): void {
+      const parentLine = e.currentTarget?.parentNode || null
       const { clientWidth } = parentLine
       const rect = parentLine.getBoundingClientRect()
       const x = e.clientX - rect.left // Позиция по оси X относительно родительского элемента
       emit('time-change-line', x / clientWidth)
     }
 
-    function timeHandler(event: Event) {
-      // console.log(event)
+    function timeHandler(event: Event): void {
       emit('time-change', event)
     }
 
@@ -93,7 +98,7 @@ export default defineComponent({
         <div
           v-for="(party, key) in convertBestPartiesInPercentage"
           :key="key"
-          :style="{ left: party.start, right: party.end }"
+          :style="{ left: party.left, right: party.right }"
           class="best-section"
           @click="timeHandlerEmit"
         ></div>

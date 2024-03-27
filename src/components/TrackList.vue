@@ -29,13 +29,14 @@ export default defineComponent({
         scrollTo()
       }
     )
+    // TODO: хз, что возвращает, войд не подходит
     async function scrollTo() {
       await nextTick()
       const selected = document.querySelector('.selected')
       selected?.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
 
-    function selectTrackFromList(trackIndex: number) {
+    function selectTrackFromList(trackIndex: number): void {
       emit('select-track-from-list', trackIndex)
     }
 

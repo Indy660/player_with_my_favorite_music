@@ -1,14 +1,22 @@
 import { MUSIC_LIST } from '../const/music_list'
-import { onBeforeMount, ref, computed, reactive, watchEffect } from 'vue'
+import { onBeforeMount, ref, computed, watchEffect } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
-interface Track {
+interface TrackList {
   songName: string
 }
 
-interface TopTrack extends Track {
+interface TopTrackList extends TrackList {
   sort: number
   bestParties: true
 }
+
+interface NotAggressiveTrackList extends TrackList {
+  notAggressive: number
+}
+
+// interface BestPartieseTrackList extends TrackList {
+//   bestParties: BestParties[]
+// }
 
 interface TabsOption {
   label: string
@@ -18,18 +26,22 @@ interface TabsOption {
 
 // const BASE_URL = import.meta.env.VITE_BASE_URL
 // console.log(BASE_URL, import.meta.env)
+// TopTrack
 export function tracksApi() {
-  onBeforeMount(() => {
-    defaultTrackList.value = MUSIC_LIST
-    topTrackList.value = MUSIC_LIST.filter((item) => item.sort)
-    notAggressiveTrackList.value = MUSIC_LIST.filter((item) => item.notAggressive)
-    totalNumbSongs.value = currentTracks.value.length
-  })
-  const defaultTrackList: Ref<Track[]> = ref([])
-  const topTrackList: Ref<TopTrack[]> = ref([])
-  const notAggressiveTrackList: Ref<Track[]> = ref([])
+  const defaultTrackList: Ref<TrackList[]> = ref([])
+  const topTrackList: Ref<TopTrackList[]> = ref([])
+  const notAggressiveTrackList: Ref<NotAggressiveTrackList[]> = ref([])
+  // const bestPartiesTrackList: Ref<BestPartieseTrackList[]> = ref([])
   const currentTrackIndex: Ref<number> = ref(0)
   const totalNumbSongs: Ref<number> = ref(0)
+  onBeforeMount(() => {
+    defaultTrackList.value = MUSIC_LIST
+    // TODO: хз на что ругается
+    topTrackList.value = MUSIC_LIST.filter((item) => item.sort)
+    notAggressiveTrackList.value = MUSIC_LIST.filter((item) => item.notAggressive)
+    // bestPartiesTrackList.value = MUSIC_LIST.filter((item) => item.bestParties)
+    totalNumbSongs.value = currentTracks.value.length
+  })
 
   const pathToCurrentFile: ComputedRef<string> = computed(() => {
     // TODO: не работает
@@ -38,13 +50,13 @@ export function tracksApi() {
     // const basePath = import.meta.env.DEV ? '' : BASE_URL
     // console.log('basePath', basePath, process.env.NODE_ENV, BASE_URL)
     // TODO: как вынести /player_with_my_favorite_music/, чтобы потом везде использовалось
-    const basePath = import.meta.env.DEV ? '/' : '/player_with_my_favorite_music/'
+    const basePath: string = import.meta.env.DEV ? '/' : '/player_with_my_favorite_music/'
     return currentTracks.value[currentTrackIndex.value]
       ? `${basePath}music/${currentTracks.value[currentTrackIndex.value]}`
       : ``
   })
 
-  const sortingTopTrackList = computed(() => {
+  const sortingTopTrackList: ComputedRef<TopTrackList[]> = computed(() => {
     return [...topTrackList.value].sort((a, b) => a.sort - b.sort)
   })
 
@@ -55,7 +67,7 @@ export function tracksApi() {
     { label: 'Not aggressive', id: 3, url: 'not_aggressive' }
   ]
   const tabSelected: Ref<number> = ref(1)
-  function changeTab(option: TabsOption) {
+  function changeTab(option: TabsOption): void {
     if (
       !(tabSelected.value === 4 && option.id === 2) &&
       !(tabSelected.value === 2 && option.id === 4)
@@ -91,17 +103,16 @@ export function tracksApi() {
   })
 
   const tracksByTab: ComputedRef<string[]> = computed(() => {
+    const returnSongName = (arr: TrackList[]): string[] => arr.map((item) => item.songName)
     switch (tabSelected.value) {
       case 1:
-        return defaultTrackList.value.map((item) => item.songName)
+        return returnSongName(defaultTrackList.value)
       case 2:
-        return sortingTopTrackList.value.map((item) => item.songName)
+        return returnSongName(sortingTopTrackList.value)
       case 3:
-        return notAggressiveTrackList.value.map((item) => item.songName)
+        return returnSongName(notAggressiveTrackList.value)
       case 4:
-        return sortingTopTrackList.value
-          .filter((item) => item?.bestParties)
-          .map((item) => item.songName)
+        return returnSongName(sortingTopTrackList.value)
     }
   })
 
@@ -124,24 +135,24 @@ export function tracksApi() {
       .map(({ value }) => value)
   }
 
-  function nextTrack() {
+  function nextTrack(): void {
     currentTrackIndex.value += 1
     if (currentTrackIndex.value >= currentTracks.value.length) {
       currentTrackIndex.value = 0
     }
   }
 
-  function previousTrack() {
+  function previousTrack(): void {
     currentTrackIndex.value =
       (currentTrackIndex.value - 1 + currentTracks.value.length) % currentTracks.value.length
   }
 
-  function selectTrack(trackIndex: number) {
+  function selectTrack(trackIndex: number): void {
     currentTrackIndex.value = trackIndex
   }
 
   const isRandomTracks: Ref<boolean> = ref(false)
-  function handlerRandomBtn() {
+  function handlerRandomBtn(): void {
     isRandomTracks.value = !isRandomTracks.value
   }
 

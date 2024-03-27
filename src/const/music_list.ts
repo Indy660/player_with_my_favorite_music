@@ -1,4 +1,10 @@
-const MUSIC_LIST = [
+interface MusicList {
+  songName: Required<string>
+  sort?: number
+  bestParties?: BestParties[]
+  notAggressive?: boolean
+}
+const MUSIC_LIST: MusicList[] = [
   {
     songName: '1.5 кг Отличного Пюре - Эмо.mp3',
     sort: 181,

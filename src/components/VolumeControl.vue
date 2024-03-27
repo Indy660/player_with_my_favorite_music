@@ -23,15 +23,15 @@ export default defineComponent({
       return props.volume > 0 ? '<i class="fas fa-volume-up"/>' : '<i class="fas fa-volume-off"/>'
     })
 
-    function volumeHandler(event: InputEvent) {
+    function volumeHandler(event: InputEvent): void {
       emit('volume-change', (event.target as HTMLInputElement).value / 100)
     }
 
-    function volumeHandlerByClick(number: number) {
+    function volumeHandlerByClick(number: number): void {
       emit('volume-change', number)
     }
 
-    function onIconVolumeClick() {
+    function onIconVolumeClick(): void {
       const defaultVolume = 0.8
       if (props.volume > 0) {
         volumeHandlerByClick(0)

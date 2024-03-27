@@ -34,7 +34,7 @@ export default defineComponent({
       nextTrack,
       previousTrack,
       pathToCurrentFile,
-      sortingTopTrackList,
+      // sortingTopTrackList,
       currentTrackIndex,
       changeTab,
       selectTrack,
@@ -66,7 +66,11 @@ export default defineComponent({
 
       audioPlayer.value = document.getElementById('audioPlayer') as CustomAudioElement
 
-      const actionHandlers = [
+      type Action = () => void
+      type ActionName = 'play' | 'pause' | 'nexttrack' | 'previoustrack' | 'seekto'
+      type ActionHandler = [ActionName, Action]
+
+      const actionHandlers: ActionHandler[] = [
         [
           'play',
           () => {
@@ -93,9 +97,10 @@ export default defineComponent({
             previousTrack()
           }
         ],
+        // :TODO поправить seekTime
         [
           'seekto',
-          (e) => {
+          (e: Event) => {
             audioPlayer.value!.currentTime = e.seekTime
           }
         ]
@@ -111,7 +116,7 @@ export default defineComponent({
     })
 
     const isDarkTheme: Ref<boolean> = ref(false)
-    function changeColorScheme() {
+    function changeColorScheme(): void {
       const theme =
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
           ? 'dark'
@@ -125,9 +130,10 @@ export default defineComponent({
       }
     }
 
-    async function handlerChangeThemeBtn() {
+    function handlerChangeThemeBtn(): void {
       isDarkTheme.value = !isDarkTheme.value
       // TODO: не работает пока
+      //  async
       // const oldLink = document.querySelector(
       //   `link[href*="${isDarkTheme.value ? 'light' : 'dark'}"]`
       // )
@@ -157,14 +163,14 @@ export default defineComponent({
     const currentTime: Ref<number> = ref(0)
     const volume: Ref<number> = ref(0.8)
 
-    function handlerCanPlay(event: Event) {
+    function handlerCanPlay(event: Event): void {
       setTotalTime(event)
       if (isPlaying.value) {
         playTrack()
       }
     }
 
-    function handlerEnded() {
+    function handlerEnded(): void {
       if (!isRepeatMode.value) {
         nextTrack()
       } else {
@@ -172,7 +178,7 @@ export default defineComponent({
       }
     }
 
-    function handlerTimeChange(event: Event) {
+    function handlerTimeChange(event: Event): void {
       if (audioPlayer.value) {
         const target = event.target as HTMLInputElement
         audioPlayer.value!.currentTime =
@@ -180,27 +186,27 @@ export default defineComponent({
       }
     }
 
-    function handlerTimeChangeLine(number: number) {
+    function handlerTimeChangeLine(number: number): void {
       if (audioPlayer.value) {
         audioPlayer.value!.currentTime = number * (audioPlayer.value!.duration || 0)
       }
     }
 
-    function onTimeUpdate(event: Event) {
+    function onTimeUpdate(event: Event): void {
       currentTime.value = (event.target as HTMLAudioElement).currentTime
     }
 
-    function onVolumeUpdate(event: Event) {
+    function onVolumeUpdate(event: Event): void {
       volume.value = (event.target as HTMLAudioElement).volume
     }
 
-    function setVolume(value: number) {
+    function setVolume(value: number): void {
       // audioPlayer.value!.volume = value / 100
       audioPlayer.value!.volume = value
     }
 
     const totalTime: Ref<number> = ref(0)
-    function setTotalTime(event: Event) {
+    function setTotalTime(event: Event): void {
       const target = event.target as HTMLAudioElement
       totalTime.value = target.duration
       navigator.mediaSession.setPositionState({
@@ -210,7 +216,7 @@ export default defineComponent({
       })
     }
 
-    function playTrack() {
+    function playTrack(): void {
       try {
         audioPlayer.value?.play().then((r) => r)
       } catch (error) {
@@ -219,7 +225,7 @@ export default defineComponent({
     }
 
     const isPlaying: Ref<boolean> = ref(false)
-    function togglePlayPause() {
+    function togglePlayPause(): void {
       isPlaying.value = !isPlaying.value
       if (isPlaying.value) {
         playTrack()
@@ -260,36 +266,36 @@ export default defineComponent({
       // }
     }
 
-    function shortTracksObserver(time: number) {
-      console.log(time)
-      const currentBestParties = sortingTopTrackList.value[currentTrackIndex.value].bestParties
-      for (let i = 0; i < currentBestParties.length; i++) {
-        const currentBestParty = currentBestParties[i]
-        // start song
-        if (time < currentBestParty.start) {
-          // changeVolumeSlowly(false)
-          console.log('start')
-          audioPlayer.value!.currentTime = currentBestParty.start
-          return
-        } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
-          console.log('continue')
-          if (time >= currentBestParty.end - 2) {
-            // changeVolumeSlowly(true)
-          }
-          return
-        }
-      }
-      console.log('nextTrack')
-      handlerEnded()
-    }
+    // function shortTracksObserver(time: number) {
+    //   console.log(time)
+    //   const currentBestParties = sortingTopTrackList.value[currentTrackIndex.value].bestParties
+    //   for (let i = 0; i < currentBestParties.length; i++) {
+    //     const currentBestParty = currentBestParties[i]
+    //     // start song
+    //     if (time < currentBestParty.start) {
+    //       // changeVolumeSlowly(false)
+    //       console.log('start')
+    //       audioPlayer.value!.currentTime = currentBestParty.start
+    //       return
+    //     } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
+    //       console.log('continue')
+    //       if (time >= currentBestParty.end - 2) {
+    //         // changeVolumeSlowly(true)
+    //       }
+    //       return
+    //     }
+    //   }
+    //   console.log('nextTrack')
+    //   handlerEnded()
+    // }
 
-    watchEffect(() => {
-      if (tabSelected.value === 4 && isPlaying.value && currentTrackIndex) {
-        shortTracksObserver(currentTime.value)
-      }
-    })
+    // watchEffect(() => {
+    //   if (tabSelected.value === 4 && isPlaying.value && currentTrackIndex) {
+    //     shortTracksObserver(currentTime.value)
+    //   }
+    // })
 
-    function previousTrackHandler() {
+    function previousTrackHandler(): void {
       if (audioPlayer.value!.currentTime <= 20 || tabSelected.value === 4) previousTrack()
       else {
         audioPlayer.value!.currentTime = 0

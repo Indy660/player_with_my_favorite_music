@@ -14,7 +14,7 @@ export default defineComponent({
   },
   emits: ['change-tab'],
   setup(props, { emit }) {
-    function btnHandler(option: object) {
+    function btnHandler(option: TabsOption): void {
       if (props.tabSelected !== option.id) {
         emit('change-tab', option)
       }

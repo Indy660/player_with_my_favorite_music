@@ -12,7 +12,7 @@ export default defineComponent({
   },
   emits: ['previous', 'play-pause', 'next'],
   setup(props, { emit }) {
-    function previousButtonHandler() {
+    function previousButtonHandler(): void {
       emit('previous')
     }
 
@@ -20,11 +20,11 @@ export default defineComponent({
       return props.isPlaying ? '<i class="fas fa-pause"/>' : ' <i class="fas fa-play"/>'
     })
 
-    function playerButtonHandler() {
+    function playerButtonHandler(): void {
       emit('play-pause')
     }
 
-    function nextButtonHandler() {
+    function nextButtonHandler(): void {
       emit('next')
     }
 

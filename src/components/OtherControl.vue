@@ -34,16 +34,16 @@ export default defineComponent({
   setup(props, { emit }) {
     //TODO: не обновляются данные из компонетс
     // const { totalNumbSongs, isRandomTracks } = tracksApi()
-    function iconClickRandomHandler() {
+    function iconClickRandomHandler(): void {
       emit('random-click')
     }
-    function iconClickRepeatModeHandler() {
+    function iconClickRepeatModeHandler(): void {
       emit('repeat-mode-click')
     }
-    function iconClickShowListHandler() {
+    function iconClickShowListHandler(): void {
       emit('show-list-click')
     }
-    function iconClickChangeThemeHandler() {
+    function iconClickChangeThemeHandler(): void {
       emit('change-theme')
     }
 
