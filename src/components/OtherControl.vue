@@ -41,10 +41,10 @@ export default defineComponent({
       emit('repeat-mode-click')
     }
     function iconClickShowListHandler() {
-      emit('show-list-click', event)
+      emit('show-list-click')
     }
     function iconClickChangeThemeHandler() {
-      emit('change-theme', event)
+      emit('change-theme')
     }
 
     const iconToggle: ComputedRef<string> = computed(() => {
@@ -55,7 +55,7 @@ export default defineComponent({
     const iconBar: ComputedRef<string> = computed(() => {
       return props.isShowTrackList
         ? '<i class="fas fa-bars fa-rotate-90"/>'
-        : '  <i class="fas fa-bars"/>'
+        : '<i class="fas fa-bars"/>'
     })
     return {
       // totalNumbSongs,

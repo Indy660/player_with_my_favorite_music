@@ -43,37 +43,50 @@ export default defineComponent({
       () => props.songName,
       () => {
         if ('mediaSession' in navigator && getLogoImage.value) {
+          const imageSizes: string[] = [
+            '96x96',
+            '128x128',
+            '192x192',
+            '256x256',
+            '384x384',
+            '512x512'
+          ]
           navigator.mediaSession.metadata = new MediaMetadata({
             title: getInfoBand.value?.songName || '',
             artist: getInfoBand.value?.bandName || '',
-            artwork: [
-              { src: getLogoImage.value, sizes: '96x96', type: 'image/jpg' },
-              {
-                src: getLogoImage.value,
-                sizes: '128x128',
-                type: 'image/png'
-              },
-              {
-                src: getLogoImage.value,
-                sizes: '192x192',
-                type: 'image/png'
-              },
-              {
-                src: getLogoImage.value,
-                sizes: '256x256',
-                type: 'image/png'
-              },
-              {
-                src: getLogoImage.value,
-                sizes: '384x384',
-                type: 'image/png'
-              },
-              {
-                src: getLogoImage.value,
-                sizes: '512x512',
-                type: 'image/png'
-              }
-            ]
+            artwork: imageSizes.map((item) => ({
+              src: getLogoImage.value,
+              sizes: item,
+              type: 'image/png'
+            }))
+            //   artwork: [
+            //     { src: getLogoImage.value, sizes: '96x96', type: 'image/jpg' },
+            //     {
+            //       src: getLogoImage.value,
+            //       sizes: '128x128',
+            //       type: 'image/png'
+            //     },
+            //     {
+            //       src: getLogoImage.value,
+            //       sizes: '192x192',
+            //       type: 'image/png'
+            //     },
+            //     {
+            //       src: getLogoImage.value,
+            //       sizes: '256x256',
+            //       type: 'image/png'
+            //     },
+            //     {
+            //       src: getLogoImage.value,
+            //       sizes: '384x384',
+            //       type: 'image/png'
+            //     },
+            //     {
+            //       src: getLogoImage.value,
+            //       sizes: '512x512',
+            //       type: 'image/png'
+            //     }
+            //   ]
           })
         }
       }

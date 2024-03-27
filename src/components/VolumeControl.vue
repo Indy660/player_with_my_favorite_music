@@ -16,7 +16,6 @@ export default defineComponent({
       return props.volume * 100
     })
     // TODO: не работает
-    // iconVolume
     // const iconVolume = computed(() => {
     //   return props.volume > 0 ? 'fa-volume-up' : 'fa-volume-off'
     // })
