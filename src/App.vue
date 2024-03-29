@@ -237,7 +237,7 @@ export default defineComponent({
 
     // for 1 loop
     // const isVolumeSlowlyDecrease: Ref<boolean> = ref(false)
-    function changeVolumeSlowly(isDecrease = true) {
+    function changeVolumeSlowly(isDecrease = true): void {
       // let steps = 40
       // const stepValue = 0.01
       // if (isDecrease && !isVolumeSlowlyDecrease.value) {
@@ -267,7 +267,7 @@ export default defineComponent({
       // }
     }
 
-    function shortTracksObserver(time: number) {
+    function shortTracksObserver(time: number): void {
       const bestParties: BestParties[] =
         sortingTopTrackList.value[currentTrackIndex.value].bestParties
       for (let i = 0; i < bestParties.length; i++) {
@@ -304,14 +304,14 @@ export default defineComponent({
     }
 
     const isShowTrackList: Ref<boolean> = ref(false)
-    function handlerShowListBtn() {
+    function handlerShowListBtn(): void {
       isShowTrackList.value = !isShowTrackList.value
     }
 
     // const table = this.$refs?.tableWrapper?.$el
     // table.getBoundingClientRect().top
 
-    function handlerSelectTrack(trackIndex: number) {
+    function handlerSelectTrack(trackIndex: number): void {
       selectTrack(trackIndex)
       if (!isPlaying.value) {
         togglePlayPause()
@@ -321,7 +321,7 @@ export default defineComponent({
     }
 
     const isRepeatMode: Ref<boolean> = ref(false)
-    function repeatModeChange() {
+    function repeatModeChange(): void {
       isRepeatMode.value = !isRepeatMode.value
     }
 

@@ -7,7 +7,7 @@ interface TrackList {
 
 interface TopTrackList extends TrackList {
   sort: number
-  bestParties: true
+  bestParties: BestParties[]
 }
 
 interface NotAggressiveTrackList extends TrackList {
@@ -28,6 +28,7 @@ interface TabsOption {
 // console.log(BASE_URL, import.meta.env)
 // TopTrack
 export function tracksApi() {
+  // const test: Ref<TopTrackList[]> = ref([{ songName: 'fsdf', sort: 3, bestParties: 2 }])
   const defaultTrackList: Ref<TrackList[]> = ref([])
   const topTrackList: Ref<TopTrackList[]> = ref([])
   const notAggressiveTrackList: Ref<NotAggressiveTrackList[]> = ref([])
@@ -50,7 +51,7 @@ export function tracksApi() {
     // const basePath = import.meta.env.DEV ? '' : BASE_URL
     // console.log('basePath', basePath, process.env.NODE_ENV, BASE_URL)
     // TODO: как вынести /player_with_my_favorite_music/, чтобы потом везде использовалось
-    const basePath: string = import.meta.env.DEV ? '/' : '/player_with_my_favorite_music/'
+    const basePath: string = import.meta.env.DEV ? '/' : '/player_with_my_favorite_music'
     return currentTracks.value[currentTrackIndex.value]
       ? `${basePath}music/${currentTracks.value[currentTrackIndex.value]}`
       : ``
@@ -118,13 +119,6 @@ export function tracksApi() {
     }
   })
 
-  // const bestParties: ComputedRef<BestParties[] | []> = computed(() => {
-  //   return tabSelected.value === 4
-  //     ? sortingTopTrackList.value[currentTrackIndex.value].bestParties
-  //     : []
-  // })
-
-  // TODO: хз что не так
   const bestParties: ComputedRef<BestParties[] | []> = computed(() => {
     return tabSelected.value === 4
       ? sortingTopTrackList.value[currentTrackIndex.value].bestParties
