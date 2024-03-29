@@ -1,7 +1,7 @@
 # Just player with my favorite music
 
 ## GH PAGES
-### https://indy660.github.io/player_with_my_favorite_music
+### https://indy660.github.io/player_with_my_favorite_music/
 
 ## Vue 3 Copmosition api + TS + Vite
 
