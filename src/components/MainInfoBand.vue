@@ -26,7 +26,11 @@ export default defineComponent({
       return (props.songName && props.songName.substring(0, indexSlice)) || ''
     })
 
-    const getInfoBand = computed(() => {
+    interface GetInfoBand {
+      bandName: string
+      songName: string
+    }
+    const getInfoBand: ComputedRef<GetInfoBand> = computed(() => {
       const [bandName, songName] = fullSongName.value.split(' - ')
       return {
         bandName,
@@ -34,7 +38,7 @@ export default defineComponent({
       }
     })
 
-    const getLogoImage = computed(() => {
+    const getLogoImage: ComputedRef<string> = computed(() => {
       const { bandName } = getInfoBand.value
       return imagePaths.value[bandName] || imagePaths.value.default_logo
     })

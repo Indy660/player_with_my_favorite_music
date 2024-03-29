@@ -24,7 +24,8 @@ export default defineComponent({
     })
 
     function volumeHandler(event: InputEvent): void {
-      emit('volume-change', (event.target as HTMLInputElement).value / 100)
+      const volumeValue: number = parseFloat((event.target as HTMLInputElement).value) / 100
+      emit('volume-change', volumeValue)
     }
 
     function volumeHandlerByClick(number: number): void {
@@ -32,7 +33,7 @@ export default defineComponent({
     }
 
     function onIconVolumeClick(): void {
-      const defaultVolume = 0.8
+      const defaultVolume: number = 0.8
       if (props.volume > 0) {
         volumeHandlerByClick(0)
       } else {

@@ -30,11 +30,11 @@ export default defineComponent({
   },
   setup() {
     const {
-      currentBestParties,
+      bestParties,
       nextTrack,
       previousTrack,
       pathToCurrentFile,
-      // sortingTopTrackList,
+      sortingTopTrackList,
       currentTrackIndex,
       changeTab,
       selectTrack,
@@ -101,6 +101,7 @@ export default defineComponent({
         [
           'seekto',
           (e: Event) => {
+            console.log(e)
             audioPlayer.value!.currentTime = e.seekTime
           }
         ]
@@ -266,34 +267,34 @@ export default defineComponent({
       // }
     }
 
-    // function shortTracksObserver(time: number) {
-    //   console.log(time)
-    //   const currentBestParties = sortingTopTrackList.value[currentTrackIndex.value].bestParties
-    //   for (let i = 0; i < currentBestParties.length; i++) {
-    //     const currentBestParty = currentBestParties[i]
-    //     // start song
-    //     if (time < currentBestParty.start) {
-    //       // changeVolumeSlowly(false)
-    //       console.log('start')
-    //       audioPlayer.value!.currentTime = currentBestParty.start
-    //       return
-    //     } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
-    //       console.log('continue')
-    //       if (time >= currentBestParty.end - 2) {
-    //         // changeVolumeSlowly(true)
-    //       }
-    //       return
-    //     }
-    //   }
-    //   console.log('nextTrack')
-    //   handlerEnded()
-    // }
+    function shortTracksObserver(time: number) {
+      const bestParties: BestParties[] =
+        sortingTopTrackList.value[currentTrackIndex.value].bestParties
+      for (let i = 0; i < bestParties.length; i++) {
+        const currentBestParty = bestParties[i]
+        // start song
+        if (time < currentBestParty.start) {
+          // changeVolumeSlowly(false)
+          console.log('start')
+          audioPlayer.value!.currentTime = currentBestParty.start
+          return
+        } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
+          console.log('continue')
+          if (time >= currentBestParty.end - 2) {
+            // changeVolumeSlowly(true)
+          }
+          return
+        }
+      }
+      console.log('nextTrack')
+      handlerEnded()
+    }
 
-    // watchEffect(() => {
-    //   if (tabSelected.value === 4 && isPlaying.value && currentTrackIndex) {
-    //     shortTracksObserver(currentTime.value)
-    //   }
-    // })
+    watchEffect(() => {
+      if (tabSelected.value === 4 && isPlaying.value && currentTrackIndex) {
+        shortTracksObserver(currentTime.value)
+      }
+    })
 
     function previousTrackHandler(): void {
       if (audioPlayer.value!.currentTime <= 20 || tabSelected.value === 4) previousTrack()
@@ -356,7 +357,7 @@ export default defineComponent({
       isShowTrackList,
       repeatModeChange,
       isRepeatMode,
-      currentBestParties,
+      bestParties,
       isDarkTheme,
       handlerChangeThemeBtn
     }
@@ -376,11 +377,11 @@ export default defineComponent({
           @select-track-from-list="handlerSelectTrack"
         />
       </transition>
-      <PageTabs :tab-selected="tabSelected" :tab-options="tabsOption" @change-tab="changeTab" />
+      <PageTabs :tab-selected="tabSelected" :tabs-option="tabsOption" @change-tab="changeTab" />
       <MainInfoBand :song-name="currentTracks[currentTrackIndex]" />
       <VolumeControl :volume="volume" @volume-change="setVolume" />
       <ProgressControl
-        :best-parties="currentBestParties"
+        :best-parties="bestParties"
         :current-time="currentTime"
         :total-time="totalTime"
         @time-change="handlerTimeChange"

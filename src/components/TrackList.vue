@@ -16,7 +16,7 @@ export default defineComponent({
   emits: ['select-track-from-list'],
   setup(props, { emit }) {
     const currentTracksWithCorrectNames: ComputedRef<string[]> = computed(() => {
-      return props.currentTracks?.map((item) => {
+      return props.currentTracks?.map((item: string) => {
         const indexLastSlash: number | undefined = item.lastIndexOf('/')
         const indexSlice: number | undefined = item?.lastIndexOf('.')
         return (item && item.substring(indexLastSlash + 1, indexSlice)) || ''

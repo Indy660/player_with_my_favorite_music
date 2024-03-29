@@ -113,15 +113,22 @@ export function tracksApi() {
         return returnSongName(notAggressiveTrackList.value)
       case 4:
         return returnSongName(sortingTopTrackList.value)
+      default:
+        return []
     }
   })
 
-  const currentBestParties = computed(() => {
-    return (
-      (tabSelected.value === 4 &&
-        sortingTopTrackList.value[currentTrackIndex.value]?.bestParties) ||
-      []
-    )
+  // const bestParties: ComputedRef<BestParties[] | []> = computed(() => {
+  //   return tabSelected.value === 4
+  //     ? sortingTopTrackList.value[currentTrackIndex.value].bestParties
+  //     : []
+  // })
+
+  // TODO: хз что не так
+  const bestParties: ComputedRef<BestParties[] | []> = computed(() => {
+    return tabSelected.value === 4
+      ? sortingTopTrackList.value[currentTrackIndex.value].bestParties
+      : []
   })
 
   const currentTracks: ComputedRef<string[]> = computed(() => {
@@ -131,7 +138,7 @@ export function tracksApi() {
   function getRandomTracks(): string[] {
     return tracksByTab.value
       .map((value: string) => ({ value, sort: Math.random() }))
-      .sort((a: number, b: number) => a.sort - b.sort)
+      .sort((a, b) => a.sort - b.sort)
       .map(({ value }) => value)
   }
 
@@ -160,7 +167,7 @@ export function tracksApi() {
     totalNumbSongs,
     defaultTrackList,
     topTrackList,
-    currentBestParties,
+    bestParties,
     nextTrack,
     previousTrack,
     pathToCurrentFile,

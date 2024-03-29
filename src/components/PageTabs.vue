@@ -3,7 +3,7 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
-    tabOptions: {
+    tabsOption: {
       type: Array,
       default: () => []
     },
@@ -29,7 +29,7 @@ export default defineComponent({
 <template>
   <div class="tabs">
     <button
-      v-for="(option, index) in tabOptions"
+      v-for="(option, index) in tabsOption"
       :key="index"
       :class="{ active: option.id === tabSelected }"
       @click="btnHandler(option)"
