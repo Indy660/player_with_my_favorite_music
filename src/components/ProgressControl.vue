@@ -61,6 +61,7 @@ export default defineComponent({
     }
 
     function timeHandlerEmit(e: MouseEvent): void {
+      // :TODO хз как
       const parentLine = e.currentTarget?.parentNode || null
       const { clientWidth } = parentLine
       const rect = parentLine.getBoundingClientRect()

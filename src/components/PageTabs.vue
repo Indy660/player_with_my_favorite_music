@@ -3,10 +3,10 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
-    tabsOption: {
-      type: Array,
-      default: () => []
-    },
+    // tabsOption: {
+    //   type: Array,
+    //   default: () => []
+    // },
     tabSelected: {
       type: Number,
       default: 1
@@ -14,13 +14,20 @@ export default defineComponent({
   },
   emits: ['change-tab'],
   setup(props, { emit }) {
+    const tabsOption: TabsOption[] = [
+      { label: 'All music', id: 1, url: 'all' },
+      { label: 'Top', id: 2, url: 'top' },
+      { label: 'Top Shorts', id: 4, url: 'shorts' },
+      { label: 'Not aggressive', id: 3, url: 'not_aggressive' }
+    ]
     function btnHandler(option: TabsOption): void {
       if (props.tabSelected !== option.id) {
         emit('change-tab', option)
       }
     }
     return {
-      btnHandler
+      btnHandler,
+      tabsOption
     }
   }
 })

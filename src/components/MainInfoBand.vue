@@ -14,9 +14,14 @@ export default defineComponent({
     const imagePaths = ref<Record<string, string>>({})
 
     onBeforeMount(async () => {
-      const images = import.meta.glob('@assets/images/*')
+      // :TODO any - хз как исправить
+      interface ImagesObject {
+        [key: string]: () => Promise<any>
+      }
+      const images: ImagesObject = import.meta.glob('@assets/images/*')
+      console.log(images)
       for (const path in images) {
-        const imageName = path.replace(/^.*\/(.*)\.\w+$/, '$1')
+        const imageName: string = path.replace(/^.*\/(.*)\.\w+$/, '$1')
         imagePaths.value[imageName] = (await images[path]()).default
       }
     })

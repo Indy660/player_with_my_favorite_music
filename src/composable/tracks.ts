@@ -11,36 +11,31 @@ interface TopTrackList extends TrackList {
 }
 
 interface NotAggressiveTrackList extends TrackList {
-  notAggressive: number
+  notAggressive: boolean
 }
 
 // interface BestPartieseTrackList extends TrackList {
 //   bestParties: BestParties[]
 // }
 
-interface TabsOption {
-  label: string
-  id: number
-  url: string
-}
-
 // const BASE_URL = import.meta.env.VITE_BASE_URL
 // console.log(BASE_URL, import.meta.env)
 // TopTrack
 export function tracksApi() {
   // const test: Ref<TopTrackList[]> = ref([{ songName: 'fsdf', sort: 3, bestParties: 2 }])
-  const defaultTrackList: Ref<TrackList[]> = ref([])
-  const topTrackList: Ref<TopTrackList[]> = ref([])
-  const notAggressiveTrackList: Ref<NotAggressiveTrackList[]> = ref([])
-  // const bestPartiesTrackList: Ref<BestPartieseTrackList[]> = ref([])
+  const defaultTrackList: Ref<TrackList[]> = ref(MUSIC_LIST)
+  const topTrackList: Ref<TopTrackList[]> = ref(
+    MUSIC_LIST.filter((item) => item.sort) as TopTrackList[]
+  )
+  const notAggressiveTrackList: Ref<NotAggressiveTrackList[]> = ref(
+    MUSIC_LIST.filter((item) => item.notAggressive) as NotAggressiveTrackList[]
+  )
+  // as NotAggressiveTrackList[]
   const currentTrackIndex: Ref<number> = ref(0)
   const totalNumbSongs: Ref<number> = ref(0)
   onBeforeMount(() => {
     defaultTrackList.value = MUSIC_LIST
     // TODO: хз на что ругается
-    topTrackList.value = MUSIC_LIST.filter((item) => item.sort)
-    notAggressiveTrackList.value = MUSIC_LIST.filter((item) => item.notAggressive)
-    // bestPartiesTrackList.value = MUSIC_LIST.filter((item) => item.bestParties)
     totalNumbSongs.value = currentTracks.value.length
   })
 
@@ -61,12 +56,6 @@ export function tracksApi() {
     return [...topTrackList.value].sort((a, b) => a.sort - b.sort)
   })
 
-  const tabsOption: TabsOption[] = [
-    { label: 'All music', id: 1, url: 'all' },
-    { label: 'Top', id: 2, url: 'top' },
-    { label: 'Top Shorts', id: 4, url: 'shorts' },
-    { label: 'Not aggressive', id: 3, url: 'not_aggressive' }
-  ]
   const tabSelected: Ref<number> = ref(1)
   function changeTab(option: TabsOption): void {
     if (
@@ -169,7 +158,6 @@ export function tracksApi() {
     currentTrackIndex,
     changeTab,
     selectTrack,
-    tabsOption,
     tabSelected,
     isRandomTracks,
     handlerRandomBtn,

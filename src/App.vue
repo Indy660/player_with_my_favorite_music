@@ -38,7 +38,6 @@ export default defineComponent({
       currentTrackIndex,
       changeTab,
       selectTrack,
-      tabsOption,
       tabSelected,
       isRandomTracks,
       handlerRandomBtn,
@@ -134,6 +133,7 @@ export default defineComponent({
     function handlerChangeThemeBtn(): void {
       isDarkTheme.value = !isDarkTheme.value
       // TODO: не работает пока
+      // TODO: как грамотно подключать стили темная/светлая, меняя и переменные и все цвета
       //  async
       // const oldLink = document.querySelector(
       //   `link[href*="${isDarkTheme.value ? 'light' : 'dark'}"]`
@@ -351,7 +351,6 @@ export default defineComponent({
       handlerRandomBtn,
       handlerShowListBtn,
       handlerSelectTrack,
-      tabsOption,
       tabSelected,
       changeTab,
       isShowTrackList,
@@ -377,7 +376,7 @@ export default defineComponent({
           @select-track-from-list="handlerSelectTrack"
         />
       </transition>
-      <PageTabs :tab-selected="tabSelected" :tabs-option="tabsOption" @change-tab="changeTab" />
+      <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
       <MainInfoBand :song-name="currentTracks[currentTrackIndex]" />
       <VolumeControl :volume="volume" @volume-change="setVolume" />
       <ProgressControl
