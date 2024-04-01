@@ -2,6 +2,7 @@ interface MusicList {
   songName: Required<string>
   sort?: number
   bestParties?: BestParties[]
+  songText?: string
   notAggressive?: boolean
 }
 const MUSIC_LIST: MusicList[] = [
@@ -9,6 +10,7 @@ const MUSIC_LIST: MusicList[] = [
     songName: '1.5 кг Отличного Пюре - Эмо.mp3',
     sort: 181,
     bestParties: [{ start: 25, end: 84 }],
+    songText: '@assets/texts/1.5 кг Отличного Пюре.txt',
     notAggressive: true
   },
   { songName: 'Angel Vivaldi - A Martian Winter.mp3' },

@@ -19,7 +19,6 @@ export default defineComponent({
         [key: string]: () => Promise<any>
       }
       const images: ImagesObject = import.meta.glob('@assets/images/*')
-      console.log(images)
       for (const path in images) {
         const imageName: string = path.replace(/^.*\/(.*)\.\w+$/, '$1')
         imagePaths.value[imageName] = (await images[path]()).default

@@ -42,7 +42,9 @@ export default defineComponent({
       isRandomTracks,
       handlerRandomBtn,
       totalNumbSongs,
-      currentTracks
+      currentTracks,
+      currentSong,
+      currentTracksList
     } = tracksApi()
     onBeforeMount(async () => {
       // старый способ импорта музыки прямо из папки
@@ -357,6 +359,8 @@ export default defineComponent({
       repeatModeChange,
       isRepeatMode,
       bestParties,
+      currentTracksList,
+      currentSong,
       isDarkTheme,
       handlerChangeThemeBtn
     }
@@ -371,14 +375,18 @@ export default defineComponent({
         <TrackList
           v-show="isShowTrackList"
           :current-track-index="currentTrackIndex"
-          :current-tracks="currentTracks"
+          :current-tracks="currentTracksList"
           class="track_list"
           @select-track-from-list="handlerSelectTrack"
         />
       </transition>
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
-      <MainInfoBand :song-name="currentTracks[currentTrackIndex]" />
-      <VolumeControl :volume="volume" @volume-change="setVolume" />
+      <MainInfoBand :song-name="currentSong.songName" />
+      <VolumeControl
+        :song-text="currentSong.songText || ''"
+        :volume="volume"
+        @volume-change="setVolume"
+      />
       <ProgressControl
         :best-parties="bestParties"
         :current-time="currentTime"

@@ -10,7 +10,7 @@ export default defineComponent({
       default: 0.8
     }
   },
-  emits: ['volume-change'],
+  emits: ['volume-change', 'show-text-song'],
   setup(props, { emit }) {
     const convertToValue: ComputedRef<number> = computed(() => {
       return props.volume * 100
@@ -23,6 +23,12 @@ export default defineComponent({
       return props.volume > 0 ? '<i class="fas fa-volume-up"/>' : '<i class="fas fa-volume-off"/>'
     })
 
+    const iconShowTextClass: ComputedRef<string> = computed(() => {
+      return props.isShowTrackList
+        ? '<i class="fas fa-bars fa-rotate-90"/>'
+        : '<i class="fas fa-bars"/>'
+    })
+
     function volumeHandler(event: InputEvent): void {
       const volumeValue: number = parseFloat((event.target as HTMLInputElement).value) / 100
       emit('volume-change', volumeValue)
@@ -30,6 +36,10 @@ export default defineComponent({
 
     function volumeHandlerByClick(number: number): void {
       emit('volume-change', number)
+    }
+
+    function onIconShowTextClick(): void {
+      emit('show-text-song')
     }
 
     function onIconVolumeClick(): void {
@@ -45,7 +55,9 @@ export default defineComponent({
       convertToValue,
       volumeHandler,
       onIconVolumeClick,
-      iconVolume
+      onIconShowTextClick,
+      iconVolume,
+      iconShowTextClass
     }
   }
 })
@@ -53,12 +65,23 @@ export default defineComponent({
 
 <template>
   <div class="volume-control">
-    <button class="player-button" @click="onIconVolumeClick">
+    <button class="player-button margin" @click="onIconVolumeClick">
       <!--      // TODO: можно ли без span?-->
       <span v-html="iconVolume"></span>
       <!--      <i class="fas" :class="iconVolume" />-->
     </button>
-    <input type="range" :value="convertToValue" min="0" max="100" step="1" @input="volumeHandler" />
+    <input
+      class="margin"
+      type="range"
+      :value="convertToValue"
+      min="0"
+      max="100"
+      step="1"
+      @input="volumeHandler"
+    />
+    <button class="show-text" :class="iconShowTextClass">
+      <i class="fa-solid fa-text-height" />
+    </button>
   </div>
 </template>
 
@@ -68,5 +91,19 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   width: 100%;
+}
+
+.volume-control .player-button {
+  text-align: start;
+  min-width: 30px;
+  padding: 0;
+}
+
+.volume-control .margin {
+  margin-right: 0.2vw;
+}
+
+button {
+  font-size: 20px;
 }
 </style>

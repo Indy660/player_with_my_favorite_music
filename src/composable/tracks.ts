@@ -36,7 +36,7 @@ export function tracksApi() {
   onBeforeMount(() => {
     defaultTrackList.value = MUSIC_LIST
     // TODO: хз на что ругается
-    totalNumbSongs.value = currentTracks.value.length
+    totalNumbSongs.value = currentTracksList.value.length
   })
 
   const pathToCurrentFile: ComputedRef<string> = computed(() => {
@@ -47,8 +47,8 @@ export function tracksApi() {
     // console.log('basePath', basePath, process.env.NODE_ENV, BASE_URL)
     // TODO: как вынести /player_with_my_favorite_music/, чтобы потом везде использовалось
     const basePath: string = import.meta.env.DEV ? '/' : '/player_with_my_favorite_music/'
-    return currentTracks.value[currentTrackIndex.value]
-      ? `${basePath}music/${currentTracks.value[currentTrackIndex.value]}`
+    return currentTracksList.value[currentTrackIndex.value]
+      ? `${basePath}music/${currentSong.value.songName}`
       : ``
   })
 
@@ -92,17 +92,31 @@ export function tracksApi() {
     // window.history.pushState({}, '', params)
   })
 
-  const tracksByTab: ComputedRef<string[]> = computed(() => {
-    const returnSongName = (arr: TrackList[]): string[] => arr.map((item) => item.songName)
+  // const tracksByTab: ComputedRef<string[]> = computed(() => {
+  //   const returnSongName = (arr: TrackList[]): string[] => arr.map((item) => item.songName)
+  //   switch (tabSelected.value) {
+  //     case 1:
+  //       return returnSongName(defaultTrackList.value)
+  //     case 2:
+  //       return returnSongName(sortingTopTrackList.value)
+  //     case 3:
+  //       return returnSongName(notAggressiveTrackList.value)
+  //     case 4:
+  //       return returnSongName(sortingTopTrackList.value)
+  //     default:
+  //       return []
+  //   }
+  // })
+  const tracksByTab: ComputedRef<TrackList[]> = computed(() => {
     switch (tabSelected.value) {
       case 1:
-        return returnSongName(defaultTrackList.value)
+        return defaultTrackList.value
       case 2:
-        return returnSongName(sortingTopTrackList.value)
+        return sortingTopTrackList.value
       case 3:
-        return returnSongName(notAggressiveTrackList.value)
+        return notAggressiveTrackList.value
       case 4:
-        return returnSongName(sortingTopTrackList.value)
+        return sortingTopTrackList.value
       default:
         return []
     }
@@ -114,15 +128,42 @@ export function tracksApi() {
       : []
   })
 
-  const currentTracks: ComputedRef<string[]> = computed(() => {
+  // const currentTracks: ComputedRef<string[]> = computed(() => {
+  //   return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
+  // })
+
+  // const currentTracks: ComputedRef<string[]> = computed(() => {
+  //   return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
+  // })
+
+  const currentTracks: ComputedRef<TrackList[]> = computed(() => {
     return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
   })
 
-  function getRandomTracks(): string[] {
+  const currentTracksList: ComputedRef<string[]> = computed(() => {
+    return currentTracks.value.map((item) => item.songName)
+  })
+
+  const currentSong: ComputedRef<TrackList> = computed(() => {
+    return currentTracks.value[currentTrackIndex.value]
+  })
+
+  // const songText: ComputedRef<string> = computed(() => {
+  //   return currentTracks.value[currentTrackIndex.value]?.songText || ''
+  // })
+
+  // function getRandomTracks(): string[] {
+  //   return tracksByTab.value
+  //     .map((value: string) => ({ value, sort: Math.random() }))
+  //     .sort((a, b) => a.sort - b.sort)
+  //     .map(({ value }) => value)
+  // }
+
+  function getRandomTracks(): TrackList[] {
     return tracksByTab.value
-      .map((value: string) => ({ value, sort: Math.random() }))
+      .map((value: TrackList) => ({ ...value, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value)
+      .map(({ sort, ...rest }) => rest)
   }
 
   function nextTrack(): void {
@@ -161,6 +202,8 @@ export function tracksApi() {
     tabSelected,
     isRandomTracks,
     handlerRandomBtn,
-    currentTracks
+    currentTracks,
+    currentTracksList,
+    currentSong
   }
 }
