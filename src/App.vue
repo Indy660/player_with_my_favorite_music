@@ -513,7 +513,8 @@ main.dark {
   top: 0;
   left: 0;
   z-index: 2;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid;
+  border-bottom-color: var(--main-color);
 }
 
 input[type='range'] {
