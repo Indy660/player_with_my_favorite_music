@@ -8,7 +8,15 @@ export default defineComponent({
     volume: {
       type: Number,
       default: 0.8
+    },
+    hasText: {
+      type: Boolean,
+      default: false
     }
+    // isShowSongText: {
+    //   type: Boolean,
+    //   default: false
+    // }
   },
   emits: ['volume-change', 'show-text-song'],
   setup(props, { emit }) {
@@ -24,9 +32,7 @@ export default defineComponent({
     })
 
     const iconShowTextClass: ComputedRef<string> = computed(() => {
-      return props.isShowTrackList
-        ? '<i class="fas fa-bars fa-rotate-90"/>'
-        : '<i class="fas fa-bars"/>'
+      return props.hasText ? '' : 'disabled'
     })
 
     function volumeHandler(event: InputEvent): void {
@@ -39,7 +45,7 @@ export default defineComponent({
     }
 
     function onIconShowTextClick(): void {
-      emit('show-text-song')
+      props.hasText && emit('show-text-song')
     }
 
     function onIconVolumeClick(): void {
@@ -79,7 +85,7 @@ export default defineComponent({
       step="1"
       @input="volumeHandler"
     />
-    <button class="show-text" :class="iconShowTextClass">
+    <button class="show-text" :class="iconShowTextClass" @click.stop="onIconShowTextClick">
       <i class="fa-solid fa-text-height" />
     </button>
   </div>
@@ -101,6 +107,11 @@ export default defineComponent({
 
 .volume-control .margin {
   margin-right: 0.2vw;
+}
+
+.volume-control .show-text.disabled {
+  cursor: default;
+  opacity: 0.3;
 }
 
 button {

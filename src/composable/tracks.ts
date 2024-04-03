@@ -1,9 +1,6 @@
 import { MUSIC_LIST } from '../const/music_list'
 import { onBeforeMount, ref, computed, watchEffect } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
-interface TrackList {
-  songName: string
-}
 
 interface TopTrackList extends TrackList {
   sort: number
@@ -147,10 +144,6 @@ export function tracksApi() {
   const currentSong: ComputedRef<TrackList> = computed(() => {
     return currentTracks.value[currentTrackIndex.value]
   })
-
-  // const songText: ComputedRef<string> = computed(() => {
-  //   return currentTracks.value[currentTrackIndex.value]?.songText || ''
-  // })
 
   // function getRandomTracks(): string[] {
   //   return tracksByTab.value

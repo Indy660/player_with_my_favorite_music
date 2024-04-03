@@ -2,7 +2,7 @@ interface MusicList {
   songName: Required<string>
   sort?: number
   bestParties?: BestParties[]
-  songText?: string
+  hasText?: boolean
   notAggressive?: boolean
 }
 const MUSIC_LIST: MusicList[] = [
@@ -10,7 +10,8 @@ const MUSIC_LIST: MusicList[] = [
     songName: '1.5 кг Отличного Пюре - Эмо.mp3',
     sort: 181,
     bestParties: [{ start: 25, end: 84 }],
-    songText: '@assets/texts/1.5 кг Отличного Пюре.txt',
+    // hasText: '@assets/texts/1.5 кг Отличного Пюре.txt',
+    hasText: true,
     notAggressive: true
   },
   { songName: 'Angel Vivaldi - A Martian Winter.mp3' },
@@ -24,11 +25,17 @@ const MUSIC_LIST: MusicList[] = [
     ],
     notAggressive: true
   },
-  { songName: 'As I Lay Dying - Forever.mp3', sort: 210, bestParties: [{ start: 0, end: 25 }] },
+  {
+    songName: 'As I Lay Dying - Forever.mp3',
+    sort: 210,
+    hasText: true,
+    bestParties: [{ start: 0, end: 25 }]
+  },
   {
     songName: 'As I Lay Dying - Nothing Left [2007].mp3',
     sort: 40,
-    bestParties: [{ start: 0, end: 57 }]
+    bestParties: [{ start: 0, end: 57 }],
+    hasText: true
   },
   {
     songName: 'As I Lay Dying - The Sound Оf Truth.mp3',
@@ -36,7 +43,8 @@ const MUSIC_LIST: MusicList[] = [
     bestParties: [
       { start: 0, end: 36 },
       { start: 59, end: 121 }
-    ]
+    ],
+    hasText: true
   },
   { songName: 'Aspirin Rose - Fucking Perfect (Pink cover).mp3' },
   {
@@ -46,7 +54,8 @@ const MUSIC_LIST: MusicList[] = [
       { start: 0, end: 30 },
       { start: 90, end: 114 },
       { start: 164, end: 175 }
-    ]
+    ],
+    hasText: true
   },
   {
     songName: 'August Burns Red - Barbarian.mp3',
@@ -55,19 +64,21 @@ const MUSIC_LIST: MusicList[] = [
       { start: 21, end: 32 },
       { start: 70, end: 88 },
       { start: 113, end: 152 }
-    ]
+    ],
+    hasText: true
   },
-  { songName: 'August Burns Red - Consumer.mp3' },
+  { songName: 'August Burns Red - Consumer.mp3', hasText: true },
   {
     songName: 'August Burns Red - Indonesia.mp3',
     sort: 141,
     bestParties: [
       { start: 84, end: 117 },
       { start: 161, end: 180 }
-    ]
+    ],
+    hasText: true
   },
-  { songName: 'August Burns Red - Meridian.mp3', notAggressive: true },
-  { songName: 'August Burns Red - Truth of a Liar.mp3' },
+  { songName: 'August Burns Red - Meridian.mp3', hasText: true, notAggressive: true },
+  { songName: 'August Burns Red - Truth of a Liar.mp3', hasText: true },
   {
     songName: 'August Burns Red - Your Little Suburbia Is in Ruins.mp3',
     sort: 70,
@@ -75,16 +86,18 @@ const MUSIC_LIST: MusicList[] = [
       { start: 12, end: 27 },
       { start: 107, end: 125 },
       { start: 146, end: 178 }
-    ]
+    ],
+    hasText: true
   },
-  { songName: 'Anaal Nathrakh - Between Shit and Piss We Are Born.mp3' },
+  { songName: 'Anaal Nathrakh - Between Shit and Piss We Are Born.mp3', hasText: true },
   {
     songName: 'Anaal Nathrakh - In The Constellation Of The Black Widow.mp3',
     sort: 220,
     bestParties: [
       { start: 65, end: 85 },
       { start: 114, end: 141 }
-    ]
+    ],
+    hasText: true
   },
   { songName: 'Between the Buried and Me - All Bodies.mp3' },
   {

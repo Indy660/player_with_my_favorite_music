@@ -9,6 +9,7 @@ import VolumeControl from './components/VolumeControl.vue'
 import ProgressControl from './components/ProgressControl.vue'
 import MainControl from './components/MainControl.vue'
 import OtherControl from './components/OtherControl.vue'
+import SongText from './components/SongText.vue'
 
 interface CustomAudioElement extends HTMLAudioElement {
   currentRange: number
@@ -26,7 +27,8 @@ export default defineComponent({
     VolumeControl,
     ProgressControl,
     MainControl,
-    OtherControl
+    OtherControl,
+    SongText
   },
   setup() {
     const {
@@ -310,6 +312,16 @@ export default defineComponent({
       isShowTrackList.value = !isShowTrackList.value
     }
 
+    const isShowSongText: Ref<boolean> = ref(false)
+    function handlerShowSongTextBtn(): void {
+      isShowSongText.value = !isShowSongText.value
+    }
+
+    function closeAllBars(): void {
+      isShowTrackList.value = false
+      isShowSongText.value = false
+    }
+
     // const table = this.$refs?.tableWrapper?.$el
     // table.getBoundingClientRect().top
 
@@ -362,30 +374,38 @@ export default defineComponent({
       currentTracksList,
       currentSong,
       isDarkTheme,
-      handlerChangeThemeBtn
+      handlerChangeThemeBtn,
+      handlerShowSongTextBtn,
+      isShowSongText,
+      closeAllBars
     }
   }
 })
 </script>
 
 <template>
-  <main :class="[isDarkTheme ? 'dark' : 'light']" @click="isShowTrackList = false">
+  <main :class="[isDarkTheme ? 'dark' : 'light']" @click="closeAllBars">
     <div class="container">
-      <transition name="slide">
+      <transition name="slide-track-list">
         <TrackList
           v-show="isShowTrackList"
           :current-track-index="currentTrackIndex"
           :current-tracks="currentTracksList"
-          class="track_list"
+          class="top_bar"
           @select-track-from-list="handlerSelectTrack"
         />
+      </transition>
+      <transition name="slide-song-text">
+        <!--        TODO: не работает на v-show-->
+        <SongText v-if="isShowSongText" :song-name="currentSong.songName" class="top_bar" />
       </transition>
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
       <MainInfoBand :song-name="currentSong.songName" />
       <VolumeControl
-        :song-text="currentSong.songText || ''"
+        :has-text="currentSong.hasText"
         :volume="volume"
         @volume-change="setVolume"
+        @show-text-song="handlerShowSongTextBtn"
       />
       <ProgressControl
         :best-parties="bestParties"
@@ -486,14 +506,14 @@ main.dark {
   width: 100%;
 }
 
-.track_list {
+.top_bar {
   position: absolute;
-  transition: padding 0.5s;
   /*TODO: можно переделать на getBoundingClientRect().top */
   height: 435px;
   top: 0;
   left: 0;
   z-index: 2;
+  border-bottom: 1px solid black;
 }
 
 input[type='range'] {
@@ -517,19 +537,35 @@ button:hover {
   /*background-color: #ddd;*/
 }
 
-.slide-enter-active,
-.slide-leave-active {
+.slide-track-list-enter-active,
+.slide-track-list-leave-active {
   transition: all 0.5s ease;
 }
 
 /*TODO: баг, -100% недоконца скрывает*/
-.slide-enter-from,
-.slide-leave-to {
+.slide-track-list-enter-from,
+.slide-track-list-leave-to {
   transform: translateY(-110%);
 }
 
-.slide-enter-to,
-.slide-leave-from {
+.slide-track-list-enter-to,
+.slide-track-list-leave-from {
+  transform: translateY(0);
+}
+
+.slide-song-text-enter-active,
+.slide-song-text-leave-active {
+  transition: all 0.5s ease;
+}
+
+/*TODO: баг, -100% недоконца скрывает*/
+.slide-song-text-enter-from,
+.slide-song-text-leave-to {
+  transform: translateY(-110%);
+}
+
+.slide-song-text-enter-to,
+.slide-song-text-leave-from {
   transform: translateY(0);
 }
 </style>

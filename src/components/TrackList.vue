@@ -50,25 +50,22 @@ export default defineComponent({
 </script>
 
 <template>
-  <div>
-    <ul ref="sidebarRef" class="sidebar" @click.stop>
-      <li
-        v-for="(track, index) in currentTracksWithCorrectNames"
-        :key="index"
-        :class="{ selected: index === currentTrackIndex }"
-        @click="selectTrackFromList(index)"
-      >
-        {{ index + 1 }}. {{ track }}
-      </li>
-    </ul>
-  </div>
+  <ul ref="sidebarRef" class="sidebar" @click.stop>
+    <li
+      v-for="(track, index) in currentTracksWithCorrectNames"
+      :key="index"
+      :class="{ selected: index === currentTrackIndex }"
+      @click="selectTrackFromList(index)"
+    >
+      {{ index + 1 }}. {{ track }}
+    </li>
+  </ul>
 </template>
 
 <style scoped>
 .sidebar {
   background-color: var(--main-bg-color);
   width: 100%;
-  height: 100%;
   overflow-y: auto;
   list-style-type: none;
   margin: 0;
