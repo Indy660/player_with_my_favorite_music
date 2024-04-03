@@ -43,27 +43,28 @@ const SONGS_TEXT = {
     'I saw your heart as it overtook me\n' +
     'We tried so hard to understand and reason\n' +
     'But in that one moment I gave my heart away\n' +
+    '\n' +
     'I gave my heart away\n' +
     'In that moment I gave my heart away\n' +
     'In that moment I gave my heart away\n' +
-    'With that perfect breath\n' +
-    'Where my mind lay beside me\n' +
+    '\n' +
+    'With that perfect breath where my mind lay beside me\n' +
     'And all I knew is what had overtaken me\n' +
-    'With no reason I am comforted\n' +
-    'By inability to understand\n' +
+    'With no reason I am comforted by inability to understand\n' +
+    '\n' +
     'Forever your eyes will hold the memory\n' +
     'I saw your heart as it overtook me\n' +
     'We tried so hard to understand and reason\n' +
     'But in that one moment I gave my heart away\n' +
+    '\n' +
     'I gave my heart away\n' +
     'In that moment I gave my heart away\n' +
     'In that moment I gave my heart away\n' +
-    'Forever your eyes\n' +
-    'Will hold the memory\n' +
-    'Forever your eyes\n' +
-    'Will hold the memory\n' +
-    'Forever your eyes\n' +
-    'Will hold the memory\n' +
+    '\n' +
+    'Forever your eyes will hold the memory\n' +
+    'Forever your eyes will hold the memory\n' +
+    'Forever your eyes will hold the memory\n' +
+    '\n' +
     'When I wake from this dream\n' +
     'Will your smile still open my heart\n' +
     'And leave me transparent?\n' +
@@ -111,32 +112,93 @@ const SONGS_TEXT = {
     'Like those gasping for their last breath\n' +
     "We cannot hide there's nothing left",
   ['As I Lay Dying - The Sound Оf Truth.mp3']:
+    '[Chorus]\n' +
     'We have all heard what we wanted to hear\n' +
-    'Truth that sounds right to our ears\n' +
+    '"Truth" that sounds right to our ears\n' +
     'We have all heard what we wanted to hear\n' +
-    'Truth that sounds right to our ears\n' +
+    '"Truth" that sounds right to our ears\n' +
+    '\n' +
+    '[Verse 1]\n' +
     'But what wisdom is there within us\n' +
     'To live based on the feeling of our hearts?\n' +
     'How many times has instinct let us down?\n' +
-    'Never to be thought through, never to be questioned, no\n' +
+    'Never to be thought through, never to be questioned!\n' +
     'Say what you really mean\n' +
-    'When your ambition calls you, calls you\n' +
+    'When your ambition calls you, calls you!\n' +
     'For what use is there, is there in praying\n' +
     'If you will only hear what you want to hear?\n' +
+    '\n' +
+    '[Chorus]\n' +
     'We have all heard what we wanted to hear\n' +
-    'Truth that sounds right to our ears\n' +
+    '"Truth" that sounds right to our ears\n' +
+    '\n' +
+    '[Verse 2]\n' +
     'We speak of fighting to resist this world\n' +
     'But what about the battle within us?\n' +
     'If we have chosen to live against the grain\n' +
     'Then why are we all facing the same way?\n' +
+    '\n' +
+    '[Bridge]\n' +
     'There is no difference between us and them\n' +
     'If we all blindly seek truth from sentiments\n' +
+    '\n' +
+    '[Guitar Solo]\n' +
+    '\n' +
+    '[Chorus]\n' +
     'We have all heard what we wanted to hear\n' +
-    'Truth that sounds right to our ears\n' +
+    '"Truth" that sounds right to our ears\n' +
     'We have all heard what we wanted to hear\n' +
-    'Truth that sounds right to our ears\n' +
+    '"Truth" that sounds right to our ears\n' +
     'We have all heard what we wanted to hear\n' +
-    'Truth that sounds right to our ears',
+    '"Truth" that sounds right to our ears',
+  ['August Burns Red - A Shot Below The Belt.mp3']:
+    "Don't you understand me?\n" +
+    "Don't you understand me?\n" +
+    '\n' +
+    'This cloud over\n' +
+    'My head is not okay\n' +
+    "It's not okay\n" +
+    '\n' +
+    'There are things\n' +
+    'That I need to get done\n' +
+    'Need to get done\n' +
+    'There are things\n' +
+    'That I need to get done\n' +
+    'Need to get done\n' +
+    '\n' +
+    "And it doesn't give you permission\n" +
+    'To take a shot below the belt...\n' +
+    '\n' +
+    'What a bittersweet symphony life is\n' +
+    "But I wouldn't have it any other way\n" +
+    '\n' +
+    'We have so little time\n' +
+    "Let's not spend it in anger in anger\n" +
+    'And I am\n' +
+    'I am in the deep end\n' +
+    "And I can't find air,I can't find air\n" +
+    '\n' +
+    'I am throwing punches, With a blindfold on\n' +
+    'I am throwing punches, With a blindfold on\n' +
+    'I am throwing punches, With a blindfold on\n' +
+    'I am throwing punches, With a blindfold on\n' +
+    '\n' +
+    'Stop riding my tail\n' +
+    'With your high beams on\n' +
+    '\n' +
+    'Because I may just brake suddenly\n' +
+    'I may just brake suddenly\n' +
+    'I may just brake suddenly\n' +
+    'I might just brake\n' +
+    '\n' +
+    'I would rather not explode -\n' +
+    "That's your job\n" +
+    '\n' +
+    "I'm stuck in between two worlds...\n" +
+    'In a maze of dreams and thoughts\n' +
+    'What a bittersweet symphony life is\n' +
+    "But I wouldn't have it any other way\n" +
+    'Have it any other way',
   ['August Burns Red - Barbarian.mp3']:
     'Chaos brings order\n' +
     'It brings order\n' +
@@ -216,11 +278,97 @@ const SONGS_TEXT = {
     'We will surely look back with sorrow\n' +
     'Sorrow, sorrow\n' +
     'Sorrow, sorrow',
+  ['August Burns Red - Indonesia.mp3']:
+    "This plane's going down in flames\n" +
+    "And this time there's no black box to capture your last words\n" +
+    "A situation we can't make any sense of\n" +
+    'Sacrifice costs all of us everything\n' +
+    '\n' +
+    'This is the time to turn down our heads and turn up our hearts\n' +
+    "There's no scale to, there's no scale to, balance this out\n" +
+    'Some say may those who curse days, curse this day\n' +
+    "There's no scale to, there's no scale to, balance this out\n" +
+    'Oh\n' +
+    '\n' +
+    'How does a man wrap his mind around eternity\n' +
+    "When he can't even (When he can't even)\n" +
+    'Explain his own (Explain his own) composition?\n' +
+    "Don't you see it's bigger than you?\n" +
+    '\n' +
+    'He sleeps in the mountains of Indonesia, and the white on his flag brings colors to shame, colors to shame\n' +
+    'He sleeps in the mountains of Indonesia, and the white on his flag brings colors to shame, colors to shame\n' +
+    '\n' +
+    'The earth will swallow the water\n' +
+    'The clouds refill the oceans\n' +
+    'The earth will swallow the water and spit out\n' +
+    'The clouds will refill, refill the oceans\n' +
+    'The earth will swallow (Old mountains crumble)\n' +
+    'The water and spit out (Stronger ones rise)\n' +
+    'The clouds will refill (This is the portrait)\n' +
+    'Refill the oceans (Humble and broken)\n' +
+    '\n' +
+    'This plane crashed down in flames (Down in flames)\n' +
+    'With a man who lived, who died to better this world\n' +
+    'David, rest in peace\n' +
+    '\n' +
+    'He sleeps in the mountains of Indonesia, and the white on his flag brings colors to shame, colors to shame\n' +
+    'He sleeps in the mountains of Indonesia, and the white on his flag brings colors to shame, colors to shame',
   ['August Burns Red - Meridian.mp3']:
     'The people who survive the sword will find favor in the desert. [Jeremiah 31:2]\n' +
     'I will build you up again and you will be rebuilt. [Jeremiah 31:4]\n' +
     'I am the painter making this mess a masterpiece\n' +
     'I will rebuild you up again',
+  ['August Burns Red - Truth of a Liar.mp3']:
+    "Allow what's done to preach new insight to your life\n" +
+    'Hindsight is perfect vision\n' +
+    'The past is easiest to see\n' +
+    '\n' +
+    'Clear a path, Stand aside\n' +
+    "We're carrying the torch now\n" +
+    'Clear a path, Stand aside\n' +
+    "We're carrying the torch now\n" +
+    'Clear a path, Stand aside\n' +
+    "There's no stopping us\n" +
+    'Clear a path, Stand aside\n' +
+    "We're carrying the torch now\n" +
+    'Clear a path, Stand aside\n' +
+    "There's no stopping us\n" +
+    '\n' +
+    "You think you're everything to everyone\n" +
+    'Go ahead, Partake in it, Justify it\n' +
+    'Become engulfed in it\n' +
+    'It will eat you alive\n' +
+    '\n' +
+    'This is not a one way road\n' +
+    "You're headed for the dead end\n" +
+    'This is not a one way road\n' +
+    "You're headed for the dead end\n" +
+    '\n' +
+    "You might think you're everything to everyone\n" +
+    'Well pardon me if I intrude\n' +
+    "You might think you're everything to everyone\n" +
+    "You're not a perfect man in a perfect world\n" +
+    '\n' +
+    'Look at where your ignorance has brought you\n' +
+    'All this will be buried, Like the fall of Rome\n' +
+    '\n' +
+    "You can't let your ignorance exploit you\n" +
+    'You will come crashing down\n' +
+    '\n' +
+    'The truth hurts (The truth hurts)\n' +
+    'The truth hurts (The truth hurts)\n' +
+    'The truth hurts (The truth hurts)\n' +
+    "But denial's what will kill you\n" +
+    '\n' +
+    'All that you loved, all that you treasure, will pass with time\n' +
+    'Blinded by the inability to see beyond flesh and blood\n' +
+    'Blinded by the inability to see beyond flesh and blood\n' +
+    '\n' +
+    'Shifting blame with a log in your eye\n' +
+    'Insisting that a string tied to your limbs\n' +
+    "Is what's to blame (Is what's to blame)\n" +
+    '\n' +
+    'Suck it up and bite the bullet',
   ['August Burns Red - Your Little Suburbia Is in Ruins.mp3']:
     'Open those eyes\n' +
     'Wake from peace\n' +
@@ -1467,7 +1615,7 @@ const SONGS_TEXT = {
     'Что когда-то я желала\n' +
     'Притворить мечтою к жизни\n' +
     'Ничего теперь не стало',
-  ['Psygnosis - FIIIX 2.0']:
+  ['Psygnosis - FIIIX 2.0.mp3']:
     'This curse which blessed me is Iost in the sky\n' +
     "When I watch around me I'm lost into my mind\n" +
     'All these things will get out one of this day\n' +
