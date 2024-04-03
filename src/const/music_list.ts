@@ -99,13 +99,14 @@ const MUSIC_LIST: MusicList[] = [
     ],
     hasText: true
   },
-  { songName: 'Between the Buried and Me - All Bodies.mp3' },
+  { songName: 'Between the Buried and Me - All Bodies.mp3', hasText: true },
   {
     songName: 'Between The Buried And Me - Ants Of The Sky.mp3',
     sort: 113,
-    bestParties: [{ start: 0, end: 108 }]
+    bestParties: [{ start: 0, end: 108 }],
+    hasText: true
   },
-  { songName: 'Between The Buried And Me - Sun Of Nothing.mp3' },
+  { songName: 'Between The Buried And Me - Sun Of Nothing.mp3', hasText: true },
   {
     songName: 'Between The Buried And Me - Swim To The Moon.mp3',
     sort: 10,
@@ -113,21 +114,24 @@ const MUSIC_LIST: MusicList[] = [
       { start: 135, end: 160 },
       { start: 500, end: 551 },
       { start: 982, end: 1022 }
-    ]
+    ],
+    hasText: true
   },
   { songName: 'Breakwater - Eleven.mp3' },
   { songName: 'Breakwater - five.mp3' },
-  { songName: 'Bullet For My Valentine - Hand Of Blood.mp3' },
+  { songName: 'Bullet For My Valentine - Hand Of Blood.mp3', hasText: true },
   {
     songName: 'Cerebral Bore - The Bald Cadaver.mp3',
     sort: 280,
     // TODO: не работает bestParties
-    bestParties: [{ start: 5.5, end: 50 }]
+    bestParties: [{ start: 5.5, end: 50 }],
+    hasText: true
   },
   {
     songName: 'Children Of Bodom - Are You Dead Yet.mp3',
     sort: 110,
-    bestParties: [{ start: 82, end: 114 }]
+    bestParties: [{ start: 82, end: 114 }],
+    hasText: true
   },
   { songName: 'Cosmonauts Day - The Captain.mp3', notAggressive: true },
   { songName: 'Death In Vegas - Dirge.mp3' },
@@ -137,11 +141,17 @@ const MUSIC_LIST: MusicList[] = [
     bestParties: [
       { start: 46, end: 65 },
       { start: 289, end: 317 }
-    ]
+    ],
+    hasText: true
   },
   { songName: 'If These Trees Could Talk - From Roots to Needles.mp3', notAggressive: true },
-  { songName: 'In Flames - Clayman.mp3', sort: 130, bestParties: [{ start: 0, end: 21 }] },
-  { songName: 'In Flames - Reflect the Storm.mp3' },
+  {
+    songName: 'In Flames - Clayman.mp3',
+    sort: 130,
+    bestParties: [{ start: 0, end: 21 }],
+    hasText: true
+  },
+  { songName: 'In Flames - Reflect the Storm.mp3', hasText: true },
   { songName: 'Killing Floor - Abandon All.mp3' },
   { songName: 'Killing Floor OST - Wake.mp3', notAggressive: true },
   { songName: 'Long Distance Calling - Black Paper Planes.mp3', notAggressive: true },
@@ -155,12 +165,14 @@ const MUSIC_LIST: MusicList[] = [
       { start: 59, end: 84 },
       { start: 165, end: 218 },
       { start: 240, end: 253 }
-    ]
+    ],
+    hasText: true
   },
   {
     songName: 'Ozoi The Maid Yakui The Maid - Lanterns.mp3',
     sort: 111,
-    bestParties: [{ start: 146, end: 218 }]
+    bestParties: [{ start: 146, end: 218 }],
+    hasText: true
   },
   {
     songName: 'Ozoi The Maid Yakui The Maid - Wonderland.mp3',
@@ -168,47 +180,57 @@ const MUSIC_LIST: MusicList[] = [
     bestParties: [
       { start: 115, end: 243 },
       { start: 355, end: 442 }
-    ]
+    ],
+    hasText: true
   },
-  { songName: 'Ozoi The Maid, Yakui The Maid - Frontier.mp3' },
-  { songName: 'Psygnosis - FIIIX 2.0.mp3' },
+  { songName: 'Ozoi The Maid, Yakui The Maid - Frontier.mp3', hasText: true },
+  { songName: 'Psygnosis - FIIIX 2.0.mp3', hasText: true },
   {
     songName: 'Psygnosis - Lost in Oblivion.mp3',
     sort: 140,
-    bestParties: [{ start: 292, end: 356 }]
+    bestParties: [{ start: 292, end: 356 }],
+    hasText: true
   },
   { songName: 'Psygnosis - MehMeh.mp3' },
   { songName: 'Psygnosis - Phrase 7.mp3', notAggressive: true },
   { songName: 'Psygnosis - Synaptic Plasticity.mp3' },
   { songName: 'Psygnosis - The Judgement.mp3' },
-  { songName: 'Raunchy - To the Lighthouse.mp3' },
-  { songName: 'Raunchy - Twelve Feet Tall.mp3', sort: 150, bestParties: [{ start: 65, end: 96 }] },
+  { songName: 'Raunchy - To the Lighthouse.mp3', hasText: true },
+  {
+    songName: 'Raunchy - Twelve Feet Tall.mp3',
+    sort: 150,
+    bestParties: [{ start: 65, end: 96 }],
+    hasText: true
+  },
   {
     songName: 'Raunchy - Wasteland Discotheque.mp3',
     sort: 190,
     bestParties: [
       { start: 0, end: 34 },
       { start: 63, end: 101 }
-    ]
+    ],
+    hasText: true
   },
-  { songName: 'Rhapsody - The Mighty Ride of the Firelord.mp3' },
-  { songName: 'Rhapsody of Fire - Wisdom of the Kings.mp3' },
-  { songName: 'Rise Of The Northstar - The New Path.mp3' },
+  { songName: 'Rhapsody - The Mighty Ride of the Firelord.mp3', hasText: true },
+  { songName: 'Rhapsody of Fire - Wisdom of the Kings.mp3', hasText: true },
+  { songName: 'Rise Of The Northstar - The New Path.mp3', hasText: true },
   {
     songName: 'Rise Of The Northstar - What The Fuck.mp3',
     sort: 160,
-    bestParties: [{ start: 45, end: 79 }]
+    bestParties: [{ start: 45, end: 79 }],
+    hasText: true
   },
   {
     songName: 'Siberian Meat Grinder feat Distemper - Пламя в Груди.mp3',
     sort: 211,
-    bestParties: [{ start: 49, end: 68 }]
+    bestParties: [{ start: 49, end: 68 }],
+    hasText: true
   },
-  { songName: 'The Doors - Alabama song.mp3', notAggressive: true },
-  { songName: 'The Doors - The End.mp3', notAggressive: true },
-  { songName: 'The Faceless - Shake The Disease.mp3' },
-  { songName: 'The Five Stars - Atom Bomb Baby.mp3', notAggressive: true },
-  { songName: 'The HAARP Machine - Esoteric Agenda.mp3' },
+  { songName: 'The Doors - Alabama song.mp3', notAggressive: true, hasText: true },
+  { songName: 'The Doors - The End.mp3', notAggressive: true, hasText: true },
+  { songName: 'The Faceless - Shake The Disease.mp3', hasText: true },
+  { songName: 'The Five Stars - Atom Bomb Baby.mp3', notAggressive: true, hasText: true },
+  { songName: 'The HAARP Machine - Esoteric Agenda.mp3', hasText: true },
   {
     songName: 'Toundra - Bizancio Byzantium.mp3',
     sort: 180,
@@ -251,7 +273,7 @@ const MUSIC_LIST: MusicList[] = [
   },
   { songName: 'Within The Ruins - Ataxia II.mp3' },
   { songName: 'Within The Ruins - Beautiful Agony.mp3' },
-  { songName: 'ZEROMANCER - Dr. Online.mp3' },
+  { songName: 'ZEROMANCER - Dr. Online.mp3', hasText: true },
   {
     songName: 'zYnthetic - Abandon All v3.mp3',
     sort: 100,
