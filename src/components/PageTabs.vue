@@ -39,7 +39,7 @@ export default defineComponent({
       v-for="(option, index) in tabsOption"
       :key="index"
       :class="{ active: option.id === tabSelected }"
-      @click="btnHandler(option)"
+      @click.stop="btnHandler(option)"
     >
       {{ option.label }}
     </button>
@@ -57,7 +57,7 @@ export default defineComponent({
   border: none;
   padding: 10px 20px;
   border-radius: initial;
-  font-size: 14px;
+  /*font-size: 14px;*/
   cursor: pointer;
   transition: background-color 0.3s;
 }

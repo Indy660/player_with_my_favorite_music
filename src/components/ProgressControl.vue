@@ -101,7 +101,7 @@ export default defineComponent({
           :key="key"
           :style="{ left: party.left, right: party.right }"
           class="best-section"
-          @click="timeHandlerEmit"
+          @click.stop="timeHandlerEmit"
         ></div>
       </div>
     </template>

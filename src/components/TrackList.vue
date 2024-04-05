@@ -55,7 +55,7 @@ export default defineComponent({
       v-for="(track, index) in currentTracksWithCorrectNames"
       :key="index"
       :class="{ selected: index === currentTrackIndex }"
-      @click="selectTrackFromList(index)"
+      @click.stop="selectTrackFromList(index)"
     >
       {{ index + 1 }}. {{ track }}
     </li>

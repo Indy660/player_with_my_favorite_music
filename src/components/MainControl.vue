@@ -40,13 +40,13 @@ export default defineComponent({
 
 <template>
   <div class="main-control">
-    <button class="player-button" @click="previousButtonHandler">
+    <button class="player-button" @click.stop="previousButtonHandler">
       <i class="fas fa-step-backward"></i>
     </button>
-    <button class="player-button" @click="playerButtonHandler">
+    <button class="player-button" @click.stop="playerButtonHandler">
       <span v-html="iconPlayerButton"></span>
     </button>
-    <button class="player-button" @click="nextButtonHandler">
+    <button class="player-button" @click.stop="nextButtonHandler">
       <i class="fas fa-step-forward"></i>
     </button>
   </div>

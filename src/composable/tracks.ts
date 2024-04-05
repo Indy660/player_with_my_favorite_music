@@ -11,15 +11,7 @@ interface NotAggressiveTrackList extends TrackList {
   notAggressive: boolean
 }
 
-// interface BestPartieseTrackList extends TrackList {
-//   bestParties: BestParties[]
-// }
-
-// const BASE_URL = import.meta.env.VITE_BASE_URL
-// console.log(BASE_URL, import.meta.env)
-// TopTrack
 export function tracksApi() {
-  // const test: Ref<TopTrackList[]> = ref([{ songName: 'fsdf', sort: 3, bestParties: 2 }])
   const defaultTrackList: Ref<TrackList[]> = ref(MUSIC_LIST)
   const topTrackList: Ref<TopTrackList[]> = ref(
     MUSIC_LIST.filter((item) => item.sort) as TopTrackList[]
@@ -88,22 +80,6 @@ export function tracksApi() {
     // const params = new URLSearchParams(`tab=${tabUrl}&track=${trackUrl}`)
     // window.history.pushState({}, '', params)
   })
-
-  // const tracksByTab: ComputedRef<string[]> = computed(() => {
-  //   const returnSongName = (arr: TrackList[]): string[] => arr.map((item) => item.songName)
-  //   switch (tabSelected.value) {
-  //     case 1:
-  //       return returnSongName(defaultTrackList.value)
-  //     case 2:
-  //       return returnSongName(sortingTopTrackList.value)
-  //     case 3:
-  //       return returnSongName(notAggressiveTrackList.value)
-  //     case 4:
-  //       return returnSongName(sortingTopTrackList.value)
-  //     default:
-  //       return []
-  //   }
-  // })
   const tracksByTab: ComputedRef<TrackList[]> = computed(() => {
     switch (tabSelected.value) {
       case 1:
@@ -125,14 +101,6 @@ export function tracksApi() {
       : []
   })
 
-  // const currentTracks: ComputedRef<string[]> = computed(() => {
-  //   return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
-  // })
-
-  // const currentTracks: ComputedRef<string[]> = computed(() => {
-  //   return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
-  // })
-
   const currentTracks: ComputedRef<TrackList[]> = computed(() => {
     return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
   })
@@ -144,13 +112,6 @@ export function tracksApi() {
   const currentSong: ComputedRef<TrackList> = computed(() => {
     return currentTracks.value[currentTrackIndex.value]
   })
-
-  // function getRandomTracks(): string[] {
-  //   return tracksByTab.value
-  //     .map((value: string) => ({ value, sort: Math.random() }))
-  //     .sort((a, b) => a.sort - b.sort)
-  //     .map(({ value }) => value)
-  // }
 
   function getRandomTracks(): TrackList[] {
     return tracksByTab.value

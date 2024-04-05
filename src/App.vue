@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, ref, watchEffect } from 'vue'
+import { computed, defineComponent, onBeforeMount, ref, watchEffect, onMounted } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
 import { tracksApi } from './composable/tracks'
 import TrackList from './components/TrackList.vue'
@@ -67,9 +67,6 @@ export default defineComponent({
       // }
 
       changeColorScheme()
-
-      audioPlayer.value = document.getElementById('audioPlayer') as CustomAudioElement
-
       type Action = () => void
       type ActionName = 'play' | 'pause' | 'nexttrack' | 'previoustrack' | 'seekto'
       type ActionHandler = [ActionName, Action]
@@ -207,7 +204,6 @@ export default defineComponent({
     }
 
     function setVolume(value: number): void {
-      // audioPlayer.value!.volume = value / 100
       audioPlayer.value!.volume = value
     }
 
@@ -300,7 +296,17 @@ export default defineComponent({
         shortTracksObserver(currentTime.value)
       }
     })
-
+    const distanceBetweenComponents: Ref<string> = ref('500px')
+    onMounted(() => {
+      const main_control_ref = document.querySelector('.main_control_ref')
+      const containerDiv = document.querySelector('.container')
+      // todo: через реф main_control_ref не видит, подобрал по классу
+      // const main_control_ref = ref(null)
+      // const rect1 = main_control_ref?.value?.$el?.getBoundingClientRect()
+      const rect1 = main_control_ref.getBoundingClientRect()
+      const rect2 = containerDiv?.getBoundingClientRect()
+      distanceBetweenComponents.value = `${Math.abs(rect1.top - rect2.top) + 18}px`
+    })
     function previousTrackHandler(): void {
       if (audioPlayer.value!.currentTime <= 20 || tabSelected.value === 4) previousTrack()
       else {
@@ -323,9 +329,6 @@ export default defineComponent({
       isShowSongText.value = false
     }
 
-    // const table = this.$refs?.tableWrapper?.$el
-    // table.getBoundingClientRect().top
-
     function handlerSelectTrack(trackIndex: number): void {
       selectTrack(trackIndex)
       if (!isPlaying.value) {
@@ -339,6 +342,7 @@ export default defineComponent({
     function repeatModeChange(): void {
       isRepeatMode.value = !isRepeatMode.value
     }
+
     type SongsText = {
       [key: string]: string
     }
@@ -387,14 +391,15 @@ export default defineComponent({
       handlerShowSongTextBtn,
       isShowSongText,
       closeAllBars,
-      currentSongText
+      currentSongText,
+      distanceBetweenComponents
     }
   }
 })
 </script>
 
 <template>
-  <main :class="[isDarkTheme ? 'dark' : 'light']" @click="closeAllBars">
+  <main :class="[isDarkTheme ? 'dark' : 'light']" @click.stop="closeAllBars">
     <div class="container">
       <transition name="slide-track-list">
         <TrackList
@@ -424,6 +429,8 @@ export default defineComponent({
         @time-change-line="handlerTimeChangeLine"
       />
       <MainControl
+        ref="main_control_ref"
+        class="main_control_ref"
         :is-playing="isPlaying"
         @previous="previousTrackHandler"
         @next="nextTrack"
@@ -442,7 +449,6 @@ export default defineComponent({
         @change-theme="handlerChangeThemeBtn"
       />
       <audio
-        id="audioPlayer"
         ref="audioPlayer"
         :src="pathToCurrentFile"
         preload="metadata"
@@ -461,6 +467,11 @@ export default defineComponent({
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   margin: 0;
+  color: var(--main-color);
+  font-weight: 500;
+  --main-font-size: 24px;
+  --max-container-width: 1000px;
+  font-size: var(--main-font-size);
 }
 main {
   width: 100vw;
@@ -492,21 +503,30 @@ main.dark {
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: 400px;
+  width: 75vw;
+  max-width: var(--max-container-width);
   border: 1px solid;
   border-radius: 5px;
   padding: 20px;
   background-color: var(--main-bg-color);
-  box-sizing: border-box;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 600px) {
+  * {
+    --main-font-size: 20px;
+  }
   .container {
     width: 100vw;
     padding: 3vw;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  * {
+    --main-font-size: 15px;
   }
 }
 
@@ -517,8 +537,7 @@ main.dark {
 
 .top_bar {
   position: absolute;
-  /*TODO: можно переделать на getBoundingClientRect().top */
-  height: 435px;
+  height: v-bind('distanceBetweenComponents');
   top: 0;
   left: 0;
   z-index: 2;
@@ -535,7 +554,7 @@ input[type='range'] {
 }
 
 button {
-  font-size: 24px;
+  font-size: var(--main-font-size);
   border-radius: 50%;
   background: none;
   border: none;

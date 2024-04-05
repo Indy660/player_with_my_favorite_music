@@ -6,7 +6,7 @@ export default defineComponent({
       type: String,
       default: ''
     }
-  },
+  }
 })
 </script>
 
@@ -29,8 +29,6 @@ export default defineComponent({
 
 .sidebar span {
   white-space: break-spaces;
-  font-size: 20px;
-  color: var(--main-color);
 }
 /*li {*/
 /*  color: var(--main-color);*/

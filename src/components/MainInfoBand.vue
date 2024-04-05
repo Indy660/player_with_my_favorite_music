@@ -89,20 +89,25 @@ export default defineComponent({
 
 <style scoped>
 .album-image {
-  width: 200px;
-  height: 200px;
+  width: calc(75vw - 40px);
+  max-width: calc(var(--max-container-width) - 40px - 50px);
+  height: calc(75vw - 40px);
+  max-height: calc(var(--max-container-width) - 40px - 50px);
 }
 
 .artist-info .band {
-  color: var(--main-color);
-  font-size: 16px;
   margin-bottom: 10px;
-  font-weight: 500;
 }
 
 .artist-info .song {
-  color: var(--main-color);
-  font-size: 18px;
+  font-size: calc(var(--main-font-size) + 2px);
   font-weight: 600;
+}
+
+@media screen and (max-width: 400px) {
+  .album-image {
+    max-height: unset;
+    max-width: unset;
+  }
 }
 </style>

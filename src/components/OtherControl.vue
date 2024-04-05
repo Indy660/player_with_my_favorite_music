@@ -74,17 +74,17 @@ export default defineComponent({
 
 <template>
   <div class="other">
-    <button :class="{ active: isRandomTracks }" @click="iconClickRandomHandler">
+    <button :class="{ active: isRandomTracks }" @click.stop="iconClickRandomHandler">
       <i class="fas fa-shuffle"></i>
     </button>
-    <button :class="{ active: isRepeatMode }" @click="iconClickRepeatModeHandler">
+    <button :class="{ active: isRepeatMode }" @click.stop="iconClickRepeatModeHandler">
       <i class="fas fa-repeat"></i>
     </button>
     <div class="song-display">
       <span>{{ currentNumbSong }}</span
       >/<span> {{ totalNumbSongs }}</span>
     </div>
-    <button @click="iconClickChangeThemeHandler">
+    <button @click.stop="iconClickChangeThemeHandler">
       <span v-html="iconToggle"></span>
     </button>
     <button :class="{ active: isShowTrackList }" @click.stop="iconClickShowListHandler">

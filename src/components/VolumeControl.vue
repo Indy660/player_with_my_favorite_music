@@ -71,7 +71,7 @@ export default defineComponent({
 
 <template>
   <div class="volume-control">
-    <button class="player-button margin" @click="onIconVolumeClick">
+    <button class="player-button margin" @click.stop="onIconVolumeClick">
       <!--      // TODO: можно ли без span?-->
       <span v-html="iconVolume"></span>
       <!--      <i class="fas" :class="iconVolume" />-->
