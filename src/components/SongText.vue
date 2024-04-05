@@ -2,7 +2,7 @@
 import { defineComponent, ref } from 'vue'
 import type { Ref } from 'vue'
 
-import SONGS_TEXT from '../const/songs_text'
+import SONGS_TEXT from '../static_data/songs_text.json'
 export default defineComponent({
   props: {
     songName: {
