@@ -2,7 +2,6 @@ interface TrackList {
   songName: Required<string>
   sort?: number
   bestParties?: BestParties[]
-  hasText?: boolean
   notAggressive?: boolean
 }
 interface BestParties {

@@ -1,6 +1,6 @@
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref, watchEffect } from 'vue'
-import type { Ref } from 'vue'
+import { computed, defineComponent, onBeforeMount, ref, watchEffect } from 'vue'
+import type { Ref, ComputedRef } from 'vue'
 import { tracksApi } from './composable/tracks'
 import TrackList from './components/TrackList.vue'
 import PageTabs from './components/PageTabs.vue'
@@ -10,6 +10,7 @@ import ProgressControl from './components/ProgressControl.vue'
 import MainControl from './components/MainControl.vue'
 import OtherControl from './components/OtherControl.vue'
 import SongText from './components/SongText.vue'
+import SONGS_TEXT from './static_data/songs_text.json'
 
 interface CustomAudioElement extends HTMLAudioElement {
   currentRange: number
@@ -338,10 +339,15 @@ export default defineComponent({
     function repeatModeChange(): void {
       isRepeatMode.value = !isRepeatMode.value
     }
+    type SongsText = {
+      [key: string]: string
+    }
+    const currentSongText: ComputedRef<string> = computed(
+      () => (SONGS_TEXT as SongsText)[currentSong.value.songName] || ''
+    )
 
     return {
       audioPlayer,
-      totalNumbSongs,
       isPlaying,
       currentTime,
       volume,
@@ -349,8 +355,13 @@ export default defineComponent({
       totalTime,
       isRandomTracks,
       pathToCurrentFile,
+
       currentTracks,
       currentTrackIndex,
+      currentTracksList,
+      totalNumbSongs,
+      currentSong,
+
       handlerCanPlay,
       handlerEnded,
       handlerTimeChange,
@@ -371,13 +382,12 @@ export default defineComponent({
       repeatModeChange,
       isRepeatMode,
       bestParties,
-      currentTracksList,
-      currentSong,
       isDarkTheme,
       handlerChangeThemeBtn,
       handlerShowSongTextBtn,
       isShowSongText,
-      closeAllBars
+      closeAllBars,
+      currentSongText
     }
   }
 })
@@ -396,13 +406,12 @@ export default defineComponent({
         />
       </transition>
       <transition name="slide-song-text">
-        <!--        TODO: не работает на v-show-->
-        <SongText v-if="isShowSongText" :song-name="currentSong.songName" class="top_bar" />
+        <SongText v-show="isShowSongText" :song-text="currentSongText" class="top_bar" />
       </transition>
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
       <MainInfoBand :song-name="currentSong.songName" />
       <VolumeControl
-        :has-text="currentSong.hasText"
+        :has-text="!!currentSongText.length"
         :volume="volume"
         @volume-change="setVolume"
         @show-text-song="handlerShowSongTextBtn"

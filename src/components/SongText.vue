@@ -1,34 +1,18 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import type { Ref } from 'vue'
-
-import SONGS_TEXT from '../static_data/songs_text.json'
+import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
-    songName: {
+    songText: {
       type: String,
       default: ''
     }
   },
-  setup(props) {
-    // const fileContent: Ref<string> = ref('')
-    // if (props.songName) {
-    //   fileContent.value = SONGS_TEXT[props.songName]
-    // }
-    const fileContent: Ref<string> = ref(SONGS_TEXT[props.songName])
-    // if (props.songName) {
-    //   fileContent.value = SONGS_TEXT[props.songName]
-    // }
-    return {
-      fileContent
-    }
-  }
 })
 </script>
 
 <template>
   <div class="sidebar">
-    <span v-text="fileContent" />
+    <span v-text="songText" />
   </div>
 </template>
 
