@@ -303,8 +303,8 @@ export default defineComponent({
       // todo: через реф main_control_ref не видит, подобрал по классу
       // const main_control_ref = ref(null)
       // const rect1 = main_control_ref?.value?.$el?.getBoundingClientRect()
-      const rect1 = main_control_ref.getBoundingClientRect()
-      const rect2 = containerDiv?.getBoundingClientRect()
+      const rect1: DOMRect = main_control_ref.getBoundingClientRect()
+      const rect2: DOMRect = containerDiv?.getBoundingClientRect()
       distanceBetweenComponents.value = `${Math.abs(rect1.top - rect2.top) + 18}px`
     })
     function previousTrackHandler(): void {
