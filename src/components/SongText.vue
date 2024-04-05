@@ -41,8 +41,12 @@ export default defineComponent({
   margin: 0;
   padding: 10px 5px;
   text-align: start;
+}
+
+.sidebar span {
   white-space: break-spaces;
   font-size: 20px;
+  color: var(--main-color);
 }
 /*li {*/
 /*  color: var(--main-color);*/
