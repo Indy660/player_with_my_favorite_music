@@ -91,8 +91,9 @@ export default defineComponent({
 .album-image {
   width: calc(75vw - 40px);
   max-width: calc(var(--max-container-width) - 40px - 50px);
-  height: calc(75vw - 40px);
-  max-height: calc(var(--max-container-width) - 40px - 50px);
+  /*height: calc(75vw - 40px);*/
+  max-height: 60vh;
+  /*height: clamp(200px, 50vh, 50vw);*/
 }
 
 .artist-info .band {
