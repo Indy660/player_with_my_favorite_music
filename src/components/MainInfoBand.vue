@@ -1,6 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref, onBeforeMount, computed, watch } from 'vue'
-import type { ComputedRef } from 'vue'
+import { defineComponent, ref, onBeforeMount, computed, watch, onUnmounted, onMounted } from 'vue'
+import type { ComputedRef, Ref } from 'vue'
 
 export default defineComponent({
   name: 'MainInfoBand',
@@ -13,6 +13,14 @@ export default defineComponent({
   setup(props) {
     const imagePaths = ref<Record<string, string>>({})
 
+    const width: Ref<number> = ref(window.innerWidth)
+    const height: Ref<number> = ref(window.innerHeight)
+
+    const updateSize = () => {
+      // console.log('updateSize', width.value, height.value)
+      width.value = window.innerWidth
+      height.value = window.innerHeight
+    }
     onBeforeMount(async () => {
       // :TODO any - хз как исправить
       interface ImagesObject {
@@ -23,6 +31,12 @@ export default defineComponent({
         const imageName: string = path.replace(/^.*\/(.*)\.\w+$/, '$1')
         imagePaths.value[imageName] = (await images[path]()).default
       }
+    })
+    onMounted(() => {
+      window.addEventListener('resize', updateSize)
+    })
+    onUnmounted(() => {
+      window.removeEventListener('resize', updateSize)
     })
 
     const fullSongName: ComputedRef<string> = computed(() => {
@@ -45,6 +59,18 @@ export default defineComponent({
     const getLogoImage: ComputedRef<string> = computed(() => {
       const { bandName } = getInfoBand.value
       return imagePaths.value[bandName] || imagePaths.value.default_logo
+    })
+
+    interface ImagesSizes {
+      width: number | string
+      height: number | string
+    }
+    const getImageSizes: ComputedRef<ImagesSizes> = computed(() => {
+      function getSize(value: number, coef: number = 1): ImagesSizes {
+        return { width: `${coef * value}px`, height: `${coef * value}px` }
+      }
+      if (width.value > height.value) return getSize(height.value, 0.6)
+      return getSize(width.value, 0.8)
     })
 
     watch(
@@ -72,7 +98,7 @@ export default defineComponent({
       }
     )
 
-    return { getInfoBand, getLogoImage }
+    return { getInfoBand, getLogoImage, getImageSizes }
   }
 })
 </script>
@@ -89,11 +115,8 @@ export default defineComponent({
 
 <style scoped>
 .album-image {
-  width: calc(75vw - 40px);
-  max-width: calc(var(--max-container-width) - 40px - 50px);
-  /*height: calc(75vw - 40px);*/
-  max-height: 60vh;
-  /*height: clamp(200px, 50vh, 50vw);*/
+  width: v-bind('getImageSizes.width');
+  height: v-bind('getImageSizes.height');
 }
 
 .artist-info .band {
@@ -103,12 +126,5 @@ export default defineComponent({
 .artist-info .song {
   font-size: calc(var(--main-font-size) + 2px);
   font-weight: 600;
-}
-
-@media screen and (max-width: 400px) {
-  .album-image {
-    max-height: unset;
-    max-width: unset;
-  }
 }
 </style>

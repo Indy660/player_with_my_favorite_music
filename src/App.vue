@@ -503,8 +503,6 @@ main.dark {
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: 75vw;
-  max-width: var(--max-container-width);
   border: 1px solid;
   border-radius: 5px;
   padding: 20px;
@@ -512,6 +510,12 @@ main.dark {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
+}
+@media screen and (min-width: 1200px) {
+  .container {
+    width: 75vw;
+    max-width: var(--max-container-width);
+  }
 }
 
 @media screen and (max-width: 600px) {
