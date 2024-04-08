@@ -98,7 +98,7 @@ export default defineComponent({
             previousTrack()
           }
         ],
-        // :TODO поправить seekTime
+        // :TODO поправить seekTime, оно здесь работает но не перематывает
         [
           'seekto',
           (e: Event) => {
@@ -197,6 +197,7 @@ export default defineComponent({
 
     function onTimeUpdate(event: Event): void {
       currentTime.value = (event.target as HTMLAudioElement).currentTime
+      // TODO: не работает перемотка в MediaSession
       navigator.mediaSession.setPositionState({
         position: currentTime.value
       })
@@ -301,8 +302,8 @@ export default defineComponent({
     })
     const distanceBetweenComponents: Ref<string> = ref('500px')
     onMounted(() => {
-      const main_control_ref = document.querySelector('.main_control_ref')
-      const containerDiv = document.querySelector('.container')
+      const main_control_ref = document.querySelector('.main_control_ref') as HTMLElement
+      const containerDiv = document.querySelector('.container') as HTMLElement
       // todo: через реф main_control_ref не видит, подобрал по классу
       // const main_control_ref = ref(null)
       // const rect1 = main_control_ref?.value?.$el?.getBoundingClientRect()
@@ -375,8 +376,6 @@ export default defineComponent({
       handlerTimeChangeLine,
       onTimeUpdate,
       setVolume,
-      // setTotalTime,
-      playTrack,
       togglePlayPause,
       nextTrack,
       previousTrackHandler,
