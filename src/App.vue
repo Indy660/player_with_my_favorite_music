@@ -199,6 +199,8 @@ export default defineComponent({
       currentTime.value = (event.target as HTMLAudioElement).currentTime
       // TODO: не работает перемотка в MediaSession
       navigator.mediaSession.setPositionState({
+        duration: totalTime.value,
+        playbackRate: 1,
         position: currentTime.value
       })
     }
