@@ -17,7 +17,6 @@ export default defineComponent({
     const height: Ref<number> = ref(window.innerHeight)
 
     const updateSize = () => {
-      // console.log('updateSize', width.value, height.value)
       width.value = window.innerWidth
       height.value = window.innerHeight
     }
@@ -66,8 +65,8 @@ export default defineComponent({
       height: number | string
     }
     const getImageSizes: ComputedRef<ImagesSizes> = computed(() => {
-      function getSize(value: number, coef: number = 1): ImagesSizes {
-        return { width: `${coef * value}px`, height: `${coef * value}px` }
+      function getSize(value: number, coefficient: number = 1): ImagesSizes {
+        return { width: `${coefficient * value}px`, height: `${coefficient * value}px` }
       }
       if (width.value > height.value) return getSize(height.value, 0.6)
       return getSize(width.value, 0.8)
