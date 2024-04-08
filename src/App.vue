@@ -103,7 +103,7 @@ export default defineComponent({
           'seekto',
           (e: Event) => {
             console.log(e)
-            // audioPlayer.value!.currentTime = e.seekTime
+            audioPlayer.value!.currentTime = e.seekTime
           }
         ]
       ]
