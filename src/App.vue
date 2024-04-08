@@ -103,7 +103,7 @@ export default defineComponent({
           'seekto',
           (e: Event) => {
             console.log(e)
-            audioPlayer.value!.currentTime = e.seekTime
+            // audioPlayer.value!.currentTime = e.seekTime
           }
         ]
       ]
@@ -197,6 +197,9 @@ export default defineComponent({
 
     function onTimeUpdate(event: Event): void {
       currentTime.value = (event.target as HTMLAudioElement).currentTime
+      navigator.mediaSession.setPositionState({
+        position: currentTime.value
+      })
     }
 
     function onVolumeUpdate(event: Event): void {
@@ -372,7 +375,7 @@ export default defineComponent({
       handlerTimeChangeLine,
       onTimeUpdate,
       setVolume,
-      setTotalTime,
+      // setTotalTime,
       playTrack,
       togglePlayPause,
       nextTrack,
