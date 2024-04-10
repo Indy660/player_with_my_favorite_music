@@ -44,7 +44,7 @@ export default defineComponent({
     const convertBestPartiesInPercentage: ComputedRef<BestPartiesPosition[]> = computed(() => {
       const oneSecondSongInPercent: number = Number((100 / props.totalTime).toFixed(2))
       // TODO: хз как defineProps в props.bestParties проверить типы
-      return props.bestParties?.map((item) => ({
+      return (props.bestParties as BestParties[]).map((item) => ({
         left: `${item.start * oneSecondSongInPercent}%`,
         right: `${100 - item.end * oneSecondSongInPercent}%`
       }))

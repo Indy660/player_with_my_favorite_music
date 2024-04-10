@@ -58,6 +58,9 @@ export default defineComponent({
     const getLogoImage: ComputedRef<string> = computed(() => {
       const { bandName } = getInfoBand.value
       return imagePaths.value[bandName] || imagePaths.value.default_logo
+      // TODO: как сделать так, чтобы свг в default_logo заработало? Не работает require в css?
+      // const path = imagePaths.value[bandName] || imagePaths.value.default_logo
+      // return `url(${path})`
     })
 
     interface ImagesSizes {
@@ -105,6 +108,7 @@ export default defineComponent({
 <template>
   <div>
     <img :src="getLogoImage" class="album-image" alt="" />
+<!--    <div class="album-image" alt="" />-->
     <div class="artist-info">
       <div class="band">{{ getInfoBand.bandName }}</div>
       <div class="song">{{ getInfoBand.songName }}</div>
@@ -116,6 +120,11 @@ export default defineComponent({
 .album-image {
   width: v-bind('getImageSizes.width');
   height: v-bind('getImageSizes.height');
+  background-color: white;
+  /*color: green;*/
+  /*background-image: v-bind('getLogoImage') ;*/
+  /*background-size: contain;*/
+  /*color: var(--main-color);*/
 }
 
 .artist-info .band {

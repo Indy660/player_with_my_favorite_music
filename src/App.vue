@@ -66,7 +66,7 @@ export default defineComponent({
       //   })
       // }
 
-      changeColorScheme()
+      initChangeColorScheme()
       type Action = () => void
       type ActionName = 'play' | 'pause' | 'nexttrack' | 'previoustrack' | 'seekto'
       type ActionHandler = [ActionName, Action]
@@ -118,17 +118,20 @@ export default defineComponent({
     })
 
     const isDarkTheme: Ref<boolean> = ref(false)
-    function changeColorScheme(): void {
+    function initChangeColorScheme(): void {
       const theme =
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
           ? 'dark'
           : 'light'
+      // const rootElement = document.documentElement
       if (theme === 'dark') {
         isDarkTheme.value = true
         // import('./assets/css/dark-theme.css')
+        // rootElement.classList.add('dark-theme');
       } else {
         isDarkTheme.value = false
         // import('./assets/css/light-theme.css')
+        // rootElement.classList.add('light-theme')
       }
     }
 
@@ -510,6 +513,10 @@ main.dark {
   --main-bg-color: #000000ff;
   --main-bg-color-secondary: rgb(48, 49, 53);
 }
+
+/*:root {*/
+/*  color-scheme: dark;*/
+/*}*/
 
 .container {
   display: flex;
