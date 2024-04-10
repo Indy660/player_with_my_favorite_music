@@ -13,10 +13,6 @@ export default defineComponent({
       type: Boolean,
       default: false
     }
-    // isShowSongText: {
-    //   type: Boolean,
-    //   default: false
-    // }
   },
   emits: ['volume-change', 'show-text-song'],
   setup(props, { emit }) {

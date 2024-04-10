@@ -62,10 +62,10 @@ export default defineComponent({
 
     function timeHandlerEmit(e: MouseEvent): void {
       // :TODO хз как
-      const parentLine = e.currentTarget?.parentNode || null
-      const { clientWidth } = parentLine
-      const rect = parentLine.getBoundingClientRect()
-      const x = e.clientX - rect.left // Позиция по оси X относительно родительского элемента
+      const parentLine: HTMLElement = (e.currentTarget?.parentNode as HTMLElement) || null
+      const { clientWidth }: number = parentLine
+      const rect: DOMRect = parentLine.getBoundingClientRect()
+      const x: number = e.clientX - rect.left // Позиция по оси X относительно родительского элемента
       emit('time-change-line', x / clientWidth)
     }
 

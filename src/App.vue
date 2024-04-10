@@ -247,17 +247,17 @@ export default defineComponent({
 
     // for 1 loop
     const isVolumeChanging: Ref<boolean> = ref(false)
-    async function changeVolumeSlowly(isDecrease = true): void {
-      let steps = 20
-      const stepValue = 0.01
+    async function changeVolumeSlowly(isDecrease: boolean = true): void {
+      let steps: number = 20
+      const stepValue: number = 0.01
       if (isDecrease) {
         // return await new Promise((resolve) => {
         const intervalId = setInterval(() => {
           if (steps >= 0 && volume.value >= 0.2) {
-            const newVolume = (volume.value - stepValue).toFixed(2)
+            const newVolume: string = (volume.value - stepValue).toFixed(2)
             console.log('+', newVolume)
             steps--
-            audioPlayer.value!.volume = newVolume
+            audioPlayer.value!.volume = Number(newVolume)
           } else {
             clearInterval(intervalId)
             isVolumeChanging.value = false
@@ -269,10 +269,10 @@ export default defineComponent({
         // return await new Promise((resolve) => {
         const intervalId = setInterval(() => {
           if (steps >= 0 && volume.value < 1) {
-            const newVolume = (volume.value + stepValue).toFixed(2)
+            const newVolume: string = (volume.value + stepValue).toFixed(2)
             console.log('-', newVolume)
             steps--
-            audioPlayer.value!.volume = newVolume
+            audioPlayer.value!.volume = Number(newVolume)
           } else {
             clearInterval(intervalId)
             isVolumeChanging.value = false
