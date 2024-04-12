@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, ref, watchEffect, onMounted } from 'vue'
+import { computed, defineComponent, onBeforeMount, ref, watchEffect, watch, onMounted } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
 import { tracksApi } from './composable/tracks'
 import TrackList from './components/TrackList.vue'
@@ -123,46 +123,20 @@ export default defineComponent({
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
           ? 'dark'
           : 'light'
-      // const rootElement = document.documentElement
-      if (theme === 'dark') {
-        isDarkTheme.value = true
-        // import('./assets/css/dark-theme.css')
-        // rootElement.classList.add('dark-theme');
-      } else {
-        isDarkTheme.value = false
-        // import('./assets/css/light-theme.css')
-        // rootElement.classList.add('light-theme')
-      }
+      isDarkTheme.value = theme === 'dark';
+    }
+
+    watch(isDarkTheme, () => {
+      updateColorScheme();
+    });
+
+    function updateColorScheme(): void {
+      document.documentElement.style.setProperty('color-scheme',isDarkTheme.value ? 'dark' : 'light');
     }
 
     function handlerChangeThemeBtn(): void {
       isDarkTheme.value = !isDarkTheme.value
-      // TODO: не работает пока
-      // TODO: как грамотно подключать стили темная/светлая, меняя и переменные и все цвета
-      //  async
-      // const oldLink = document.querySelector(
-      //   `link[href*="${isDarkTheme.value ? 'light' : 'dark'}"]`
-      // )
-      // if (oldLink) {
-      //   oldLink.remove()
-      // }
-      // const newColor = isDarkTheme.value ? 'dark' : 'light'
-      // // ./assets/css/dark-theme.css
-      // await loadCss(`./assets/css/${newColor}-theme.css`)
-
-      // if (isDarkTheme.value) {
-      //   import('./assets/css/dark-theme.css')
-      // } else {
-      //   import('./assets/css/light-theme.css')
-      // }
     }
-    // async function loadCss(file) {
-    //   const link = document.createElement('link')
-    //   link.rel = 'stylesheet'
-    //   link.href = file
-    //   // link.type = 'text/css'
-    //   document.head.appendChild(link)
-    // }
 
     const audioPlayer: Ref<CustomAudioElement | null> = ref(null)
 
@@ -501,22 +475,16 @@ main {
 }
 
 main.light {
-  color-scheme: light;
   --main-color: #000000ff;
   --main-bg-color: #ffffffff;
   --main-bg-color-secondary: rgba(210, 211, 223, 0.39);
 }
 
 main.dark {
-  color-scheme: dark;
   --main-color: #ffffffff;
   --main-bg-color: #000000ff;
   --main-bg-color-secondary: rgb(48, 49, 53);
 }
-
-/*:root {*/
-/*  color-scheme: dark;*/
-/*}*/
 
 .container {
   display: flex;

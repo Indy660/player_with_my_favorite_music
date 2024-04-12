@@ -1,8 +1,6 @@
 import { createApp } from 'vue'
-import './style.css'
+// import './style.css'
 import App from './App.vue'
-// import './assets/css/dark-theme.css'
-// import './assets/css/light-theme.css'
 
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
