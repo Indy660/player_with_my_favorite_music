@@ -124,6 +124,7 @@ export default defineComponent({
           ? 'dark'
           : 'light'
       isDarkTheme.value = theme === 'dark';
+      updateColorScheme()
     }
 
     watch(isDarkTheme, () => {
