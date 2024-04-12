@@ -348,9 +348,9 @@ export default defineComponent({
       () => (SONGS_TEXT as SongsText)[currentSong.value.songName] || ''
     )
 
-    onBeforeRouteLeave((to, from) => {
-      return false
-    })
+    // onBeforeRouteLeave((to, from) => {
+    //   return false
+    // })
 
     return {
       audioPlayer,

@@ -2,6 +2,7 @@ import { MUSIC_LIST } from '../const/music_list'
 import { TABS_OPTION } from '../const/tabs_otion'
 import { onBeforeMount, ref, computed, watchEffect } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
+import * as process from 'process'
 
 interface TopTrackList extends TrackList {
   sort: number
@@ -30,15 +31,9 @@ export function tracksApi() {
   })
 
   const pathToCurrentFile: ComputedRef<string> = computed(() => {
-    // TODO: не работает
-    // const basePath = BASE_URL
-    // const basePath = import.meta.env.DEV ? '/' : BASE_URL
-    // const basePath = import.meta.env.DEV ? '' : BASE_URL
-    // console.log('basePath', basePath, process.env.NODE_ENV, BASE_URL)
-    // TODO: как вынести /player_with_my_favorite_music/, чтобы потом везде использовалось
     console.log(import.meta.env)
-    // const basePath: string = import.meta.env.BASE_URL
-    const basePath: string = import.meta.env.DEV ? '/' : import.meta.env.VITE_BASE_URL
+    // console.log(process.env)
+    const basePath: string = import.meta.env.BASE_URL
     return currentTracksList.value[currentTrackIndex.value]
       ? `${basePath}music/${currentSong.value.songName}`
       : ``
