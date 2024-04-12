@@ -13,8 +13,8 @@ export default defineConfig({
   // server: {
   //   hmr: { overlay: false }
   // },
-  // define: {
-  //   'import.meta.env.BASE_URL': JSON.stringify(process.env.VITE_BASE_URL)
-  // },
+  define: {
+    'import.meta.env.BASE_URL': JSON.stringify(process.env.VITE_BASE_URL)
+  },
   base: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : '/'
 })

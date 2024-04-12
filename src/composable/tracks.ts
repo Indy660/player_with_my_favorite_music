@@ -36,7 +36,9 @@ export function tracksApi() {
     // const basePath = import.meta.env.DEV ? '' : BASE_URL
     // console.log('basePath', basePath, process.env.NODE_ENV, BASE_URL)
     // TODO: как вынести /player_with_my_favorite_music/, чтобы потом везде использовалось
-    const basePath: string = import.meta.env.DEV ? '/' : import.meta.env.BASE_URL
+    console.log(import.meta.env)
+    // const basePath: string = import.meta.env.BASE_URL
+    const basePath: string = import.meta.env.DEV ? '/' : import.meta.env.VITE_BASE_URL
     return currentTracksList.value[currentTrackIndex.value]
       ? `${basePath}music/${currentSong.value.songName}`
       : ``
