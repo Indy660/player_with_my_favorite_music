@@ -1,12 +1,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { TABS_OPTION } from '../const/tabs_otion'
 
 export default defineComponent({
   props: {
-    // tabsOption: {
-    //   type: Array,
-    //   default: () => []
-    // },
     tabSelected: {
       type: Number,
       default: 1
@@ -14,12 +11,6 @@ export default defineComponent({
   },
   emits: ['change-tab'],
   setup(props, { emit }) {
-    const tabsOption: TabsOption[] = [
-      { label: 'All music', id: 1, url: 'all' },
-      { label: 'Top', id: 2, url: 'top' },
-      { label: 'Top Shorts', id: 4, url: 'shorts' },
-      { label: 'Not aggressive', id: 3, url: 'not_aggressive' }
-    ]
     function btnHandler(option: TabsOption): void {
       if (props.tabSelected !== option.id) {
         emit('change-tab', option)
@@ -27,7 +18,7 @@ export default defineComponent({
     }
     return {
       btnHandler,
-      tabsOption
+      TABS_OPTION
     }
   }
 })
@@ -36,7 +27,7 @@ export default defineComponent({
 <template>
   <div class="tabs">
     <button
-      v-for="(option, index) in tabsOption"
+      v-for="(option, index) in TABS_OPTION"
       :key="index"
       :class="{ active: option.id === tabSelected }"
       @click.stop="btnHandler(option)"
@@ -57,7 +48,6 @@ export default defineComponent({
   border: none;
   padding: 10px 20px;
   border-radius: initial;
-  /*font-size: 14px;*/
   cursor: pointer;
   transition: background-color 0.3s;
 }

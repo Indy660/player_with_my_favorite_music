@@ -1,4 +1,5 @@
 import { MUSIC_LIST } from '../const/music_list'
+import { TABS_OPTION } from '../const/tabs_otion'
 import { onBeforeMount, ref, computed, watchEffect } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
 
@@ -60,25 +61,25 @@ export function tracksApi() {
   // Метод для обновления значений по URL
   const updateValuesFromUrl = () => {
     // TODO: в github ломает при обновлении
-    // const queryParts = window.location.pathname.split('&')
-    // if (queryParts.length === 2) {
-    //   const tabUrl = queryParts[0].split('=')[1]
-    //   const trackIndex = parseInt(queryParts[1].split('=')[1])
-    //   const selectedTab = tabsOption.find((tab) => tab.url === tabUrl)
-    //   if (selectedTab) {
-    //     tabSelected.value = selectedTab.id
-    //     currentTrackIndex.value = !isNaN(trackIndex) ? trackIndex : 0
-    //   }
-    // }
+    const queryParts = window.location.pathname.split('&')
+    if (queryParts.length === 2) {
+      const tabUrl = queryParts[0].split('=')[1]
+      const trackIndex = parseInt(queryParts[1].split('=')[1])
+      const selectedTab = TABS_OPTION.find((tab) => tab.url === tabUrl)
+      if (selectedTab) {
+        tabSelected.value = selectedTab.id
+        currentTrackIndex.value = !isNaN(trackIndex) ? trackIndex : 0
+      }
+    }
   }
   updateValuesFromUrl()
   // TODO: в github ломает при обновлении, нужно добавить ? вместо /
   watchEffect(() => {
-    // const currentTab = tabsOption.find((tab) => tab.id === tabSelected.value)
-    // const tabUrl = currentTab ? currentTab.url : ''
-    // const trackUrl = currentTrackIndex.value.toString()
-    // const params = new URLSearchParams(`tab=${tabUrl}&track=${trackUrl}`)
-    // window.history.pushState({}, '', params)
+    const currentTab = TABS_OPTION.find((tab) => tab.id === tabSelected.value)
+    const tabUrl = currentTab ? currentTab.url : ''
+    const trackUrl = currentTrackIndex.value.toString()
+    const params = new URLSearchParams(`tab=${tabUrl}&track=${trackUrl}`)
+    window.history.pushState({}, '', params)
   })
   const tracksByTab: ComputedRef<TrackList[]> = computed(() => {
     switch (tabSelected.value) {

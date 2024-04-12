@@ -123,16 +123,19 @@ export default defineComponent({
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
           ? 'dark'
           : 'light'
-      isDarkTheme.value = theme === 'dark';
+      isDarkTheme.value = theme === 'dark'
       updateColorScheme()
     }
 
     watch(isDarkTheme, () => {
-      updateColorScheme();
-    });
+      updateColorScheme()
+    })
 
     function updateColorScheme(): void {
-      document.documentElement.style.setProperty('color-scheme',isDarkTheme.value ? 'dark' : 'light');
+      document.documentElement.style.setProperty(
+        'color-scheme',
+        isDarkTheme.value ? 'dark' : 'light'
+      )
     }
 
     function handlerChangeThemeBtn(): void {
@@ -450,6 +453,7 @@ export default defineComponent({
         @ended="handlerEnded"
       />
     </div>
+    <!--    <RouterView />-->
   </main>
 </template>
 
