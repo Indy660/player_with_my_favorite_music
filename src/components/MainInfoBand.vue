@@ -97,7 +97,8 @@ export default defineComponent({
             }))
           })
         }
-      }
+      },
+      { immediate: true }
     )
 
     return { getInfoBand, getLogoImage, getImageSizes }
@@ -108,7 +109,7 @@ export default defineComponent({
 <template>
   <div>
     <img :src="getLogoImage" class="album-image" alt="" />
-<!--    <div class="album-image" alt="" />-->
+    <!--    <div class="album-image" alt="" />-->
     <div class="artist-info">
       <div class="band">{{ getInfoBand.bandName }}</div>
       <div class="song">{{ getInfoBand.songName }}</div>

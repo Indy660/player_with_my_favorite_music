@@ -30,7 +30,7 @@ const MUSIC_LIST: MusicList[] = [
   {
     songName: 'As I Lay Dying - Nothing Left [2007].mp3',
     sort: 40,
-    bestParties: [{ start: 0, end: 57 }],
+    bestParties: [{ start: 0, end: 57 }]
   },
   {
     songName: 'As I Lay Dying - The Sound Оf Truth.mp3',
@@ -38,7 +38,7 @@ const MUSIC_LIST: MusicList[] = [
     bestParties: [
       { start: 0, end: 36 },
       { start: 59, end: 121 }
-    ],
+    ]
   },
   { songName: 'Aspirin Rose - Fucking Perfect (Pink cover).mp3' },
   {
@@ -48,7 +48,7 @@ const MUSIC_LIST: MusicList[] = [
       { start: 0, end: 30 },
       { start: 90, end: 114 },
       { start: 164, end: 175 }
-    ],
+    ]
   },
   {
     songName: 'August Burns Red - Barbarian.mp3',
@@ -57,19 +57,28 @@ const MUSIC_LIST: MusicList[] = [
       { start: 21, end: 32 },
       { start: 70, end: 88 },
       { start: 113, end: 152 }
-    ],
+    ]
   },
-  { songName: 'August Burns Red - Consumer.mp3'  },
+  {
+    songName: 'August Burns Red - Chasing the Dragon.mp3',
+    sort: 151
+    // bestParties: [
+    //   { start: 21, end: 32 },
+    //   { start: 70, end: 88 },
+    //   { start: 113, end: 152 }
+    // ],
+  },
+  { songName: 'August Burns Red - Consumer.mp3' },
   {
     songName: 'August Burns Red - Indonesia.mp3',
     sort: 141,
     bestParties: [
       { start: 84, end: 117 },
       { start: 161, end: 180 }
-    ],
+    ]
   },
   { songName: 'August Burns Red - Meridian.mp3', notAggressive: true },
-  { songName: 'August Burns Red - Truth of a Liar.mp3',  },
+  { songName: 'August Burns Red - Truth of a Liar.mp3' },
   {
     songName: 'August Burns Red - Your Little Suburbia Is in Ruins.mp3',
     sort: 70,
@@ -77,24 +86,24 @@ const MUSIC_LIST: MusicList[] = [
       { start: 12, end: 27 },
       { start: 107, end: 125 },
       { start: 146, end: 178 }
-    ],
+    ]
   },
-  { songName: 'Anaal Nathrakh - Between Shit and Piss We Are Born.mp3',  },
+  { songName: 'Anaal Nathrakh - Between Shit and Piss We Are Born.mp3' },
   {
     songName: 'Anaal Nathrakh - In The Constellation Of The Black Widow.mp3',
     sort: 220,
     bestParties: [
       { start: 65, end: 85 },
       { start: 114, end: 141 }
-    ],
+    ]
   },
-  { songName: 'Between the Buried and Me - All Bodies.mp3',  },
+  { songName: 'Between the Buried and Me - All Bodies.mp3' },
   {
     songName: 'Between The Buried And Me - Ants Of The Sky.mp3',
     sort: 113,
-    bestParties: [{ start: 0, end: 108 }],
+    bestParties: [{ start: 0, end: 108 }]
   },
-  { songName: 'Between The Buried And Me - Sun Of Nothing.mp3',  },
+  { songName: 'Between The Buried And Me - Sun Of Nothing.mp3' },
   {
     songName: 'Between The Buried And Me - Swim To The Moon.mp3',
     sort: 10,
@@ -102,21 +111,21 @@ const MUSIC_LIST: MusicList[] = [
       { start: 135, end: 160 },
       { start: 500, end: 551 },
       { start: 982, end: 1022 }
-    ],
+    ]
   },
   { songName: 'Breakwater - Eleven.mp3' },
   { songName: 'Breakwater - five.mp3' },
-  { songName: 'Bullet For My Valentine - Hand Of Blood.mp3',  },
+  { songName: 'Bullet For My Valentine - Hand Of Blood.mp3' },
   {
     songName: 'Cerebral Bore - The Bald Cadaver.mp3',
     sort: 280,
     // TODO: не работает bestParties
-    bestParties: [{ start: 5.5, end: 50 }],
+    bestParties: [{ start: 5.5, end: 50 }]
   },
   {
     songName: 'Children Of Bodom - Are You Dead Yet.mp3',
     sort: 110,
-    bestParties: [{ start: 82, end: 114 }],
+    bestParties: [{ start: 82, end: 114 }]
   },
   { songName: 'Cosmonauts Day - The Captain.mp3', notAggressive: true },
   { songName: 'Death In Vegas - Dirge.mp3' },
@@ -126,15 +135,15 @@ const MUSIC_LIST: MusicList[] = [
     bestParties: [
       { start: 46, end: 65 },
       { start: 289, end: 317 }
-    ],
+    ]
   },
   { songName: 'If These Trees Could Talk - From Roots to Needles.mp3', notAggressive: true },
   {
     songName: 'In Flames - Clayman.mp3',
     sort: 130,
-    bestParties: [{ start: 0, end: 21 }],
+    bestParties: [{ start: 0, end: 21 }]
   },
-  { songName: 'In Flames - Reflect the Storm.mp3',  },
+  { songName: 'In Flames - Reflect the Storm.mp3' },
   { songName: 'Killing Floor - Abandon All.mp3' },
   { songName: 'Killing Floor OST - Wake.mp3', notAggressive: true },
   { songName: 'Long Distance Calling - Black Paper Planes.mp3', notAggressive: true },
@@ -148,12 +157,12 @@ const MUSIC_LIST: MusicList[] = [
       { start: 59, end: 84 },
       { start: 165, end: 218 },
       { start: 240, end: 253 }
-    ],
+    ]
   },
   {
     songName: 'Ozoi The Maid Yakui The Maid - Lanterns.mp3',
     sort: 111,
-    bestParties: [{ start: 146, end: 218 }],
+    bestParties: [{ start: 146, end: 218 }]
   },
   {
     songName: 'Ozoi The Maid Yakui The Maid - Wonderland.mp3',
@@ -161,26 +170,24 @@ const MUSIC_LIST: MusicList[] = [
     bestParties: [
       { start: 115, end: 243 },
       { start: 355, end: 442 }
-    ],
+    ]
   },
-  { songName: 'Ozoi The Maid, Yakui The Maid - Frontier.mp3',  },
-  { songName: 'Psygnosis - FIIIX 2.0.mp3',  },
+  { songName: 'Ozoi The Maid, Yakui The Maid - Frontier.mp3' },
+  { songName: 'Psygnosis - FIIIX 2.0.mp3' },
   {
     songName: 'Psygnosis - Lost in Oblivion.mp3',
     sort: 140,
-    bestParties: [{ start: 292, end: 356 }],
-
+    bestParties: [{ start: 292, end: 356 }]
   },
   { songName: 'Psygnosis - MehMeh.mp3' },
   { songName: 'Psygnosis - Phrase 7.mp3', notAggressive: true },
   { songName: 'Psygnosis - Synaptic Plasticity.mp3' },
   { songName: 'Psygnosis - The Judgement.mp3' },
-  { songName: 'Raunchy - To the Lighthouse.mp3',  },
+  { songName: 'Raunchy - To the Lighthouse.mp3' },
   {
     songName: 'Raunchy - Twelve Feet Tall.mp3',
     sort: 150,
-    bestParties: [{ start: 65, end: 96 }],
-
+    bestParties: [{ start: 65, end: 96 }]
   },
   {
     songName: 'Raunchy - Wasteland Discotheque.mp3',
@@ -188,29 +195,26 @@ const MUSIC_LIST: MusicList[] = [
     bestParties: [
       { start: 0, end: 34 },
       { start: 63, end: 101 }
-    ],
-
+    ]
   },
-  { songName: 'Rhapsody - The Mighty Ride of the Firelord.mp3',  },
-  { songName: 'Rhapsody of Fire - Wisdom of the Kings.mp3',  },
-  { songName: 'Rise Of The Northstar - The New Path.mp3',  },
+  { songName: 'Rhapsody - The Mighty Ride of the Firelord.mp3' },
+  { songName: 'Rhapsody of Fire - Wisdom of the Kings.mp3' },
+  { songName: 'Rise Of The Northstar - The New Path.mp3' },
   {
     songName: 'Rise Of The Northstar - What The Fuck.mp3',
     sort: 160,
-    bestParties: [{ start: 45, end: 79 }],
-
+    bestParties: [{ start: 45, end: 79 }]
   },
   {
     songName: 'Siberian Meat Grinder feat Distemper - Пламя в Груди.mp3',
     sort: 211,
-    bestParties: [{ start: 49, end: 68 }],
-
+    bestParties: [{ start: 49, end: 68 }]
   },
-  { songName: 'The Doors - Alabama song.mp3', notAggressive: true,  },
-  { songName: 'The Doors - The End.mp3', notAggressive: true,  },
-  { songName: 'The Faceless - Shake The Disease.mp3',  },
-  { songName: 'The Five Stars - Atom Bomb Baby.mp3', notAggressive: true,  },
-  { songName: 'The HAARP Machine - Esoteric Agenda.mp3',  },
+  { songName: 'The Doors - Alabama song.mp3', notAggressive: true },
+  { songName: 'The Doors - The End.mp3', notAggressive: true },
+  { songName: 'The Faceless - Shake The Disease.mp3' },
+  { songName: 'The Five Stars - Atom Bomb Baby.mp3', notAggressive: true },
+  { songName: 'The HAARP Machine - Esoteric Agenda.mp3' },
   {
     songName: 'Toundra - Bizancio Byzantium.mp3',
     sort: 180,
@@ -253,7 +257,7 @@ const MUSIC_LIST: MusicList[] = [
   },
   { songName: 'Within The Ruins - Ataxia II.mp3' },
   { songName: 'Within The Ruins - Beautiful Agony.mp3' },
-  { songName: 'ZEROMANCER - Dr. Online.mp3',  },
+  { songName: 'ZEROMANCER - Dr. Online.mp3' },
   {
     songName: 'zYnthetic - Abandon All v3.mp3',
     sort: 100,
@@ -263,7 +267,11 @@ const MUSIC_LIST: MusicList[] = [
     ],
     notAggressive: true
   },
-  { songName: 'zYnthetic - SSplug.mp3' }
+  { songName: 'zYnthetic - SSplug.mp3' },
+  {
+    songName: 'P.O.D. - Youth of the Nation.mp3',
+    notAggressive: true
+  }
 ]
 
 export { MUSIC_LIST }
