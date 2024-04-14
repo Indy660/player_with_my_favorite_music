@@ -8,7 +8,8 @@ const routes = [{ path: '/:pathMatch(.*)*', component: App }]
 
 const router = createRouter({
   history: createMemoryHistory(),
-  routes
+  routes,
+  mode: 'history'
 })
 
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
