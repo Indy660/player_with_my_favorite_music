@@ -12,8 +12,8 @@ const routes = [{ path: '/:pathMatch(.*)*', component: App }]
 // const routes = [{ path: '/:pathMatch(.*)*', redirect: import.meta.env.BASE_URL }]
 
 const router = createRouter({
-  // history: createMemoryHistory(),
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createMemoryHistory(),
+  // history: createWebHistory(import.meta.env.BASE_URL),
   routes
   // mode: 'history'
 })
