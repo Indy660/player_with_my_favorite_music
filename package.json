@@ -1,6 +1,7 @@
 {
   "name": "player_with_my_favorite_music",
   "version": "0.0.0",
+  "homepage": "/player_with_my_favorite_music/#",
   "private": true,
   "type": "module",
   "scripts": {

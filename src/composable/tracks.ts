@@ -78,7 +78,7 @@ export function tracksApi() {
     const currentTab = TABS_OPTION.find((tab) => tab.id === tabSelected.value)
     const tabUrl = currentTab ? currentTab.url : ''
     const trackUrl = currentTrackIndex.value.toString()
-    const params: URLSearchParams = new URLSearchParams(`#tab=${tabUrl}&track=${trackUrl}`)
+    const params: URLSearchParams = new URLSearchParams(`tab=${tabUrl}&track=${trackUrl}`)
     // console.log(router)
     // router?.push(`tab=${tabUrl}&track=${trackUrl}`)
     window.history.pushState({}, '', params)
