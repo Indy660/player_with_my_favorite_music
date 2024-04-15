@@ -1,6 +1,10 @@
 import { MUSIC_LIST } from '../const/music_list'
 import { TABS_OPTION } from '../const/tabs_otion'
 import { onBeforeMount, ref, computed, watchEffect } from 'vue'
+// import { useRouter } from 'vue-router'
+//
+// const router = useRouter()
+// const route = useRoute()
 import type { Ref, ComputedRef } from 'vue'
 
 interface TopTrackList extends TrackList {
@@ -75,6 +79,8 @@ export function tracksApi() {
     const tabUrl = currentTab ? currentTab.url : ''
     const trackUrl = currentTrackIndex.value.toString()
     const params: URLSearchParams = new URLSearchParams(`tab=${tabUrl}&track=${trackUrl}`)
+    // console.log(router)
+    // router?.push(`tab=${tabUrl}&track=${trackUrl}`)
     window.history.pushState({}, '', params)
   })
   const tracksByTab: ComputedRef<TrackList[]> = computed(() => {

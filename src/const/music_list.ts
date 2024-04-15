@@ -173,6 +173,10 @@ const MUSIC_LIST: MusicList[] = [
     ]
   },
   { songName: 'Ozoi The Maid, Yakui The Maid - Frontier.mp3' },
+  {
+    songName: 'P.O.D. - Youth of the Nation.mp3',
+    notAggressive: true
+  },
   { songName: 'Psygnosis - FIIIX 2.0.mp3' },
   {
     songName: 'Psygnosis - Lost in Oblivion.mp3',
@@ -267,11 +271,11 @@ const MUSIC_LIST: MusicList[] = [
     ],
     notAggressive: true
   },
-  { songName: 'zYnthetic - SSplug.mp3' },
-  {
-    songName: 'P.O.D. - Youth of the Nation.mp3',
-    notAggressive: true
-  }
+  { songName: 'zYnthetic - SSplug.mp3' }
 ]
+
+// const sortredMusicList: MusicList[] = MUSIC_LIST.sort((a, b) =>
+//   a.songName.localeCompare(b.songName)
+// )
 
 export { MUSIC_LIST }
