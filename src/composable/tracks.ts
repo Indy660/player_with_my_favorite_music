@@ -62,6 +62,7 @@ export function tracksApi() {
   const updateValuesFromUrl = () => {
     // TODO: в github ломает при обновлении
     const queryParts: Array<string> = window.location.pathname.split('&')
+    console.log(queryParts)
     if (queryParts.length === 2) {
       const tabUrl = queryParts[0].split('=')[1]
       const trackIndex = parseInt(queryParts[1].split('=')[1])
@@ -78,7 +79,9 @@ export function tracksApi() {
     const currentTab = TABS_OPTION.find((tab) => tab.id === tabSelected.value)
     const tabUrl = currentTab ? currentTab.url : ''
     const trackUrl = currentTrackIndex.value.toString()
-    const params: URLSearchParams = new URLSearchParams(`#tab=${tabUrl}&track=${trackUrl}`)
+    // const params = `#tab=${tabUrl}&track=${trackUrl}`
+    const params = `tab=${tabUrl}&track=${trackUrl}`
+    // const params: URLSearchParams = new URLSearchParams(`#tab=${tabUrl}&track=${trackUrl}`)
     // console.log(router)
     // router?.push(`tab=${tabUrl}&track=${trackUrl}`)
     window.history.pushState({}, '', params)
