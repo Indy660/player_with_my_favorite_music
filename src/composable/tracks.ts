@@ -1,10 +1,6 @@
 import { MUSIC_LIST } from '../const/music_list'
 import { TABS_OPTION } from '../const/tabs_otion'
 import { onBeforeMount, ref, computed, watchEffect } from 'vue'
-// import { useRouter } from 'vue-router'
-//
-// const router = useRouter()
-// const route = useRoute()
 import type { Ref, ComputedRef } from 'vue'
 
 interface TopTrackList extends TrackList {
@@ -24,18 +20,14 @@ export function tracksApi() {
   const notAggressiveTrackList: Ref<NotAggressiveTrackList[]> = ref(
     MUSIC_LIST.filter((item) => item.notAggressive) as NotAggressiveTrackList[]
   )
-  // as NotAggressiveTrackList[]
   const currentTrackIndex: Ref<number> = ref(0)
   const totalNumbSongs: Ref<number> = ref(0)
   onBeforeMount(() => {
     defaultTrackList.value = MUSIC_LIST
-    // TODO: хз на что ругается
     totalNumbSongs.value = currentTracksList.value.length
   })
 
   const pathToCurrentFile: ComputedRef<string> = computed(() => {
-    console.log(import.meta.env)
-    // console.log(process.env)
     const basePath: string = import.meta.env.BASE_URL
     return currentTracksList.value[currentTrackIndex.value]
       ? `${basePath}music/${currentSong.value.songName}`

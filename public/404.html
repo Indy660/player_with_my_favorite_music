@@ -5,7 +5,7 @@
 </head>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const url = localStorage.getItem('url');
+    const url = window.location.pathname
     const redirectUrl = `${url}`;
     const metaRefresh = document.querySelector('meta[http-equiv="refresh"]');
     if (metaRefresh) {
