@@ -63,9 +63,7 @@ export function tracksApi() {
     }
   }
   const updateValuesFromUrl = (): void => {
-    // const urlFromStorage: string | null = localStorage.getItem('url')
     const urlFromStorage = window.location.hash
-    console.log(urlFromStorage)
     urlFromStorage && setTabAndIndex(urlFromStorage)
   }
   updateValuesFromUrl()
@@ -77,7 +75,6 @@ export function tracksApi() {
     const trackUrl: string = currentTrackIndex.value.toString()
     const params: string = `${import.meta.env.BASE_URL}#tab=${tabUrl}&track=${trackUrl}`
     window.history.pushState({}, '', params)
-    localStorage.setItem('url', params)
   })
   const tracksByTab: ComputedRef<TrackList[]> = computed(() => {
     switch (tabSelected.value) {

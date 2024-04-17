@@ -5,9 +5,7 @@
 </head>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const url = window.location.hash
-    console.log(url,  window.location)
-    const redirectUrl = `${url}`;
+    const redirectUrl = window.location.hash;
     const metaRefresh = document.querySelector('meta[http-equiv="refresh"]');
     if (metaRefresh) {
       metaRefresh.setAttribute('content', `0;URL='${redirectUrl}'`);
