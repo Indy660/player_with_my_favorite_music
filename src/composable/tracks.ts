@@ -60,7 +60,6 @@ export function tracksApi() {
 
   function setTabAndIndex(query: string): void {
     const queryParts: Array<string> = query.split('&')
-    console.log(queryParts)
     if (queryParts.length === 2) {
       const tabUrl = queryParts[0].split('=')[1]
       const trackIndex = parseInt(queryParts[1].split('=')[1])
@@ -71,27 +70,18 @@ export function tracksApi() {
       }
     }
   }
-  // Метод для обновления значений по URL
-  const updateValuesFromUrl = () => {
-    const query: string = window.location.pathname
-    const urlFromStorage = localStorage.getItem('url')
-    console.log('query', query, 'urlFromStorage', urlFromStorage)
-    import.meta.env.DEV
-      ? query && setTabAndIndex(query)
-      : urlFromStorage && setTabAndIndex(urlFromStorage)
+  const updateValuesFromUrl = (): void => {
+    const urlFromStorage: string | null = localStorage.getItem('url')
+    urlFromStorage && setTabAndIndex(urlFromStorage)
   }
   updateValuesFromUrl()
-  // TODO: в github ломает при обновлении, нужно добавить ? вместо /
   watchEffect(() => {
-    const currentTab = TABS_OPTION.find((tab) => tab.id === tabSelected.value)
-    const tabUrl = currentTab ? currentTab.url : ''
-    const trackUrl = currentTrackIndex.value.toString()
-    // const params = `#tab=${tabUrl}&track=${trackUrl}`
-    const params = `${import.meta.env.BASE_URL}#tab=${tabUrl}&track=${trackUrl}`
-    console.log('params', params, import.meta.env.BASE_URL)
-    // const params: URLSearchParams = new URLSearchParams(`#tab=${tabUrl}&track=${trackUrl}`)
-    // console.log(router)
-    // router?.push(`tab=${tabUrl}&track=${trackUrl}`)
+    const currentTab: TabsOption | undefined = TABS_OPTION.find(
+      (tab) => tab.id === tabSelected.value
+    )
+    const tabUrl: string = currentTab ? currentTab.url : ''
+    const trackUrl: string = currentTrackIndex.value.toString()
+    const params: string = `${import.meta.env.BASE_URL}#tab=${tabUrl}&track=${trackUrl}`
     window.history.pushState({}, '', params)
     localStorage.setItem('url', params)
   })
