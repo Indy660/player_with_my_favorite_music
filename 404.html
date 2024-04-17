@@ -5,11 +5,14 @@
 </head>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    const baseUrl = process?.env?.VITE_BASE_URL || '/player_with_my_favorite_music/'
+    console.log(process?.env?.VITE_BASE_URL)
     // Получаем данные из localStorage
-    const url = localStorage.getItem('url');
+    // const url = localStorage.getItem('url');
+    const url = '';
     console.log('localStorage', url)
     // Формируем URL для перенаправления
-    const redirectUrl = `/player_with_my_favorite_music/${url}`;
+    const redirectUrl = `${baseUrl}${url}`;
 
     // Устанавливаем URL в мета-тег refresh
     const metaRefresh = document.querySelector('meta[http-equiv="refresh"]');
