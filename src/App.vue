@@ -557,10 +557,11 @@ button {
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  opacity: 0.8;
 }
 
 button:hover {
-  /*background-color: #ddd;*/
+  opacity: 1;
 }
 
 .slide-track-list-enter-active,
