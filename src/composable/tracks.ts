@@ -6,7 +6,6 @@ import { onBeforeMount, ref, computed, watchEffect } from 'vue'
 // const router = useRouter()
 // const route = useRoute()
 import type { Ref, ComputedRef } from 'vue'
-import * as process from 'process'
 
 interface TopTrackList extends TrackList {
   sort: number
