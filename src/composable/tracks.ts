@@ -6,6 +6,7 @@ import { onBeforeMount, ref, computed, watchEffect } from 'vue'
 // const router = useRouter()
 // const route = useRoute()
 import type { Ref, ComputedRef } from 'vue'
+import * as process from 'process'
 
 interface TopTrackList extends TrackList {
   sort: number
@@ -58,10 +59,8 @@ export function tracksApi() {
     totalNumbSongs.value = currentTracks.value.length
   }
 
-  // Метод для обновления значений по URL
-  const updateValuesFromUrl = () => {
-    // TODO: в github ломает при обновлении
-    const queryParts: Array<string> = window.location.pathname.split('&')
+  function setTabAndIndex(query: string): void {
+    const queryParts: Array<string> = query.split('&')
     console.log(queryParts)
     if (queryParts.length === 2) {
       const tabUrl = queryParts[0].split('=')[1]
@@ -73,6 +72,15 @@ export function tracksApi() {
       }
     }
   }
+  // Метод для обновления значений по URL
+  const updateValuesFromUrl = () => {
+    const query: string = window.location.pathname
+    const urlFromStorage = localStorage.getItem('url')
+    console.log('query', query, 'urlFromStorage', urlFromStorage)
+    import.meta.env.DEV
+      ? query && setTabAndIndex(query)
+      : urlFromStorage && setTabAndIndex(urlFromStorage)
+  }
   updateValuesFromUrl()
   // TODO: в github ломает при обновлении, нужно добавить ? вместо /
   watchEffect(() => {
@@ -80,12 +88,12 @@ export function tracksApi() {
     const tabUrl = currentTab ? currentTab.url : ''
     const trackUrl = currentTrackIndex.value.toString()
     // const params = `#tab=${tabUrl}&track=${trackUrl}`
-    const params = `tab=${tabUrl}&track=${trackUrl}`
+    const params = `/tab=${tabUrl}&track=${trackUrl}`
     // const params: URLSearchParams = new URLSearchParams(`#tab=${tabUrl}&track=${trackUrl}`)
     // console.log(router)
     // router?.push(`tab=${tabUrl}&track=${trackUrl}`)
     window.history.pushState({}, '', params)
-    localStorage.setItem('url', params);
+    localStorage.setItem('url', params)
   })
   const tracksByTab: ComputedRef<TrackList[]> = computed(() => {
     switch (tabSelected.value) {

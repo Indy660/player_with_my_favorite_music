@@ -396,64 +396,62 @@ export default defineComponent({
 <template>
   <main :class="[isDarkTheme ? 'dark' : 'light']" @click.stop="closeAllBars">
     <div class="container">
-      <RouterView>
-        <transition name="slide-track-list">
-          <TrackList
-            v-show="isShowTrackList"
-            :current-track-index="currentTrackIndex"
-            :current-tracks="currentTracksList"
-            class="top_bar"
-            @select-track-from-list="handlerSelectTrack"
-          />
-        </transition>
-        <transition name="slide-song-text">
-          <SongText v-show="isShowSongText" :song-text="currentSongText" class="top_bar" />
-        </transition>
-        <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
-        <MainInfoBand :song-name="currentSong.songName" />
-        <VolumeControl
-          :has-text="!!currentSongText.length"
-          :volume="volume"
-          @volume-change="setVolume"
-          @show-text-song="handlerShowSongTextBtn"
+      <transition name="slide-track-list">
+        <TrackList
+          v-show="isShowTrackList"
+          :current-track-index="currentTrackIndex"
+          :current-tracks="currentTracksList"
+          class="top_bar"
+          @select-track-from-list="handlerSelectTrack"
         />
-        <ProgressControl
-          :best-parties="bestParties"
-          :current-time="currentTime"
-          :total-time="totalTime"
-          @time-change="handlerTimeChange"
-          @time-change-line="handlerTimeChangeLine"
-        />
-        <MainControl
-          ref="main_control_ref"
-          class="main_control_ref"
-          :is-playing="isPlaying"
-          @previous="previousTrackHandler"
-          @next="nextTrack"
-          @play-pause="togglePlayPause"
-        />
-        <OtherControl
-          :current-numb-song="currentTrackIndex + 1"
-          :total-numb-songs="totalNumbSongs"
-          :is-random-tracks="isRandomTracks"
-          :is-show-track-list="isShowTrackList"
-          :is-repeat-mode="isRepeatMode"
-          :is-dark-theme="isDarkTheme"
-          @repeat-mode-click="repeatModeChange"
-          @random-click="handlerRandomBtn"
-          @show-list-click="handlerShowListBtn"
-          @change-theme="handlerChangeThemeBtn"
-        />
-        <audio
-          ref="audioPlayer"
-          :src="pathToCurrentFile"
-          preload="metadata"
-          @volumechange="onVolumeUpdate"
-          @timeupdate="onTimeUpdate"
-          @canplay="handlerCanPlay"
-          @ended="handlerEnded"
-        />
-      </RouterView>
+      </transition>
+      <transition name="slide-song-text">
+        <SongText v-show="isShowSongText" :song-text="currentSongText" class="top_bar" />
+      </transition>
+      <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
+      <MainInfoBand :song-name="currentSong.songName" />
+      <VolumeControl
+        :has-text="!!currentSongText.length"
+        :volume="volume"
+        @volume-change="setVolume"
+        @show-text-song="handlerShowSongTextBtn"
+      />
+      <ProgressControl
+        :best-parties="bestParties"
+        :current-time="currentTime"
+        :total-time="totalTime"
+        @time-change="handlerTimeChange"
+        @time-change-line="handlerTimeChangeLine"
+      />
+      <MainControl
+        ref="main_control_ref"
+        class="main_control_ref"
+        :is-playing="isPlaying"
+        @previous="previousTrackHandler"
+        @next="nextTrack"
+        @play-pause="togglePlayPause"
+      />
+      <OtherControl
+        :current-numb-song="currentTrackIndex + 1"
+        :total-numb-songs="totalNumbSongs"
+        :is-random-tracks="isRandomTracks"
+        :is-show-track-list="isShowTrackList"
+        :is-repeat-mode="isRepeatMode"
+        :is-dark-theme="isDarkTheme"
+        @repeat-mode-click="repeatModeChange"
+        @random-click="handlerRandomBtn"
+        @show-list-click="handlerShowListBtn"
+        @change-theme="handlerChangeThemeBtn"
+      />
+      <audio
+        ref="audioPlayer"
+        :src="pathToCurrentFile"
+        preload="metadata"
+        @volumechange="onVolumeUpdate"
+        @timeupdate="onTimeUpdate"
+        @canplay="handlerCanPlay"
+        @ended="handlerEnded"
+      />
     </div>
   </main>
 </template>
