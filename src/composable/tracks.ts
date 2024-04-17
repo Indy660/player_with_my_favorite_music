@@ -85,6 +85,7 @@ export function tracksApi() {
     // console.log(router)
     // router?.push(`tab=${tabUrl}&track=${trackUrl}`)
     window.history.pushState({}, '', params)
+    localStorage.setItem('url', params);
   })
   const tracksByTab: ComputedRef<TrackList[]> = computed(() => {
     switch (tabSelected.value) {

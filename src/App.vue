@@ -1,7 +1,6 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, ref, watchEffect, watch, onMounted } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
-import { onBeforeRouteLeave } from 'vue-router'
 import { tracksApi } from './composable/tracks'
 import TrackList from './components/TrackList.vue'
 import PageTabs from './components/PageTabs.vue'
@@ -347,10 +346,6 @@ export default defineComponent({
     const currentSongText: ComputedRef<string> = computed(
       () => (SONGS_TEXT as SongsText)[currentSong.value.songName] || ''
     )
-
-    // onBeforeRouteLeave((to, from) => {
-    //   return false
-    // })
 
     return {
       audioPlayer,
