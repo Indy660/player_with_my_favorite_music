@@ -1,8 +1,23 @@
 <html>
 <head>
-  <meta http-equiv="refresh" content="0;URL='/player_with_my_favorite_music/'" />
+  <meta http-equiv="refresh" />
   <title>Player with my favorite music</title>
 </head>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Получаем данные из localStorage
+    const url = localStorage.getItem('url');
+    console.log('localStorage', url)
+    // Формируем URL для перенаправления
+    const redirectUrl = `/player_with_my_favorite_music/${url}`;
+
+    // Устанавливаем URL в мета-тег refresh
+    const metaRefresh = document.querySelector('meta[http-equiv="refresh"]');
+    if (metaRefresh) {
+      metaRefresh.setAttribute('content', `0;URL='${redirectUrl}'`);
+    }
+  });
+</script>
 <body>
 </body>
 </html>
