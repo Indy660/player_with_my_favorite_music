@@ -63,7 +63,9 @@ export function tracksApi() {
     }
   }
   const updateValuesFromUrl = (): void => {
-    const urlFromStorage: string | null = localStorage.getItem('url')
+    // const urlFromStorage: string | null = localStorage.getItem('url')
+    const urlFromStorage = window.location.hash
+    console.log(urlFromStorage)
     urlFromStorage && setTabAndIndex(urlFromStorage)
   }
   updateValuesFromUrl()
