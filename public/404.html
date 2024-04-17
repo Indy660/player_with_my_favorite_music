@@ -6,10 +6,9 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const baseUrl = import.meta.env.BASE_URL || '/player_with_my_favorite_music/'
-    console.log()
     // Получаем данные из localStorage
     // const url = localStorage.getItem('url');
-    console.log(import.meta.env.BASE_URL, process?.env?.VITE_BASE_URL, baseUrl)
+    console.log(import.meta?.env?.BASE_URL, process?.env?.VITE_BASE_URL, baseUrl)
     const url = '';
     console.log('localStorage', url)
     // Формируем URL для перенаправления

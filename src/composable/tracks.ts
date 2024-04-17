@@ -87,7 +87,8 @@ export function tracksApi() {
     const tabUrl = currentTab ? currentTab.url : ''
     const trackUrl = currentTrackIndex.value.toString()
     // const params = `#tab=${tabUrl}&track=${trackUrl}`
-    const params = `/tab=${tabUrl}&track=${trackUrl}`
+    const params = `${import.meta.env.BASE_URL}tab=${tabUrl}&track=${trackUrl}`
+    console.log('params', params, import.meta.env.BASE_URL)
     // const params: URLSearchParams = new URLSearchParams(`#tab=${tabUrl}&track=${trackUrl}`)
     // console.log(router)
     // router?.push(`tab=${tabUrl}&track=${trackUrl}`)
