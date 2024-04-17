@@ -1,5 +1,13 @@
 <script lang="ts">
-import { defineComponent, ref, onBeforeMount, computed, watch, onUnmounted, onMounted } from 'vue'
+import {
+  defineComponent,
+  ref,
+  onBeforeMount,
+  computed,
+  onUnmounted,
+  onMounted,
+  watchEffect
+} from 'vue'
 import type { ComputedRef, Ref } from 'vue'
 
 export default defineComponent({
@@ -74,32 +82,32 @@ export default defineComponent({
       if (width.value > height.value) return getSize(height.value, 0.6)
       return getSize(width.value, 0.8)
     })
-
-    watch(
-      () => props.songName,
-      () => {
-        if ('mediaSession' in navigator && getLogoImage.value) {
-          const imageSizes: string[] = [
-            '96x96',
-            '128x128',
-            '192x192',
-            '256x256',
-            '384x384',
-            '512x512'
-          ]
-          navigator.mediaSession.metadata = new MediaMetadata({
-            title: getInfoBand.value?.songName || '',
-            artist: getInfoBand.value?.bandName || '',
-            artwork: imageSizes.map((item) => ({
-              src: getLogoImage.value,
-              sizes: item,
-              type: 'image/png'
-            }))
-          })
-        }
-      },
-      { immediate: true }
-    )
+    function setMetadata(): void {
+      if ('mediaSession' in navigator && getLogoImage.value) {
+        const imageSizes: string[] = [
+          '96x96',
+          '128x128',
+          '192x192',
+          '256x256',
+          '384x384',
+          '512x512'
+        ]
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: getInfoBand.value?.songName || '',
+          artist: getInfoBand.value?.bandName || '',
+          artwork: imageSizes.map((item) => ({
+            src: getLogoImage.value,
+            sizes: item,
+            type: 'image/png'
+          }))
+        })
+      }
+    }
+    watchEffect(() => {
+      if (getInfoBand.value && getLogoImage.value) {
+        setMetadata()
+      }
+    })
 
     return { getInfoBand, getLogoImage, getImageSizes }
   }
