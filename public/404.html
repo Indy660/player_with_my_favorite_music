@@ -5,11 +5,12 @@
 </head>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const baseUrl = process?.env?.VITE_BASE_URL || '/player_with_my_favorite_music/'
+    // const baseUrl = '/player_with_my_favorite_music/'
+    const baseUrl = ''
     // Получаем данные из localStorage
-    // const url = localStorage.getItem('url');
-    console.log(process?.env?.VITE_BASE_URL, process?.env, baseUrl)
-    const url = '';
+    const url = localStorage.getItem('url');
+    console.log(baseUrl)
+    // const url = '';
     console.log('localStorage', url)
     // Формируем URL для перенаправления
     const redirectUrl = `${baseUrl}${url}`;
