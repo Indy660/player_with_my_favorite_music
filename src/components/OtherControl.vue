@@ -100,7 +100,4 @@ export default defineComponent({
   align-items: center;
   color: var(--main-color);
 }
-.other .active {
-  color: #0016ff;
-}
 </style>

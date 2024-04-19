@@ -165,7 +165,7 @@ export default defineComponent({
     function handlerTimeChange(event: Event): void {
       if (audioPlayer.value) {
         const target = event.target as HTMLInputElement
-        audioPlayer.value!.currentTime =
+        audioPlayer.value.currentTime =
           (Number(target.value) / 100) * (audioPlayer.value!.duration || 0)
       }
     }
@@ -178,7 +178,9 @@ export default defineComponent({
 
     function onTimeUpdate(event: Event): void {
       currentTime.value = (event.target as HTMLAudioElement).currentTime
-      // TODO: не работает перемотка в MediaSession
+      // console.log(currentTime.value, totalTime.value)
+      // TODO: не работает иногда перемотка в MediaSession
+      // сразу ставится ползунок в конец, на паузе правильная позиция указывается
       navigator.mediaSession.setPositionState({
         duration: totalTime.value,
         playbackRate: 1,
@@ -199,7 +201,7 @@ export default defineComponent({
       const target = event.target as HTMLAudioElement
       totalTime.value = target.duration
       navigator.mediaSession.setPositionState({
-        duration: target.duration,
+        duration: totalTime.value,
         playbackRate: 1,
         position: 0
       })
@@ -207,7 +209,7 @@ export default defineComponent({
 
     function playTrack(): void {
       try {
-        audioPlayer.value?.play().then((r) => r)
+        audioPlayer.value!.play().then((r) => r)
       } catch (error) {
         console.log('error', error)
       }
@@ -219,7 +221,7 @@ export default defineComponent({
       if (isPlaying.value) {
         playTrack()
       } else {
-        audioPlayer.value?.pause()
+        audioPlayer.value!.pause()
       }
     }
 
@@ -462,7 +464,6 @@ export default defineComponent({
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   margin: 0;
-  color: var(--main-color);
   font-weight: 500;
   --main-font-size: 24px;
   --max-container-width: 1000px;
@@ -476,6 +477,7 @@ main {
   align-items: center;
   background-color: var(--main-bg-color-secondary);
   overflow: hidden;
+  color: var(--main-color);
 }
 
 main.light {
@@ -562,6 +564,10 @@ button {
 
 button:hover {
   opacity: 1;
+}
+
+button.active {
+  color: #0016ff;
 }
 
 .slide-track-list-enter-active,
