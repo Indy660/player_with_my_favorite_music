@@ -227,61 +227,87 @@ export default defineComponent({
 
     // for 1 loop
     const isVolumeChanging: Ref<boolean> = ref(false)
+    // async function changeVolumeSlowly(isDecrease: boolean = true): void {
+    //   let steps: number = 20
+    //   const stepValue: number = 0.01
+    //   if (isDecrease) {
+    //     // return await new Promise((resolve) => {
+    //     const intervalId = setInterval(() => {
+    //       if (steps >= 0 && volume.value >= 0.2) {
+    //         const newVolume: string = (volume.value - stepValue).toFixed(2)
+    //         console.log('+', newVolume)
+    //         steps--
+    //         audioPlayer.value!.volume = Number(newVolume)
+    //       } else {
+    //         clearInterval(intervalId)
+    //         isVolumeChanging.value = false
+    //         // resolve()
+    //       }
+    //     }, 50)
+    //     // })
+    //   } else {
+    //     // return await new Promise((resolve) => {
+    //     const intervalId = setInterval(() => {
+    //       if (steps >= 0 && volume.value < 1) {
+    //         const newVolume: string = (volume.value + stepValue).toFixed(2)
+    //         console.log('-', newVolume)
+    //         steps--
+    //         audioPlayer.value!.volume = Number(newVolume)
+    //       } else {
+    //         clearInterval(intervalId)
+    //         isVolumeChanging.value = false
+    //         // resolve()
+    //       }
+    //     }, 50)
+    //     // })
+    //   }
+    // }
     async function changeVolumeSlowly(isDecrease: boolean = true): void {
+      isVolumeChanging.value = true
       let steps: number = 20
       const stepValue: number = 0.01
-      if (isDecrease) {
-        // return await new Promise((resolve) => {
-        const intervalId = setInterval(() => {
-          if (steps >= 0 && volume.value >= 0.2) {
-            const newVolume: string = (volume.value - stepValue).toFixed(2)
-            console.log('+', newVolume)
-            steps--
-            audioPlayer.value!.volume = Number(newVolume)
-          } else {
-            clearInterval(intervalId)
-            isVolumeChanging.value = false
-            // resolve()
-          }
-        }, 50)
-        // })
-      } else {
-        // return await new Promise((resolve) => {
-        const intervalId = setInterval(() => {
-          if (steps >= 0 && volume.value < 1) {
-            const newVolume: string = (volume.value + stepValue).toFixed(2)
-            console.log('-', newVolume)
-            steps--
-            audioPlayer.value!.volume = Number(newVolume)
-          } else {
-            clearInterval(intervalId)
-            isVolumeChanging.value = false
-            // resolve()
-          }
-        }, 50)
-        // })
+      async function changeVolume(isDecrease: boolean): Promise<string> {
+        return await new Promise((resolve) => {
+          const intervalId = setInterval(() => {
+            if (steps >= 0) {
+              const newVolume: string = isDecrease
+                ? (volume.value - stepValue).toFixed(2)
+                : (volume.value + stepValue).toFixed(2)
+              console.log(`${isDecrease ? '-' : '+'}`, newVolume)
+              steps--
+              audioPlayer.value!.volume = Number(newVolume)
+            } else {
+              clearInterval(intervalId)
+              isVolumeChanging.value = false
+              return resolve('done')
+            }
+          }, 50)
+        })
       }
+      await changeVolume(isDecrease)
     }
 
-    function shortTracksObserver(time: number): void {
+    async function shortTracksObserver(time: number): void {
       const bestParties: BestParties[] =
         sortingTopTrackList.value[currentTrackIndex.value].bestParties
       for (let i = 0; i < bestParties.length; i++) {
         const currentBestParty = bestParties[i]
         // start song
-        if (time < currentBestParty.start && !isVolumeChanging.value) {
-          // isVolumeChanging.value = true
+        if (time <= currentBestParty.start && !isVolumeChanging.value) {
           console.log('start')
           audioPlayer.value!.currentTime = currentBestParty.start
-          // await changeVolumeSlowly(false)
+          await changeVolumeSlowly(false)
           return
         } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
           console.log('continue')
-          // TODO: хз как поймать эту фазу один раз
-          if (time >= currentBestParty.end - 3 && !isVolumeChanging.value) {
+          // TODO: второе условие как хак
+          if (
+            time >= currentBestParty.end - 3 &&
+            time <= currentBestParty.end - 2 &&
+            !isVolumeChanging.value
+          ) {
             console.log('end')
-            // isVolumeChanging.value = true
-            // await changeVolumeSlowly(true)
+            await changeVolumeSlowly(true)
           }
           return
         }
@@ -290,9 +316,9 @@ export default defineComponent({
       handlerEnded()
     }
 
-    watchEffect(() => {
+    watchEffect(async () => {
       if (tabSelected.value === 4 && isPlaying.value && currentTrackIndex) {
-        shortTracksObserver(currentTime.value)
+        await shortTracksObserver(currentTime.value)
       }
     })
     const distanceBetweenComponents: Ref<string> = ref('500px')
