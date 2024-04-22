@@ -1,5 +1,5 @@
 import { MUSIC_LIST } from '../const/music_list'
-import { TABS_OPTION } from '../const/tabs_otion'
+// import { TABS_OPTION } from '../const/tabs_otion'
 import { onBeforeMount, ref, computed, watchEffect } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
 
@@ -11,6 +11,15 @@ interface TopTrackList extends TrackList {
 interface NotAggressiveTrackList extends TrackList {
   notAggressive: boolean
 }
+
+const TABS_OPTION: TabsOption[] = [
+  { label: 'All music', id: 1, url: 'all' },
+  { label: 'Top', id: 2, url: 'top' },
+  { label: 'Top Shorts', id: 4, url: 'shorts' },
+  { label: 'Not aggressive', id: 3, url: 'not_aggressive' },
+  { label: 'Favorite', id: 5, url: 'favorite' }
+]
+const favoriteSongs: Ref<Array<string>> = ref([])
 
 export function tracksApi() {
   const defaultTrackList: Ref<TrackList[]> = ref(MUSIC_LIST)
@@ -25,6 +34,7 @@ export function tracksApi() {
   onBeforeMount(() => {
     defaultTrackList.value = MUSIC_LIST
     totalNumbSongs.value = currentTracksList.value.length
+    getFavoriteSongsFromLocalStorage()
   })
 
   const pathToCurrentFile: ComputedRef<string> = computed(() => {
@@ -76,6 +86,7 @@ export function tracksApi() {
     const params: string = `${import.meta.env.BASE_URL}#tab=${tabUrl}&track=${trackUrl}`
     window.history.pushState({}, '', params)
   })
+
   const tracksByTab: ComputedRef<TrackList[]> = computed(() => {
     switch (tabSelected.value) {
       case 1:
@@ -86,9 +97,20 @@ export function tracksApi() {
         return notAggressiveTrackList.value
       case 4:
         return sortingTopTrackList.value
+      case 5:
+        return tracksByTabForFavorite.value
       default:
         return []
     }
+  })
+  const tracksByTabForFavorite: ComputedRef<TrackList[]> = computed(() => {
+    return defaultTrackList.value.filter((item) => favoriteSongs.value.includes(item.songName))
+  })
+
+  const TabsOptionRender: ComputedRef<TabsOption[]> = computed(() => {
+    return tracksByTabForFavorite.value.length
+      ? TABS_OPTION
+      : TABS_OPTION.slice(0, TABS_OPTION.length - 1)
   })
 
   const bestParties: ComputedRef<BestParties[] | []> = computed(() => {
@@ -137,6 +159,29 @@ export function tracksApi() {
     isRandomTracks.value = !isRandomTracks.value
   }
 
+  function getFavoriteSongsFromLocalStorage(): void {
+    const raw: string | null = localStorage.getItem('favoriteSongs')
+    raw && (favoriteSongs.value = JSON.parse(raw))
+  }
+
+  function setFavoriteSongsFromLocalStorage(): void {
+    localStorage.setItem('favoriteSongs', JSON.stringify(favoriteSongs.value.slice(0)))
+  }
+
+  function handleAddFavoriteSongBtn(): void {
+    const song: TrackList = currentSong.value
+    const findingSongIndex = favoriteSongs.value.findIndex((item) => item === song.songName)
+    if (findingSongIndex >= 0) {
+      favoriteSongs.value.splice(findingSongIndex, 1)
+      if (!favoriteSongs.value.length) {
+        tabSelected.value = 1
+      }
+    } else {
+      favoriteSongs.value.push(song.songName)
+    }
+    setFavoriteSongsFromLocalStorage()
+  }
+
   return {
     totalNumbSongs,
     defaultTrackList,
@@ -154,6 +199,9 @@ export function tracksApi() {
     handlerRandomBtn,
     currentTracks,
     currentTracksList,
-    currentSong
+    currentSong,
+    handleAddFavoriteSongBtn,
+    favoriteSongs,
+    TabsOptionRender
   }
 }

@@ -47,7 +47,9 @@ export default defineComponent({
       totalNumbSongs,
       currentTracks,
       currentSong,
-      currentTracksList
+      currentTracksList,
+      favoriteSongs,
+      handleAddFavoriteSongBtn
     } = tracksApi()
     onBeforeMount(async () => {
       // старый способ импорта музыки прямо из папки
@@ -227,41 +229,6 @@ export default defineComponent({
 
     // for 1 loop
     const isVolumeChanging: Ref<boolean> = ref(false)
-    // async function changeVolumeSlowly(isDecrease: boolean = true): void {
-    //   let steps: number = 20
-    //   const stepValue: number = 0.01
-    //   if (isDecrease) {
-    //     // return await new Promise((resolve) => {
-    //     const intervalId = setInterval(() => {
-    //       if (steps >= 0 && volume.value >= 0.2) {
-    //         const newVolume: string = (volume.value - stepValue).toFixed(2)
-    //         console.log('+', newVolume)
-    //         steps--
-    //         audioPlayer.value!.volume = Number(newVolume)
-    //       } else {
-    //         clearInterval(intervalId)
-    //         isVolumeChanging.value = false
-    //         // resolve()
-    //       }
-    //     }, 50)
-    //     // })
-    //   } else {
-    //     // return await new Promise((resolve) => {
-    //     const intervalId = setInterval(() => {
-    //       if (steps >= 0 && volume.value < 1) {
-    //         const newVolume: string = (volume.value + stepValue).toFixed(2)
-    //         console.log('-', newVolume)
-    //         steps--
-    //         audioPlayer.value!.volume = Number(newVolume)
-    //       } else {
-    //         clearInterval(intervalId)
-    //         isVolumeChanging.value = false
-    //         // resolve()
-    //       }
-    //     }, 50)
-    //     // })
-    //   }
-    // }
     async function changeVolumeSlowly(isDecrease: boolean = true): void {
       isVolumeChanging.value = true
       let steps: number = 20
@@ -292,7 +259,7 @@ export default defineComponent({
         sortingTopTrackList.value[currentTrackIndex.value].bestParties
       for (let i = 0; i < bestParties.length; i++) {
         const currentBestParty = bestParties[i]
-        // start song
+        // TODO: проблема при переключении, звук уходит со временем на 100%
         if (time <= currentBestParty.start && !isVolumeChanging.value) {
           console.log('start')
           audioPlayer.value!.currentTime = currentBestParty.start
@@ -412,10 +379,12 @@ export default defineComponent({
       isDarkTheme,
       handlerChangeThemeBtn,
       handlerShowSongTextBtn,
+      handleAddFavoriteSongBtn,
       isShowSongText,
       closeAllBars,
       currentSongText,
-      distanceBetweenComponents
+      distanceBetweenComponents,
+      favoriteSongs
     }
   }
 })
@@ -437,13 +406,15 @@ export default defineComponent({
         <SongText v-show="isShowSongText" :song-text="currentSongText" class="top_bar" />
       </transition>
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
-      <MainInfoBand :song-name="currentSong.songName" />
-      <VolumeControl
+      {{ currentSong?.songName }}
+      <MainInfoBand
+        :song-name="currentSong.songName"
         :has-text="!!currentSongText.length"
-        :volume="volume"
-        @volume-change="setVolume"
+        :is-favorite-song="favoriteSongs.includes(currentSong.songName)"
         @show-text-song="handlerShowSongTextBtn"
+        @add-favorite="handleAddFavoriteSongBtn"
       />
+      <VolumeControl :volume="volume" @volume-change="setVolume" />
       <ProgressControl
         :best-parties="bestParties"
         :current-time="currentTime"

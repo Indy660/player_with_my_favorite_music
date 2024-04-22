@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { TABS_OPTION } from '../const/tabs_otion'
+import { tracksApi } from '../composable/tracks'
 
 export default defineComponent({
   props: {
@@ -11,6 +11,7 @@ export default defineComponent({
   },
   emits: ['change-tab'],
   setup(props, { emit }) {
+    const { TabsOptionRender } = tracksApi()
     function btnHandler(option: TabsOption): void {
       if (props.tabSelected !== option.id) {
         emit('change-tab', option)
@@ -18,7 +19,7 @@ export default defineComponent({
     }
     return {
       btnHandler,
-      TABS_OPTION
+      TabsOptionRender
     }
   }
 })
@@ -27,8 +28,8 @@ export default defineComponent({
 <template>
   <div class="tabs">
     <button
-      v-for="(option, index) in TABS_OPTION"
-      :key="index"
+      v-for="option in TabsOptionRender"
+      :key="option.id"
       :class="{ active: option.id === tabSelected }"
       @click.stop="btnHandler(option)"
     >
@@ -40,6 +41,7 @@ export default defineComponent({
 <style scoped>
 .tabs {
   display: flex;
+  justify-content: center;
 }
 
 .tabs button {
@@ -48,8 +50,6 @@ export default defineComponent({
   border: none;
   padding: 10px 20px;
   border-radius: initial;
-  cursor: pointer;
-  transition: background-color 0.3s;
 }
 
 .tabs button.active {

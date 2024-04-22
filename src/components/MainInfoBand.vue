@@ -16,9 +16,18 @@ export default defineComponent({
     songName: {
       type: String,
       default: ''
+    },
+    hasText: {
+      type: Boolean,
+      default: false
+    },
+    isFavoriteSong: {
+      type: Boolean,
+      default: false
     }
   },
-  setup(props) {
+  emits: ['show-text-song', 'add-favorite'],
+  setup(props, { emit }) {
     const imagePaths = ref<Record<string, string>>({})
 
     const width: Ref<number> = ref(window.innerWidth)
@@ -108,40 +117,92 @@ export default defineComponent({
         setMetadata()
       }
     })
+    const iconShowTextClass: ComputedRef<string> = computed(() => {
+      return props.hasText ? '' : 'disabled'
+    })
 
-    return { getInfoBand, getLogoImage, getImageSizes }
+    const iconHeartClass: ComputedRef<string> = computed(() => {
+      // return props.hasText ? '' : 'disabled'
+      return props.isFavoriteSong ? 'active' : ''
+    })
+    function onIconShowTextClick(): void {
+      props.hasText && emit('show-text-song')
+    }
+
+    function onIconAddFavoriteClick(): void {
+      emit('add-favorite')
+    }
+
+    return {
+      getInfoBand,
+      getLogoImage,
+      getImageSizes,
+      onIconShowTextClick,
+      onIconAddFavoriteClick,
+      iconHeartClass,
+      iconShowTextClass
+    }
   }
 })
 </script>
 
 <template>
-  <div>
+  <div class="main-info">
     <img :src="getLogoImage" class="album-image" alt="" />
-    <!--    <div class="album-image" alt="" />-->
-    <div class="artist-info">
-      <div class="band">{{ getInfoBand.bandName }}</div>
-      <div class="song">{{ getInfoBand.songName }}</div>
+    <div class="main-panel">
+      <button class="heart" :class="iconHeartClass" @click.stop="onIconAddFavoriteClick">
+        <i class="fa-solid fa-heart" />
+      </button>
+      <!--    <div class="album-image" alt="" />-->
+      <div class="artist-info">
+        <div class="band">{{ getInfoBand.bandName }}</div>
+        <div class="song">{{ getInfoBand.songName }}</div>
+      </div>
+      <button class="show-text" :class="iconShowTextClass" @click.stop="onIconShowTextClick">
+        <i class="fa-solid fa-text-height" />
+      </button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.album-image {
-  width: v-bind('getImageSizes.width');
-  height: v-bind('getImageSizes.height');
-  background-color: white;
-  /*color: green;*/
-  /*background-image: v-bind('getLogoImage') ;*/
-  /*background-size: contain;*/
-  /*color: var(--main-color);*/
-}
+.main-info {
+  .album-image {
+    width: v-bind('getImageSizes.width');
+    height: v-bind('getImageSizes.height');
+    background-color: white;
+    /*color: green;*/
+    /*background-image: v-bind('getLogoImage') ;*/
+    /*background-size: contain;*/
+    /*color: var(--main-color);*/
+  }
 
-.artist-info .band {
-  margin-bottom: 10px;
-}
+  .main-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    .artist-info .band {
+      margin-bottom: 10px;
+    }
 
-.artist-info .song {
-  font-size: calc(var(--main-font-size) + 2px);
-  font-weight: 600;
+    .artist-info .song {
+      font-size: calc(var(--main-font-size) + 2px);
+      font-weight: 600;
+    }
+
+    .show-text.disabled {
+      cursor: default;
+      opacity: 0.3;
+    }
+
+    .heart.active {
+      color: #de0a26;
+    }
+
+    button {
+      font-size: 20px;
+    }
+  }
 }
 </style>

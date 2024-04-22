@@ -8,13 +8,9 @@ export default defineComponent({
     volume: {
       type: Number,
       default: 0.8
-    },
-    hasText: {
-      type: Boolean,
-      default: false
     }
   },
-  emits: ['volume-change', 'show-text-song'],
+  emits: ['volume-change'],
   setup(props, { emit }) {
     const convertToValue: ComputedRef<number> = computed(() => {
       return props.volume * 100
@@ -27,10 +23,6 @@ export default defineComponent({
       return props.volume > 0 ? '<i class="fas fa-volume-up"/>' : '<i class="fas fa-volume-off"/>'
     })
 
-    const iconShowTextClass: ComputedRef<string> = computed(() => {
-      return props.hasText ? '' : 'disabled'
-    })
-
     function volumeHandler(event: InputEvent): void {
       const volumeValue: number = parseFloat((event.target as HTMLInputElement).value) / 100
       emit('volume-change', volumeValue)
@@ -38,10 +30,6 @@ export default defineComponent({
 
     function volumeHandlerByClick(number: number): void {
       emit('volume-change', number)
-    }
-
-    function onIconShowTextClick(): void {
-      props.hasText && emit('show-text-song')
     }
 
     function onIconVolumeClick(): void {
@@ -57,9 +45,7 @@ export default defineComponent({
       convertToValue,
       volumeHandler,
       onIconVolumeClick,
-      onIconShowTextClick,
-      iconVolume,
-      iconShowTextClass
+      iconVolume
     }
   }
 })
@@ -81,9 +67,6 @@ export default defineComponent({
       step="1"
       @input="volumeHandler"
     />
-    <button class="show-text" :class="iconShowTextClass" @click.stop="onIconShowTextClick">
-      <i class="fa-solid fa-text-height" />
-    </button>
   </div>
 </template>
 
@@ -103,14 +86,5 @@ export default defineComponent({
 
 .volume-control .margin {
   margin-right: 0.2vw;
-}
-
-.volume-control .show-text.disabled {
-  cursor: default;
-  opacity: 0.3;
-}
-
-button {
-  font-size: 20px;
 }
 </style>
