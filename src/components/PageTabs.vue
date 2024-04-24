@@ -50,6 +50,8 @@ export default defineComponent({
   border: none;
   padding: 10px 20px;
   border-radius: initial;
+  width: unset;
+  height: unset;
 }
 
 .tabs button.active {

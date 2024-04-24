@@ -229,7 +229,7 @@ export default defineComponent({
 
     // for 1 loop
     const isVolumeChanging: Ref<boolean> = ref(false)
-    async function changeVolumeSlowly(isDecrease: boolean = true): void {
+    async function changeVolumeSlowly(isDecrease: boolean = true): Promise<void> {
       isVolumeChanging.value = true
       let steps: number = 20
       const stepValue: number = 0.01
@@ -254,7 +254,7 @@ export default defineComponent({
       await changeVolume(isDecrease)
     }
 
-    async function shortTracksObserver(time: number): void {
+    async function shortTracksObserver(time: number): Promise<void> {
       const bestParties: BestParties[] =
         sortingTopTrackList.value[currentTrackIndex.value].bestParties
       for (let i = 0; i < bestParties.length; i++) {
@@ -297,7 +297,7 @@ export default defineComponent({
       // const rect1 = main_control_ref?.value?.$el?.getBoundingClientRect()
       const rect1: DOMRect = main_control_ref.getBoundingClientRect()
       const rect2: DOMRect = containerDiv?.getBoundingClientRect()
-      distanceBetweenComponents.value = `${Math.abs(rect1.top - rect2.top) + 18}px`
+      distanceBetweenComponents.value = `${Math.abs(rect1.top - rect2.top) + 25}px`
     })
     function previousTrackHandler(): void {
       if (audioPlayer.value!.currentTime <= 20 || tabSelected.value === 4) previousTrack()
@@ -406,7 +406,6 @@ export default defineComponent({
         <SongText v-show="isShowSongText" :song-text="currentSongText" class="top_bar" />
       </transition>
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
-      {{ currentSong?.songName }}
       <MainInfoBand
         :song-name="currentSong.songName"
         :has-text="!!currentSongText.length"
@@ -458,13 +457,15 @@ export default defineComponent({
 <style lang="css">
 * {
   transition: all 0.3s linear;
+  font-size: var(--main-font-size);
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   margin: 0;
   font-weight: 500;
   --main-font-size: 24px;
   --max-container-width: 1000px;
-  font-size: var(--main-font-size);
+  --active-color-btn: 240, 100%;
+  --hover-color-btn: 60, 100%;
 }
 main {
   width: 100vw;
@@ -481,12 +482,14 @@ main.light {
   --main-color: #000000ff;
   --main-bg-color: #ffffffff;
   --main-bg-color-secondary: rgba(210, 211, 223, 0.39);
+  --color-lightness: 55%;
 }
 
 main.dark {
   --main-color: #ffffffff;
   --main-bg-color: #000000ff;
   --main-bg-color-secondary: rgb(48, 49, 53);
+  --color-lightness: 45%;
 }
 
 .container {
@@ -551,20 +554,29 @@ input[type='range'] {
 
 button {
   font-size: var(--main-font-size);
-  border-radius: 50%;
   background: none;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
   opacity: 0.8;
+  border-radius: 50%;
+  padding: 4px;
+  width: calc(var(--main-font-size) + 10px);
+  height: calc(var(--main-font-size) + 10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button:hover {
   opacity: 1;
+  border: 1px solid currentcolor;
+  /*todo: хреново на ховере выглядит*/
+  background-color: hsl(var(--hover-color-btn), var(--color-lightness));
 }
 
 button.active {
-  color: #0016ff;
+  color: hsl(var(--active-color-btn), var(--color-lightness));
 }
 
 .slide-track-list-enter-active,
@@ -572,10 +584,9 @@ button.active {
   transition: all 0.5s ease;
 }
 
-/*TODO: баг, -100% недоконца скрывает*/
 .slide-track-list-enter-from,
 .slide-track-list-leave-to {
-  transform: translateY(-110%);
+  transform: translateY(-100%);
 }
 
 .slide-track-list-enter-to,
@@ -588,10 +599,9 @@ button.active {
   transition: all 0.5s ease;
 }
 
-/*TODO: баг, -100% недоконца скрывает*/
 .slide-song-text-enter-from,
 .slide-song-text-leave-to {
-  transform: translateY(-110%);
+  transform: translateY(-100%);
 }
 
 .slide-song-text-enter-to,
