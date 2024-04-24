@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import type { ComputedRef } from 'vue'
-// import { tracksApi } from '../composable/tracks'
+import { tracksApi } from '../composable/tracks'
 export default defineComponent({
   name: 'OtherControl',
   props: {
@@ -9,14 +9,14 @@ export default defineComponent({
       type: Number,
       default: 0
     },
-    totalNumbSongs: {
-      type: Number,
-      default: 0
-    },
-    isRandomTracks: {
-      type: Boolean,
-      default: false
-    },
+    // totalNumbSongs: {
+    //   type: Number,
+    //   default: 0
+    // },
+    // isRandomTracks: {
+    //   type: Boolean,
+    //   default: false
+    // },
     isRepeatMode: {
       type: Boolean,
       default: false
@@ -30,12 +30,13 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['random-click', 'show-list-click', 'repeat-mode-click', 'change-theme'],
+  // 'random-click',
+  emits: ['show-list-click', 'repeat-mode-click', 'change-theme'],
   setup(props, { emit }) {
     //TODO: не обновляются данные из компонетс
-    // const { totalNumbSongs, isRandomTracks } = tracksApi()
+    const { totalNumbSongs, isRandomTracks, handlerRandomBtn } = tracksApi()
     function iconClickRandomHandler(): void {
-      emit('random-click')
+      handlerRandomBtn()
     }
     function iconClickRepeatModeHandler(): void {
       emit('repeat-mode-click')
@@ -58,9 +59,8 @@ export default defineComponent({
         : '<i class="fas fa-bars"/>'
     })
     return {
-      // totalNumbSongs,
-      // isShowTrackList,
-      // isRandomTracks,
+      totalNumbSongs,
+      isRandomTracks,
       iconClickRandomHandler,
       iconClickRepeatModeHandler,
       iconClickShowListHandler,

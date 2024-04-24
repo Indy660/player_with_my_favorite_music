@@ -78,9 +78,9 @@ li {
   cursor: pointer;
 }
 li.selected {
-  background-color: var(--main-bg-color-secondary);
+  color: hsl(var(--active-color-btn), var(--color-lightness));
 }
 li:hover {
-  background-color: rgb(0 22 255 / 10%);
+  background-color: var(--main-bg-color-secondary);
 }
 </style>

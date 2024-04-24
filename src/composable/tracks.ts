@@ -1,5 +1,4 @@
 import { MUSIC_LIST } from '../const/music_list'
-// import { TABS_OPTION } from '../const/tabs_otion'
 import { onBeforeMount, ref, computed, watchEffect } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
 
@@ -20,6 +19,8 @@ const TABS_OPTION: TabsOption[] = [
   { label: 'Favorite', id: 5, url: 'favorite' }
 ]
 const favoriteSongs: Ref<Array<string>> = ref([])
+const totalNumbSongs: Ref<number> = ref(0)
+const isRandomTracks: Ref<boolean> = ref(false)
 
 export function tracksApi() {
   const defaultTrackList: Ref<TrackList[]> = ref(MUSIC_LIST)
@@ -30,7 +31,6 @@ export function tracksApi() {
     MUSIC_LIST.filter((item) => item.notAggressive) as NotAggressiveTrackList[]
   )
   const currentTrackIndex: Ref<number> = ref(0)
-  const totalNumbSongs: Ref<number> = ref(0)
   onBeforeMount(() => {
     defaultTrackList.value = MUSIC_LIST
     totalNumbSongs.value = currentTracksList.value.length
@@ -115,7 +115,7 @@ export function tracksApi() {
 
   const bestParties: ComputedRef<BestParties[] | []> = computed(() => {
     return tabSelected.value === 4
-      ? sortingTopTrackList.value[currentTrackIndex.value].bestParties
+      ? sortingTopTrackList.value[currentTrackIndex.value]?.bestParties || [{ start: 0, end: 30 }]
       : []
   })
 
@@ -154,7 +154,6 @@ export function tracksApi() {
     currentTrackIndex.value = trackIndex
   }
 
-  const isRandomTracks: Ref<boolean> = ref(false)
   function handlerRandomBtn(): void {
     isRandomTracks.value = !isRandomTracks.value
   }

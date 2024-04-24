@@ -37,14 +37,14 @@ export default defineComponent({
       nextTrack,
       previousTrack,
       pathToCurrentFile,
-      sortingTopTrackList,
+      // sortingTopTrackList,
       currentTrackIndex,
       changeTab,
       selectTrack,
       tabSelected,
-      isRandomTracks,
-      handlerRandomBtn,
-      totalNumbSongs,
+      // isRandomTracks,
+      // handlerRandomBtn,
+      // totalNumbSongs,
       currentTracks,
       currentSong,
       currentTracksList,
@@ -248,20 +248,19 @@ export default defineComponent({
               isVolumeChanging.value = false
               return resolve('done')
             }
-          }, 50)
+          }, 100)
         })
       }
       await changeVolume(isDecrease)
     }
 
     async function shortTracksObserver(time: number): Promise<void> {
-      const bestParties: BestParties[] =
-        sortingTopTrackList.value[currentTrackIndex.value].bestParties
-      for (let i = 0; i < bestParties.length; i++) {
-        const currentBestParty = bestParties[i]
+      for (let i = 0; i < bestParties.value.length; i++) {
+        const currentBestParty = bestParties.value[i]
         // TODO: проблема при переключении, звук уходит со временем на 100%
         if (time <= currentBestParty.start && !isVolumeChanging.value) {
           console.log('start')
+          audioPlayer.value!.volume = 0.6
           audioPlayer.value!.currentTime = currentBestParty.start
           await changeVolumeSlowly(false)
           return
@@ -274,6 +273,7 @@ export default defineComponent({
             !isVolumeChanging.value
           ) {
             console.log('end')
+            audioPlayer.value!.volume = 0.8
             await changeVolumeSlowly(true)
           }
           return
@@ -349,13 +349,13 @@ export default defineComponent({
       volume,
       onVolumeUpdate,
       totalTime,
-      isRandomTracks,
+      // isRandomTracks,
       pathToCurrentFile,
 
       currentTracks,
       currentTrackIndex,
       currentTracksList,
-      totalNumbSongs,
+      // totalNumbSongs,
       currentSong,
 
       handlerCanPlay,
@@ -367,7 +367,7 @@ export default defineComponent({
       togglePlayPause,
       nextTrack,
       previousTrackHandler,
-      handlerRandomBtn,
+      // handlerRandomBtn,
       handlerShowListBtn,
       handlerSelectTrack,
       tabSelected,
@@ -429,15 +429,15 @@ export default defineComponent({
         @next="nextTrack"
         @play-pause="togglePlayPause"
       />
+      <!--      :total-numb-songs="totalNumbSongs"-->
+      <!--      :is-random-tracks="isRandomTracks"-->
+      <!--      @random-click="handlerRandomBtn"-->
       <OtherControl
         :current-numb-song="currentTrackIndex + 1"
-        :total-numb-songs="totalNumbSongs"
-        :is-random-tracks="isRandomTracks"
         :is-show-track-list="isShowTrackList"
         :is-repeat-mode="isRepeatMode"
         :is-dark-theme="isDarkTheme"
         @repeat-mode-click="repeatModeChange"
-        @random-click="handlerRandomBtn"
         @show-list-click="handlerShowListBtn"
         @change-theme="handlerChangeThemeBtn"
       />
@@ -482,14 +482,14 @@ main.light {
   --main-color: #000000ff;
   --main-bg-color: #ffffffff;
   --main-bg-color-secondary: rgba(210, 211, 223, 0.39);
-  --color-lightness: 55%;
+  --color-lightness: 60%;
 }
 
 main.dark {
   --main-color: #ffffffff;
   --main-bg-color: #000000ff;
   --main-bg-color-secondary: rgb(48, 49, 53);
-  --color-lightness: 45%;
+  --color-lightness: 40%;
 }
 
 .container {
@@ -571,8 +571,9 @@ button {
 button:hover {
   opacity: 1;
   border: 1px solid currentcolor;
-  /*todo: хреново на ховере выглядит*/
+  /*todo: хреново на ховере выглядит при темной темы*/
   background-color: hsl(var(--hover-color-btn), var(--color-lightness));
+  transform: scale(1.1);
 }
 
 button.active {
