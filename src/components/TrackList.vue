@@ -33,7 +33,7 @@ export default defineComponent({
     // TODO: хз, что возвращает, войд не подходит
     async function scrollTo() {
       await nextTick()
-      const selected = document.querySelector('.selected')
+      const selected = document.querySelector('.tracks .selected')
       selected?.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
 
@@ -50,7 +50,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <ul ref="sidebarRef" class="sidebar" @click.stop>
+  <ul class="sidebar tracks" @click.stop>
     <li
       v-for="(track, index) in currentTracksWithCorrectNames"
       :key="index"

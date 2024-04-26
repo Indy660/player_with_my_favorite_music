@@ -1,10 +1,10 @@
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, nextTick, watch } from 'vue'
 import type { ComputedRef } from 'vue'
 export default defineComponent({
   props: {
     songText: {
-      type: [Object, String],
+      type: [Array, String],
       default: ''
     },
     currentTime: {
@@ -17,12 +17,40 @@ export default defineComponent({
     function goToText(time: number): void {
       emit('time-change', time - 0.5)
     }
+    // TODO: очень часто но хз как
+    watch(
+      () => props.currentTime,
+      () => {
+        scrollTo()
+      }
+    )
+    async function scrollTo() {
+      await nextTick()
+      const selected = document.querySelector('.song-text .selected')
+      selected?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
     // TODO: songTextWithMusicSymbol
     // TODO: переключение по инпуту трека закрывает этот компонент
     // TODO: сделать два таба для разных видов текстов
 
-    // const songTextWithMusicSymbol: ComputedRef<SongTextProp> = computed(() => {
-    //
+    const songTextWithMusicSymbol: ComputedRef<SongTextProp> = computed(() => {
+      const result = []
+      // https://www.compart.com/en/unicode/U+1F3B5
+      if (Array.isArray(props.songText)) {
+        props.songText.forEach((item, index) => {
+          if (props.songText[index + 1].seconds - props.songText[index].seconds > 30) {
+            result.push({
+              seconds: props.songText[index].seconds + 3,
+              lyrics: '&#127925'
+            })
+          }
+          result.push({
+            item
+          })
+        })
+      }
+      return result
+    })
 
     // TODO:
     // Are You Dead Yet
@@ -30,15 +58,15 @@ export default defineComponent({
     // Wasteland Discotheque
     // Nothing Left
     // Fucking Perfect
-    return { goToText }
+    return { goToText, songTextWithMusicSymbol }
   }
 })
 </script>
 
 <template>
-  <div class="sidebar" @click.stop>
+  <div class="sidebar song-text" @click.stop>
     <span v-show="typeof songText === 'string'" v-text="songText" />
-    <div v-show="typeof songText === 'object'" class="text-with-timestamps">
+    <div v-show="Array.isArray(songText)" class="text-with-timestamps">
       {{ currentTime }}
       <!--      currentTime < songText[key - 1]?.seconds ||-->
       <span
