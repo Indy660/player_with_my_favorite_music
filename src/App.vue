@@ -123,7 +123,9 @@ export default defineComponent({
     const isDarkTheme: Ref<boolean> = ref(false)
     function initChangeColorScheme(): void {
       const theme =
-        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+        (localStorage.getItem('dark-color-scheme') &&
+          JSON.parse(localStorage.getItem('dark-color-scheme')))
           ? 'dark'
           : 'light'
       isDarkTheme.value = theme === 'dark'
@@ -139,6 +141,7 @@ export default defineComponent({
         'color-scheme',
         isDarkTheme.value ? 'dark' : 'light'
       )
+      localStorage.setItem('dark-color-scheme', JSON.stringify(isDarkTheme.value))
     }
 
     function handlerChangeThemeBtn(): void {
@@ -166,11 +169,9 @@ export default defineComponent({
     }
 
     function handlerTimeChangeInput(event: Event): void {
-      if (audioPlayer.value) {
-        const target = event.target as HTMLInputElement
-        audioPlayer.value.currentTime =
-          (Number(target.value) / 100) * (audioPlayer.value!.duration || 0)
-      }
+      const target = event.target as HTMLInputElement
+      audioPlayer.value!.currentTime =
+        (Number(target.value) / 100) * (audioPlayer.value!.duration || 0)
     }
 
     function handlerTimeChangeBySongText(seconds: number): void {
@@ -180,9 +181,7 @@ export default defineComponent({
     }
 
     function handlerTimeChangeLine(number: number): void {
-      if (audioPlayer.value) {
-        audioPlayer.value!.currentTime = number * (audioPlayer.value!.duration || 0)
-      }
+      audioPlayer.value!.currentTime = number * (audioPlayer.value!.duration || 0)
     }
 
     function onTimeUpdate(event: Event): void {
@@ -431,7 +430,12 @@ export default defineComponent({
         @show-text-song="handlerShowSongTextBtn"
         @add-favorite="handleAddFavoriteSongBtn"
       />
-      <VolumeControl :volume="volume" @volume-change="setVolume" />
+      <VolumeControl
+        ref="main_control_ref"
+        class="main_control_ref"
+        :volume="volume"
+        @volume-change="setVolume"
+      />
       <ProgressControl
         :best-parties="bestParties"
         :current-time="currentTime"
@@ -440,8 +444,6 @@ export default defineComponent({
         @time-change-line="handlerTimeChangeLine"
       />
       <MainControl
-        ref="main_control_ref"
-        class="main_control_ref"
         :is-playing="isPlaying"
         @previous="previousTrackHandler"
         @next="nextTrack"

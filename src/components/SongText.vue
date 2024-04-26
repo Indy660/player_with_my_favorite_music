@@ -18,6 +18,9 @@ export default defineComponent({
       emit('time-change', time - 0.5)
     }
     // TODO: songTextWithMusicSymbol
+    // TODO: переключение по инпуту трека закрывает этот компонент
+    // TODO: сделать два таба для разных видов текстов
+
     // const songTextWithMusicSymbol: ComputedRef<SongTextProp> = computed(() => {
     //
 
@@ -37,11 +40,14 @@ export default defineComponent({
     <span v-show="typeof songText === 'string'" v-text="songText" />
     <div v-show="typeof songText === 'object'" class="text-with-timestamps">
       {{ currentTime }}
+      <!--      currentTime < songText[key - 1]?.seconds ||-->
       <span
         v-for="(partSong, key) in songText"
         :key="key"
         :class="{
-          selected: currentTime >= partSong.seconds - 1 && currentTime < songText[key + 1].seconds
+          selected:
+            currentTime >= partSong.seconds - 1 &&
+            (currentTime < songText[key + 1]?.seconds || key === Object.keys(songText).length - 1)
         }"
         @click="goToText(partSong.seconds)"
         v-html="'\n' + partSong.seconds + ' ' + partSong.lyrics + '\n'"
@@ -59,7 +65,7 @@ export default defineComponent({
   margin: 0;
   padding: 10px 5px;
   text-align: start;
-  transition: none;
+  /*transition: none;*/
 }
 
 .sidebar span {
