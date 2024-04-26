@@ -11,6 +11,7 @@ import MainControl from './components/MainControl.vue'
 import OtherControl from './components/OtherControl.vue'
 import SongText from './components/SongText.vue'
 import SONGS_TEXT from './static_data/songs_text.json'
+import SONGS_TEXT_WITH_TIMECODES from './static_data/songs_text_with_timecodes.json'
 
 interface CustomAudioElement extends HTMLAudioElement {
   currentRange: number
@@ -338,8 +339,15 @@ export default defineComponent({
     type SongsText = {
       [key: string]: string
     }
-    const currentSongText: ComputedRef<string> = computed(
-      () => (SONGS_TEXT as SongsText)[currentSong.value.songName] || ''
+    type SongsTextWithTimeCode = {
+      seconds: number
+      lyrics: string
+    }
+    const currentSongText: ComputedRef<Array<SongsTextWithTimeCode> | string> = computed(
+      () =>
+        (SONGS_TEXT_WITH_TIMECODES as Array<SongsTextWithTimeCode>)[currentSong.value.songName] ||
+        (SONGS_TEXT as SongsText)[currentSong.value.songName] ||
+        ''
     )
 
     return {

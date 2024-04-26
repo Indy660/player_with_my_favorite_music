@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "homepage": "/player_with_my_favorite_music/#",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "vite --port 5000",
     "build": "vite build",
@@ -21,6 +21,9 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.5",
+    "axios": "^1.6.8",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
     "vue": "^3.3.11"
   },
   "devDependencies": {
