@@ -191,11 +191,6 @@ export default defineComponent({
       font-weight: 600;
     }
 
-    .show-text.disabled {
-      cursor: default;
-      opacity: 0.3;
-    }
-
     .heart.active {
       color: #de0a26;
     }

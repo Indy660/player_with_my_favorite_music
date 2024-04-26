@@ -165,12 +165,18 @@ export default defineComponent({
       }
     }
 
-    function handlerTimeChange(event: Event): void {
+    function handlerTimeChangeInput(event: Event): void {
       if (audioPlayer.value) {
         const target = event.target as HTMLInputElement
         audioPlayer.value.currentTime =
           (Number(target.value) / 100) * (audioPlayer.value!.duration || 0)
       }
+    }
+
+    function handlerTimeChangeBySongText(seconds: number): void {
+      audioPlayer.value!.currentTime = seconds
+      isPlaying.value = true
+      playTrack()
     }
 
     function handlerTimeChangeLine(number: number): void {
@@ -339,13 +345,10 @@ export default defineComponent({
     type SongsText = {
       [key: string]: string
     }
-    type SongsTextWithTimeCode = {
-      seconds: number
-      lyrics: string
-    }
-    const currentSongText: ComputedRef<Array<SongsTextWithTimeCode> | string> = computed(
+    const currentSongText: ComputedRef<SongTextProp> = computed(
       () =>
-        (SONGS_TEXT_WITH_TIMECODES as Array<SongsTextWithTimeCode>)[currentSong.value.songName] ||
+        ((SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName]?.length &&
+          (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName]) ||
         (SONGS_TEXT as SongsText)[currentSong.value.songName] ||
         ''
     )
@@ -368,8 +371,9 @@ export default defineComponent({
 
       handlerCanPlay,
       handlerEnded,
-      handlerTimeChange,
+      handlerTimeChangeInput,
       handlerTimeChangeLine,
+      handlerTimeChangeBySongText,
       onTimeUpdate,
       setVolume,
       togglePlayPause,
@@ -411,7 +415,13 @@ export default defineComponent({
         />
       </transition>
       <transition name="slide-song-text">
-        <SongText v-show="isShowSongText" :song-text="currentSongText" class="top_bar" />
+        <SongText
+          v-show="isShowSongText"
+          :current-time="currentTime"
+          :song-text="currentSongText"
+          class="top_bar"
+          @time-change="handlerTimeChangeBySongText"
+        />
       </transition>
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
       <MainInfoBand
@@ -426,7 +436,7 @@ export default defineComponent({
         :best-parties="bestParties"
         :current-time="currentTime"
         :total-time="totalTime"
-        @time-change="handlerTimeChange"
+        @time-change="handlerTimeChangeInput"
         @time-change-line="handlerTimeChangeLine"
       />
       <MainControl
@@ -565,7 +575,6 @@ button {
   background: none;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
   opacity: 0.8;
   border-radius: 50%;
   padding: 4px;
@@ -586,6 +595,14 @@ button:hover {
 
 button.active {
   color: hsl(var(--active-color-btn), var(--color-lightness));
+}
+
+button.disabled {
+  cursor: default;
+  opacity: 0.3;
+  transform: none;
+  border: none;
+  background-color: unset;
 }
 
 .slide-track-list-enter-active,
