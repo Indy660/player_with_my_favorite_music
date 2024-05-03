@@ -19,8 +19,3 @@ type SongTextWithTimeCode = {
   seconds: number
   lyrics: string
 }
-type SongsTextWithTimeCode = {
-  [key: string]: Array<SongTextWithTimeCode>
-}
-
-type SongTextProp = Array<SongTextWithTimeCode> | string

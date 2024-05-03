@@ -38,24 +38,4 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped>
-.tabs {
-  display: flex;
-  justify-content: center;
-}
-
-.tabs button {
-  color: var(--main-color);
-  background-color: var(--main-bg-color-secondary);
-  border: none;
-  padding: 10px 20px;
-  border-radius: initial;
-  width: unset;
-  height: unset;
-}
-
-.tabs button.active {
-  background-color: var(--main-bg-color);
-  border: 1px solid var(--main-color);
-}
-</style>
+<style scoped></style>

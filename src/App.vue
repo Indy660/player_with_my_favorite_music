@@ -344,12 +344,23 @@ export default defineComponent({
     type SongsText = {
       [key: string]: string
     }
-    const currentSongText: ComputedRef<SongTextProp> = computed(
-      () =>
-        ((SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName]?.length &&
-          (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName]) ||
-        (SONGS_TEXT as SongsText)[currentSong.value.songName] ||
-        ''
+    type SongsTextWithTimeCode = {
+      [key: string]: Array<SongTextWithTimeCode>
+    }
+    // const currentSongText: ComputedRef<SongTextProp> = computed(
+    //   () =>
+    //     ((SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName]?.length &&
+    //       (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName]) ||
+    //     (SONGS_TEXT as SongsText)[currentSong.value.songName] ||
+    //     ''
+    // )
+
+    const currentSongText: ComputedRef<string> = computed(
+      () => (SONGS_TEXT as SongsText)[currentSong.value.songName] || ''
+    )
+
+    const currentSongTextWithTimecodes: ComputedRef<Array<SongTextWithTimeCode>> = computed(
+      () => (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName] || []
     )
 
     return {
@@ -394,6 +405,7 @@ export default defineComponent({
       isShowSongText,
       closeAllBars,
       currentSongText,
+      currentSongTextWithTimecodes,
       distanceBetweenComponents,
       favoriteSongs
     }
@@ -415,9 +427,10 @@ export default defineComponent({
       </transition>
       <transition name="slide-song-text">
         <SongText
-          v-show="isShowSongText"
+          v-show="isShowSongText && (currentSongText.length || currentSongTextWithTimecodes.length)"
           :current-time="currentTime"
           :song-text="currentSongText"
+          :song-text-with-timecodes="currentSongTextWithTimecodes"
           class="top_bar"
           @time-change="handlerTimeChangeBySongText"
         />
@@ -425,7 +438,7 @@ export default defineComponent({
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
       <MainInfoBand
         :song-name="currentSong.songName"
-        :has-text="!!currentSongText.length"
+        :has-text="!!currentSongText.length || !!currentSongTextWithTimecodes.length"
         :is-favorite-song="favoriteSongs.includes(currentSong.songName)"
         @show-text-song="handlerShowSongTextBtn"
         @add-favorite="handleAddFavoriteSongBtn"
@@ -605,6 +618,26 @@ button.disabled {
   transform: none;
   border: none;
   background-color: unset;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+}
+
+.tabs button {
+  color: var(--main-color);
+  background-color: var(--main-bg-color-secondary);
+  border: none;
+  padding: 10px 20px;
+  border-radius: initial;
+  width: unset;
+  height: unset;
+}
+
+.tabs button.active {
+  background-color: var(--main-bg-color);
+  border: 1px solid var(--main-color);
 }
 
 .slide-track-list-enter-active,
