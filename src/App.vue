@@ -43,9 +43,6 @@ export default defineComponent({
       changeTab,
       selectTrack,
       tabSelected,
-      // isRandomTracks,
-      // handlerRandomBtn,
-      // totalNumbSongs,
       currentTracks,
       currentSong,
       currentTracksList,
@@ -350,23 +347,17 @@ export default defineComponent({
     type SongsTextWithTimeCode = {
       [key: string]: Array<SongTextWithTimeCode>
     }
-    // const currentSongText: ComputedRef<SongTextProp> = computed(
-    //   () =>
-    //     ((SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName]?.length &&
-    //       (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName]) ||
-    //     (SONGS_TEXT as SongsText)[currentSong.value.songName] ||
-    //     ''
-    // )
-
     const currentSongText: ComputedRef<string> = computed(
       () => (SONGS_TEXT as SongsText)[currentSong.value.songName] || ''
     )
-
     const currentSongTextWithTimecodes: ComputedRef<Array<SongTextWithTimeCode>> = computed(
       () => (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName] || []
     )
 
-    const handleKeyDown = (event: Event): void => {
+    interface KeyboardEvent {
+      key: string
+    }
+    const handleKeyDown = (event: KeyboardEvent): void => {
       switch (event.key) {
         case ' ':
           togglePlayPause()
@@ -397,13 +388,11 @@ export default defineComponent({
       volume,
       onVolumeUpdate,
       totalTime,
-      // isRandomTracks,
       pathToCurrentFile,
 
       currentTracks,
       currentTrackIndex,
       currentTracksList,
-      // totalNumbSongs,
       currentSong,
 
       handlerCanPlay,
@@ -416,7 +405,6 @@ export default defineComponent({
       togglePlayPause,
       nextTrack,
       previousTrackHandler,
-      // handlerRandomBtn,
       handlerShowListBtn,
       handlerSelectTrack,
       tabSelected,
@@ -489,9 +477,6 @@ export default defineComponent({
         @next="nextTrack"
         @play-pause="togglePlayPause"
       />
-      <!--      :total-numb-songs="totalNumbSongs"-->
-      <!--      :is-random-tracks="isRandomTracks"-->
-      <!--      @random-click="handlerRandomBtn"-->
       <OtherControl
         :current-numb-song="currentTrackIndex + 1"
         :is-show-track-list="isShowTrackList"
