@@ -229,6 +229,7 @@ export default defineComponent({
       if (isPlaying.value) {
         playTrack()
       } else {
+        // TODO: Cannot read properties of null (reading 'pause') на пробел
         audioPlayer.value!.pause()
       }
     }
@@ -304,6 +305,8 @@ export default defineComponent({
       const rect1: DOMRect = main_control_ref.getBoundingClientRect()
       const rect2: DOMRect = containerDiv?.getBoundingClientRect()
       distanceBetweenComponents.value = `${Math.abs(rect1.top - rect2.top) + 25}px`
+      audioPlayer.value!.volume = 0.8
+      document.addEventListener('keydown', handleKeyDown)
     })
     function previousTrackHandler(): void {
       if (audioPlayer.value!.currentTime <= 20 || tabSelected.value === 4) previousTrack()
@@ -362,6 +365,30 @@ export default defineComponent({
     const currentSongTextWithTimecodes: ComputedRef<Array<SongTextWithTimeCode>> = computed(
       () => (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName] || []
     )
+
+    const handleKeyDown = (event: Event): void => {
+      switch (event.key) {
+        case ' ':
+          togglePlayPause()
+          break
+        case 'ArrowRight':
+          console.log('ArrowRight')
+          nextTrack()
+          break
+        case 'ArrowLeft':
+          console.log('ArrowLeft')
+          previousTrackHandler()
+          break
+        case 'ArrowUp':
+          console.log('ArrowUp', audioPlayer.value!.volume)
+          audioPlayer.value!.volume <= 0.9 && setVolume(audioPlayer.value!.volume + 0.1)
+          break
+        case 'ArrowDown':
+          console.log('ArrowDown', audioPlayer.value!.volume)
+          audioPlayer.value!.volume >= 0.1 && setVolume(audioPlayer.value!.volume - 0.1)
+          break
+      }
+    }
 
     return {
       audioPlayer,
