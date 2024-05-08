@@ -18,7 +18,6 @@ const apiUrl = 'https://api.textyl.co/api/lyrics?q='
 // songData
 // lyrics
 
-// TODO: сделать проверку ключа, чтобы не было до запросов
 // TODO: "type": "module" заменить на  "type": "commonjs" в пекедже
 // Функция для получения текста песни и сохранения его в JSON файл
 async function fetchLyricsAndSave(songTitle, originalName) {

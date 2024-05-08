@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const axios = require('axios')
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 // Путь к папке с музыкой
 const musicFolderPath = './public/music'
@@ -18,8 +18,7 @@ const apiUrl = 'https://lyrics.lyricfind.com/_next/data/K8lnjb_309zmz7XOhQHFu/en
 // songData
 // lyrics
 
-// TODO: сделать проверку ключа, чтобы не было до запросов
-// TODO: "type": "module" заменить на  "type": "commonjs" в пекедже
+// TODO: lyricfind требует CORS
 // Функция для получения текста песни и сохранения его в JSON файл
 async function fetchLyricsAndSave(songTitle, originalName) {
   // Формируем URL для запроса к API
@@ -46,27 +45,33 @@ async function fetchLyricsAndSave(songTitle, originalName) {
   }
   try {
     // Выполняем запрос к API
-    const response = await axios.get(requestUrl)
+    const response = await axios.get(requestUrl, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
     // Проверяем, не пустой ли ответ
+    console.log('response', response)
     if (response.data) {
       console.log(response.data)
       if (response.data?.pageProps?.songData?.lyrics) {
         console.log(response.data?.pageProps?.songData?.lyrics)
         // Добавляем новую песню в объект
-        lyricsData[originalName] = response.data
+        lyricsData[originalName] = response.data.pageProps.songData.lyrics
         // Асинхронно записываем данные обратно в файл
         await fs.promises.writeFile(outputFilePath, JSON.stringify(lyricsData, null, 2))
         console.log(`Текст песни для ${songTitle} сохранен в ${outputFilePath}`)
       }
     } else {
       console.log(`Текст песни для ${songTitle} не найден`)
-      lyricsData[originalName] = []
+      // lyricsData[originalName] = ''
       // Асинхронно записываем данные обратно в файл
       await fs.promises.writeFile(outputFilePath, JSON.stringify(lyricsData, null, 2))
     }
   } catch (error) {
+    console.log(error)
     console.log(`Ошибка при запросе текста песни для ${songTitle}`)
-    lyricsData[originalName] = []
+    // lyricsData[originalName] = ''
     // Асинхронно записываем данные обратно в файл
     await fs.promises.writeFile(outputFilePath, JSON.stringify(lyricsData, null, 2))
   }

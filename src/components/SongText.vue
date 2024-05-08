@@ -23,7 +23,7 @@ export default defineComponent({
       id: number
       available: boolean
     }
-    const tabsOption: ComputedRef<Array<TabsOption>> = computed(() => {
+    const tabsOption: ComputedRef<TabsOption[]> = computed(() => {
       return [
         {
           label: 'Timecodes',
@@ -48,13 +48,13 @@ export default defineComponent({
         }
       }
     )
-    // TODO: переключение по инпуту трека закрывает этот компонент
 
-    const songTextWithMusicSymbol: ComputedRef<Array<SongTextWithTimeCode>> = computed(() => {
-      const result: Array<SongTextWithTimeCode> = []
+    // TODO: переключение по инпуту трека закрывает этот компонент
+    const songTextWithMusicSymbol: ComputedRef<SongTextWithTimeCode[]> = computed(() => {
+      const result: SongTextWithTimeCode[] = []
       // https://www.compart.com/en/unicode/U+1F3B5
       // TODO: поправить тайпскрипт
-      ;(props.songTextWithTimecodes as Array<SongTextWithTimeCode>).forEach((item, index) => {
+      ;(props.songTextWithTimecodes as SongTextWithTimeCode[]).forEach((item, index) => {
         if (
           props.songTextWithTimecodes?.[index + 1]?.seconds &&
           Number(
