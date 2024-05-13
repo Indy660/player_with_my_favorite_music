@@ -46,7 +46,8 @@ export default defineComponent({
         if (!props.songTextWithTimecodes.length && props.songText.length) {
           idTabSelected.value = 2
         }
-      }
+      },
+      { immediate: true }
     )
 
     // TODO: переключение по инпуту трека закрывает этот компонент
@@ -137,7 +138,6 @@ export default defineComponent({
       <span v-show="idTabSelected === 2" v-text="songText" />
       <div v-show="idTabSelected === 1" class="text-with-timestamps">
         {{ currentTime }}
-        <!--      currentTime < songText[key - 1]?.seconds ||-->
         <span
           v-for="(partSong, key) in songTextWithMusicSymbol"
           :key="key"

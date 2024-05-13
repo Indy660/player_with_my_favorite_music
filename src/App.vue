@@ -122,7 +122,7 @@ export default defineComponent({
       const theme =
         (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ||
         (localStorage.getItem('dark-color-scheme') &&
-          JSON.parse(localStorage.getItem('dark-color-scheme')))
+          JSON.parse(localStorage.getItem('dark-color-scheme') as string))
           ? 'dark'
           : 'light'
       isDarkTheme.value = theme === 'dark'
