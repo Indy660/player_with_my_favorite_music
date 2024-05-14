@@ -260,6 +260,8 @@ const MUSIC_LIST: MusicList[] = [
     notAggressive: true
   },
   { songName: 'Within The Ruins - Ataxia II.mp3' },
+  { songName: 'Between The Buried And Me - White Walls', sort: 92 },
+  { songName: 'Raunchy - The Yeah Thing', sort: 93 },
   { songName: 'Within The Ruins - Beautiful Agony.mp3' },
   { songName: 'ZEROMANCER - Dr. Online.mp3' },
   {
