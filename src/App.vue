@@ -165,20 +165,10 @@ export default defineComponent({
       }
     }
 
-    function handlerTimeChangeInput(event: Event): void {
-      const target = event.target as HTMLInputElement
-      audioPlayer.value!.currentTime =
-        (Number(target.value) / 100) * (audioPlayer.value!.duration || 0)
-    }
-
-    function handlerTimeChangeBySongText(seconds: number): void {
+    function handlerTimeChange(seconds: number): void {
       audioPlayer.value!.currentTime = seconds
       isPlaying.value = true
       playTrack()
-    }
-
-    function handlerTimeChangeLine(number: number): void {
-      audioPlayer.value!.currentTime = number * (audioPlayer.value!.duration || 0)
     }
 
     function onTimeUpdate(event: Event): void {
@@ -329,11 +319,8 @@ export default defineComponent({
 
     function handlerSelectTrack(trackIndex: number): void {
       selectTrack(trackIndex)
-      if (!isPlaying.value) {
-        togglePlayPause()
-      } else {
-        playTrack()
-      }
+      isPlaying.value = true
+      playTrack()
     }
 
     const isRepeatMode: Ref<boolean> = ref(false)
@@ -397,9 +384,7 @@ export default defineComponent({
 
       handlerCanPlay,
       handlerEnded,
-      handlerTimeChangeInput,
-      handlerTimeChangeLine,
-      handlerTimeChangeBySongText,
+      handlerTimeChange,
       onTimeUpdate,
       setVolume,
       togglePlayPause,
@@ -447,7 +432,7 @@ export default defineComponent({
           :song-text="currentSongText"
           :song-text-with-timecodes="currentSongTextWithTimecodes"
           class="top_bar"
-          @time-change="handlerTimeChangeBySongText"
+          @time-change="handlerTimeChange"
         />
       </transition>
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
@@ -468,8 +453,7 @@ export default defineComponent({
         :best-parties="bestParties"
         :current-time="currentTime"
         :total-time="totalTime"
-        @time-change="handlerTimeChangeInput"
-        @time-change-line="handlerTimeChangeLine"
+        @time-change="handlerTimeChange"
       />
       <MainControl
         :is-playing="isPlaying"

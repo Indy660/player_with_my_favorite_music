@@ -260,8 +260,15 @@ const MUSIC_LIST: MusicList[] = [
     notAggressive: true
   },
   { songName: 'Within The Ruins - Ataxia II.mp3' },
-  { songName: 'Between The Buried And Me - White Walls', sort: 92 },
-  { songName: 'Raunchy - The Yeah Thing', sort: 93 },
+  {
+    songName: 'Between The Buried And Me - White Walls.mp3',
+    sort: 92,
+    bestParties: [
+      { start: 264, end: 378 }
+      // { start: 60, end: 89 }
+    ]
+  },
+  { songName: 'Raunchy - The Yeah Thing.mp3', sort: 93 },
   { songName: 'Within The Ruins - Beautiful Agony.mp3' },
   { songName: 'ZEROMANCER - Dr. Online.mp3' },
   {

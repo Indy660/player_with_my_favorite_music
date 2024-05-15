@@ -65,11 +65,12 @@ export default defineComponent({
       const clientWidth: number = parentLine?.clientWidth || 0
       const rect: DOMRect = parentLine.getBoundingClientRect()
       const x: number = e.clientX - rect.left // Позиция по оси X относительно родительского элемента
-      emit('time-change-line', x / clientWidth)
+      emit('time-change', (x / clientWidth) * props.totalTime)
     }
 
     function timeHandler(event: Event): void {
-      emit('time-change', event)
+      const target = event.target as HTMLInputElement
+      emit('time-change', (Number(target.value) / 100) * (props.totalTime || 0))
     }
 
     return {
