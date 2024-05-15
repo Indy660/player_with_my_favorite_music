@@ -172,6 +172,7 @@ export default defineComponent({
     }
 
     function onTimeUpdate(event: Event): void {
+      console.log(event)
       currentTime.value = (event.target as HTMLAudioElement).currentTime
       // console.log(currentTime.value, totalTime.value)
       // TODO: не работает иногда перемотка в MediaSession
@@ -249,6 +250,8 @@ export default defineComponent({
     }
 
     async function shortTracksObserver(time: number): Promise<void> {
+      // console.log('shortTracksObserver')
+      // audioPlayer.value!.volume = 0.6
       for (let i = 0; i < bestParties.value.length; i++) {
         const currentBestParty = bestParties.value[i]
         // TODO: проблема при переключении, звук уходит со временем на 100%

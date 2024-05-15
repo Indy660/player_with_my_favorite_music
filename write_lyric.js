@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const axios = require('axios')
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 // Путь к папке с музыкой
 const musicFolderPath = './public/music'
@@ -43,6 +43,29 @@ async function fetchLyricsAndSave(songTitle, originalName) {
     console.log(`Данные для ${originalName} уже есть, запрос к API пропущен.`)
     return
   }
+  // TODO: rapidapi тоже не работает
+  // https://rapidapi.com/collection/lyrics-apis - ни один из бесплатых не работает
+  //https://rapidapi.com/Sridurgayadav/api/chart-lyrics
+  //   const options = {
+  //     method: 'GET',
+  //     url: 'https://sridurgayadav-chart-lyrics-v1.p.rapidapi.com/apiv1.asmx/SearchLyricDirect',
+  //     params: {
+  //       artist: 'michael jackson',
+  //       song: 'bad'
+  //     },
+  //     headers: {
+  //       'X-RapidAPI-Key': '5f4a9a2d91msh1f09c2b6a09fc35p1e5f11jsn01afb8fe9627',
+  //       'X-RapidAPI-Host': 'sridurgayadav-chart-lyrics-v1.p.rapidapi.com'
+  //     }
+  //   }
+  //
+  //   try {
+  //     const response = await axios.request(options)
+  //     console.log(response.data)
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+
   try {
     // Выполняем запрос к API
     const response = await axios.get(requestUrl, {
