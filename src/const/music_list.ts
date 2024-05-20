@@ -265,8 +265,8 @@ const MUSIC_LIST: MusicList[] = [
     songName: 'Between The Buried And Me - White Walls.mp3',
     sort: 172,
     bestParties: [
-      { start: 264, end: 378 }
-      // { start: 60, end: 89 }
+      { start: 111, end: 155 },
+      { start: 478, end: 524 }
     ]
   },
   { songName: 'Raunchy - The Yeah Thing.mp3', sort: 193, bestParties: [{ start: 14, end: 65 }] },

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, computed, nextTick, watch, ref } from 'vue'
+import {defineComponent, computed, nextTick, watch, ref, watchEffect} from 'vue'
 import type { ComputedRef, Ref } from 'vue'
 export default defineComponent({
   props: {
@@ -37,8 +37,7 @@ export default defineComponent({
     function goToText(time: number): void {
       emit('time-change', time - 0.5)
     }
-    watch(
-      () => props.songText,
+    watchEffect(
       () => {
         if (!props.songText.length && props.songTextWithTimecodes.length) {
           idTabSelected.value = 1
@@ -47,7 +46,6 @@ export default defineComponent({
           idTabSelected.value = 2
         }
       },
-      { immediate: true }
     )
 
     // TODO: переключение по инпуту трека закрывает этот компонент

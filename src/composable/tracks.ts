@@ -189,7 +189,6 @@ export function tracksApi() {
     nextTrack,
     previousTrack,
     pathToCurrentFile,
-    sortingTopTrackList,
     currentTrackIndex,
     changeTab,
     selectTrack,

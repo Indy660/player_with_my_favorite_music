@@ -38,7 +38,6 @@ export default defineComponent({
       nextTrack,
       previousTrack,
       pathToCurrentFile,
-      // sortingTopTrackList,
       currentTrackIndex,
       changeTab,
       selectTrack,
@@ -172,7 +171,7 @@ export default defineComponent({
     }
 
     function onTimeUpdate(event: Event): void {
-      console.log(event)
+      // console.log(event)
       currentTime.value = (event.target as HTMLAudioElement).currentTime
       // console.log(currentTime.value, totalTime.value)
       // TODO: не работает иногда перемотка в MediaSession
@@ -353,19 +352,15 @@ export default defineComponent({
           togglePlayPause()
           break
         case 'ArrowRight':
-          console.log('ArrowRight')
           nextTrack()
           break
         case 'ArrowLeft':
-          console.log('ArrowLeft')
           previousTrackHandler()
           break
         case 'ArrowUp':
-          console.log('ArrowUp', audioPlayer.value!.volume)
           audioPlayer.value!.volume <= 0.9 && setVolume(audioPlayer.value!.volume + 0.1)
           break
         case 'ArrowDown':
-          console.log('ArrowDown', audioPlayer.value!.volume)
           audioPlayer.value!.volume >= 0.1 && setVolume(audioPlayer.value!.volume - 0.1)
           break
       }
@@ -453,6 +448,7 @@ export default defineComponent({
         @volume-change="setVolume"
       />
       <ProgressControl
+        @click.stop
         :best-parties="bestParties"
         :current-time="currentTime"
         :total-time="totalTime"
@@ -487,6 +483,13 @@ export default defineComponent({
 </template>
 
 <style lang="css">
+/* способ добавления тёмной темы */
+/*:root {*/
+/*  filter: invert(1) hue-rotate(180deg);*/
+/*  img {*/
+/*    filter: invert(1) hue-rotate(180deg);*/
+/*  }*/
+/*}*/
 * {
   transition: all 0.3s linear;
   font-size: var(--main-font-size);
