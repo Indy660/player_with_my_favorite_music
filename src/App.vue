@@ -170,6 +170,7 @@ export default defineComponent({
       playTrack()
     }
 
+    // TODO: проблема при перемотке, Failed to execute 'setPositionState' on 'MediaSession': The provided position cannot be greater than the duration.
     function onTimeUpdate(event: Event): void {
       // console.log(event)
       currentTime.value = (event.target as HTMLAudioElement).currentTime
@@ -258,7 +259,8 @@ export default defineComponent({
           console.log('start')
           audioPlayer.value!.volume = 0.6
           audioPlayer.value!.currentTime = currentBestParty.start
-          await changeVolumeSlowly(false)
+          // TODO: отвратительно работает переключение песен
+          // await changeVolumeSlowly(false)
           return
         } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
           console.log('continue')
@@ -270,7 +272,7 @@ export default defineComponent({
           ) {
             console.log('end')
             audioPlayer.value!.volume = 0.8
-            await changeVolumeSlowly(true)
+            // await changeVolumeSlowly(true)
           }
           return
         }
@@ -448,10 +450,10 @@ export default defineComponent({
         @volume-change="setVolume"
       />
       <ProgressControl
-        @click.stop
         :best-parties="bestParties"
         :current-time="currentTime"
         :total-time="totalTime"
+        @click.stop
         @time-change="handlerTimeChange"
       />
       <MainControl

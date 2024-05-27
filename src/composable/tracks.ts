@@ -1,6 +1,6 @@
 import { MUSIC_LIST } from '../const/music_list'
-import { onBeforeMount, ref, computed, watchEffect } from 'vue'
-import type { Ref, ComputedRef } from 'vue'
+import type { ComputedRef, Ref } from 'vue'
+import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 
 interface TopTrackList extends TrackList {
   sort: number
@@ -139,15 +139,21 @@ export function tracksApi() {
   }
 
   function nextTrack(): void {
-    currentTrackIndex.value += 1
-    if (currentTrackIndex.value >= currentTracks.value.length) {
-      currentTrackIndex.value = 0
-    }
+    currentTrackIndex.value =
+      currentTrackIndex.value >= currentTracks.value.length - 1 ? 0 : currentTrackIndex.value + 1
   }
 
   function previousTrack(): void {
+    // console.log(
+    //   'previousTrack',
+    //   currentTrackIndex.value,
+    //   currentTrackIndex.value <= 0,
+    //   currentTrackIndex.value - 1
+    // )
+    // TODO: странный баг на http://127.0.0.1:5000/#tab=shorts&track=11, не переключает трек, только если не на стопе
+    // http://127.0.0.1:5000/#tab=shorts&track=23
     currentTrackIndex.value =
-      (currentTrackIndex.value - 1 + currentTracks.value.length) % currentTracks.value.length
+      currentTrackIndex.value <= 0 ? currentTracks.value.length - 1 : currentTrackIndex.value - 1
   }
 
   function selectTrack(trackIndex: number): void {

@@ -61,12 +61,8 @@ const MUSIC_LIST: MusicList[] = [
   },
   {
     songName: 'August Burns Red - Chasing the Dragon.mp3',
-    sort: 151
-    // bestParties: [
-    //   { start: 21, end: 32 },
-    //   { start: 70, end: 88 },
-    //   { start: 113, end: 152 }
-    // ],
+    sort: 151,
+    bestParties: [{ start: 40, end: 65 }]
   },
   { songName: 'August Burns Red - Consumer.mp3' },
   {
@@ -281,11 +277,18 @@ const MUSIC_LIST: MusicList[] = [
     ],
     notAggressive: true
   },
-  { songName: 'zYnthetic - SSplug.mp3' }
+  { songName: 'zYnthetic - SSplug.mp3', notAggressive: true },
+  {
+    songName: 'Sunlight Ascending - (Winter) Diorama Dream.mp3',
+    sort: 255,
+    bestParties: [{ start: 190, end: 261 }],
+    notAggressive: true
+  },
+  {
+    songName: 'Sum 41 - Still Waiting.mp3'
+  }
 ]
 
-// const sortredMusicList: MusicList[] = MUSIC_LIST.sort((a, b) =>
-//   a.songName.localeCompare(b.songName)
-// )
+const sortMusicList: MusicList[] = MUSIC_LIST.sort((a, b) => a.songName.localeCompare(b.songName))
 
-export { MUSIC_LIST }
+export { sortMusicList as MUSIC_LIST }
