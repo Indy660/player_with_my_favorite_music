@@ -581,5 +581,19 @@
   },
   {
     "songName": "Sum 41 - Still Waiting.mp3"
+  },
+  {
+    "songName": "Between The Buried And Me - Obfuscation.mp3",
+    "sort": 119,
+    "bestParties": [
+      {
+        "start": 0,
+        "end": 18.4
+      },
+      {
+        "start": 142,
+        "end": 258
+      }
+    ]
   }
 ]

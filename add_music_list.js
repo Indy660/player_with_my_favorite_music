@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { exec } = require('child_process')
 
+// https://vksave.com/
 // Шаг 1: Чтение JSON-файла
 function readJsonFile(filePath) {
   try {
