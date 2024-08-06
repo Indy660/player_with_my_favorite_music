@@ -257,7 +257,7 @@ export default defineComponent({
         // TODO: проблема при переключении, звук уходит со временем на 100%
         if (time <= currentBestParty.start && !isVolumeChanging.value) {
           console.log('start')
-          audioPlayer.value!.volume = 0.6
+          // audioPlayer.value!.volume = 0.6
           audioPlayer.value!.currentTime = currentBestParty.start
           // TODO: отвратительно работает переключение песен
           // await changeVolumeSlowly(false)
@@ -271,7 +271,7 @@ export default defineComponent({
             !isVolumeChanging.value
           ) {
             console.log('end')
-            audioPlayer.value!.volume = 0.8
+            // audioPlayer.value!.volume = 0.8
             // await changeVolumeSlowly(true)
           }
           return
