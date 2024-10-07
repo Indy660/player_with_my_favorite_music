@@ -9,7 +9,8 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: {
         '@assets': path.resolve(__dirname, 'src/assets'),
-        '@public': path.resolve(__dirname, 'public')
+        '@public': path.resolve(__dirname, 'public'),
+        '@': path.resolve(__dirname, 'src')
       }
     },
     // TODO: похоже не работает с .js https://github.com/vitejs/vite/discussions/14649

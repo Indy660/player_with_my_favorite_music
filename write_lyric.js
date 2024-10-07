@@ -1,15 +1,16 @@
 const fs = require('fs')
 const path = require('path')
 const axios = require('axios')
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 // Путь к папке с музыкой
 const musicFolderPath = './public/music'
 const lyricFolderPath = './src/static_data'
-const lyricFolderFile = 'songs_text_experiment.json'
+const lyricFolderFile = 'songs_text_with_timecodes.json'
+const musicListFile = 'music_list.json'
 
 // URL API для запроса текстов песен
-const apiUrl = 'https://lyrics.lyricfind.com/_next/data/K8lnjb_309zmz7XOhQHFu/en-US/lyrics/'
+const apiUrl = 'https://api.textyl.co/api/lyrics?q='
 
 // https://api.textyl.co/api/lyrics?q=The%20Doors%20%20Alabama%20song
 
@@ -18,14 +19,11 @@ const apiUrl = 'https://lyrics.lyricfind.com/_next/data/K8lnjb_309zmz7XOhQHFu/en
 // songData
 // lyrics
 
-// TODO: lyricfind требует CORS
+// TODO: "type": "module" заменить на  "type": "commonjs" в пекедже
 // Функция для получения текста песни и сохранения его в JSON файл
 async function fetchLyricsAndSave(songTitle, originalName) {
   // Формируем URL для запроса к API
-  // const requestUrl = `${apiUrl}${encodeURIComponent(songTitle)}`
-  const requestUrl =
-    'https://lyrics.lyricfind.com/_next/data/K8lnjb_309zmz7XOhQHFu/en-US/lyrics/between-the-buried-and-me-swim-to-the-moon.json?songSlug=between-the-buried-and-me-swim-to-the-moon'
-  console.log('requestUrl', requestUrl)
+  const requestUrl = `${apiUrl}${encodeURIComponent(songTitle)}`
   const outputFilePath = path.join(lyricFolderPath, lyricFolderFile)
   let lyricsData = {}
   // Асинхронно читаем файл, если он существует
@@ -43,86 +41,80 @@ async function fetchLyricsAndSave(songTitle, originalName) {
     console.log(`Данные для ${originalName} уже есть, запрос к API пропущен.`)
     return
   }
-  // TODO: rapidapi тоже не работает
-  // https://rapidapi.com/collection/lyrics-apis - ни один из бесплатых не работает
-  //https://rapidapi.com/Sridurgayadav/api/chart-lyrics
-  //   const options = {
-  //     method: 'GET',
-  //     url: 'https://sridurgayadav-chart-lyrics-v1.p.rapidapi.com/apiv1.asmx/SearchLyricDirect',
-  //     params: {
-  //       artist: 'michael jackson',
-  //       song: 'bad'
-  //     },
-  //     headers: {
-  //       'X-RapidAPI-Key': '5f4a9a2d91msh1f09c2b6a09fc35p1e5f11jsn01afb8fe9627',
-  //       'X-RapidAPI-Host': 'sridurgayadav-chart-lyrics-v1.p.rapidapi.com'
-  //     }
-  //   }
-  //
-  //   try {
-  //     const response = await axios.request(options)
-  //     console.log(response.data)
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-
   try {
     // Выполняем запрос к API
-    const response = await axios.get(requestUrl, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    const response = await axios.get(requestUrl)
     // Проверяем, не пустой ли ответ
-    console.log('response', response)
     if (response.data) {
-      console.log(response.data)
-      if (response.data?.pageProps?.songData?.lyrics) {
-        console.log(response.data?.pageProps?.songData?.lyrics)
-        // Добавляем новую песню в объект
-        lyricsData[originalName] = response.data.pageProps.songData.lyrics
-        // Асинхронно записываем данные обратно в файл
-        await fs.promises.writeFile(outputFilePath, JSON.stringify(lyricsData, null, 2))
-        console.log(`Текст песни для ${songTitle} сохранен в ${outputFilePath}`)
-      }
+      // Добавляем новую песню в объект
+      lyricsData[originalName] = response.data
+      // Асинхронно записываем данные обратно в файл
+      await fs.promises.writeFile(outputFilePath, JSON.stringify(lyricsData, null, 2))
+      console.log(`Текст песни для ${songTitle} сохранен в ${outputFilePath}`)
     } else {
       console.log(`Текст песни для ${songTitle} не найден`)
-      // lyricsData[originalName] = ''
+      lyricsData[originalName] = []
       // Асинхронно записываем данные обратно в файл
       await fs.promises.writeFile(outputFilePath, JSON.stringify(lyricsData, null, 2))
     }
   } catch (error) {
-    console.log(error)
     console.log(`Ошибка при запросе текста песни для ${songTitle}`)
-    // lyricsData[originalName] = ''
+    lyricsData[originalName] = []
     // Асинхронно записываем данные обратно в файл
     await fs.promises.writeFile(outputFilePath, JSON.stringify(lyricsData, null, 2))
   }
 }
 
-fetchLyricsAndSave(
-  'between-the-buried-and-me-swim-to-the-moon',
-  'Between The Buried And Me - Swim To The Moon.mp3'
-)
-
-// .promises
-
 // Получаем все файлы MP3 в папке
-// расскоментировать
-// fs.readdir(musicFolderPath, async (err, files) => {
-//   if (err) {
-//     console.error('Ошибка при чтении папки:', err)
-//     return
-//   }
-//   for (const file of files) {
-//     if (path.extname(file) === '.mp3') {
-//       const fileNameWithoutExtension = path.basename(file, '.mp3')
-//       const fileNameWithoutExtensionAndDashes = fileNameWithoutExtension.replace(/-/g, ' ')
-//       // Вызываем функцию для каждого MP3 файла
-//       await fetchLyricsAndSave(fileNameWithoutExtensionAndDashes, file)
-//     }
-//   }
-// })
+fs.readdir(musicFolderPath, async (err, files) => {
+  if (err) {
+    console.error('Ошибка при чтении папки:', err)
+    return
+  }
+  for (const file of files) {
+    await checkAndUpdateMusicList(file, path.join(lyricFolderPath, musicListFile))
+    if (path.extname(file) === '.mp3') {
+      const fileNameWithoutExtension = path.basename(file, '.mp3')
+      const fileNameWithoutExtensionAndDashes = fileNameWithoutExtension.replace(/-/g, ' ')
+      // Вызываем функцию для каждого MP3 файла
+      await fetchLyricsAndSave(fileNameWithoutExtensionAndDashes, file)
+    }
+  }
+})
+
+async function readJsonFile(filePath) {
+  try {
+    const data = await fs.promises.readFile(filePath, 'utf8')
+    return JSON.parse(data)
+  } catch (err) {
+    console.error('Ошибка при чтении файла:', err)
+    return []
+  }
+}
+
+async function writeJsonFile(filePath, data) {
+  try {
+    await fs.promises.writeFile(filePath, JSON.stringify(data, null, 2))
+    console.log('Файл успешно обновлен')
+  } catch (err) {
+    console.error('Ошибка при записи файла:', err)
+  }
+}
+
+async function checkAndUpdateMusicList(filePath, musicListPath) {
+  const musicList = await readJsonFile(musicListPath)
+
+  // Проверяем наличие пути в списке песен
+  const foundIndex = musicList.findIndex((item) => item.songName === filePath)
+
+  if (foundIndex !== -1) {
+    console.log(`Песня "${filePath}" уже существует в списке.`)
+  } else {
+    musicList.push({ songName: filePath })
+    await writeJsonFile(musicListPath, musicList)
+    console.log(`Добавлена новая песня: ${filePath}`)
+  }
+}
 
 ////////////////////////////
 // синхронное чтение

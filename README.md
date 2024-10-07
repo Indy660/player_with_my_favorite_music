@@ -3,7 +3,15 @@
 ## GH PAGES
 ### https://indy660.github.io/player_with_my_favorite_music/
 
-## Vue 3 Copmosition api + TS + Vite
+## Vue 3 with Composition Api + TS + Vite
+
+### If you want use for yourself just do:
+* fork project
+* add music in 'public/music' with regex like "music_band - music_name.mp3"
+* run script write_lyric.js
+* enjoy 😃
+
+___
 
 ## Project Setup
 
