@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const axios = require('axios')
+const cheerio = require('cheerio')
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 // Путь к папке с музыкой
@@ -17,6 +18,35 @@ const apiUrl = 'https://lyrics.lyricfind.com/_next/data/K8lnjb_309zmz7XOhQHFu/en
 // pageProps
 // songData
 // lyrics
+
+axios
+  .get('https://lyrics.lyricfind.com/lyrics/between-the-buried-and-me-swim-to-the-moon', {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+  })
+  .then((response) => {
+    const $ = cheerio.load(response.data)
+
+    // Найдем элемент по классу
+    // const content = $('.MuiBox-root.css-1i43dhb').html() // Извлекаем текст элемента
+    // console.log('Content:', content)
+    const lyricsContainer = $('.MuiBox-root css-165casq')
+    console.log(lyricsContainer)
+    // Находим все элементы с атрибутом data-testid="lyrics.lyricLine"
+    const lyrics = []
+    lyricsContainer.find('[data-testid="lyrics.lyricLine"]').each((i, element) => {
+      const lineText = $(element).text() // Извлекаем текст каждой строки
+      lyrics.push(lineText) // Добавляем строки в массив
+    })
+
+    console.log('Lyrics:', lyrics.join('\n')) // Выводим весь текст как строки
+
+    // const title = $('title').text()
+    // console.log('Title:', title)
+  })
+  .catch((err) => console.error(err))
 
 // TODO: lyricfind требует CORS
 // Функция для получения текста песни и сохранения его в JSON файл
@@ -100,10 +130,10 @@ async function fetchLyricsAndSave(songTitle, originalName) {
   }
 }
 
-fetchLyricsAndSave(
-  'between-the-buried-and-me-swim-to-the-moon',
-  'Between The Buried And Me - Swim To The Moon.mp3'
-)
+// fetchLyricsAndSave(
+//   'between-the-buried-and-me-swim-to-the-moon',
+//   'Between The Buried And Me - Swim To The Moon.mp3'
+// )
 
 // .promises
 
