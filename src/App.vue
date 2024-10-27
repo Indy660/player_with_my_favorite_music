@@ -447,6 +447,7 @@ export default defineComponent({
         ref="main_control_ref"
         class="main_control_ref"
         :volume="volume"
+        @click.stop
         @volume-change="setVolume"
       />
       <ProgressControl

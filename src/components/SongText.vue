@@ -74,19 +74,26 @@ export default defineComponent({
 
     const indexPlayingPartTimeCode: ComputedRef<number> = computed(() => {
       if (props.songTextWithTimecodes.length) {
-        const findIndex = songTextWithMusicSymbol.value?.findIndex((partSong, index, array) => {
+        const index = songTextWithMusicSymbol.value?.findIndex((partSong, index, array) => {
           return (
             props.currentTime >= partSong.seconds - 1 &&
             props.currentTime < array?.[index + 1]?.seconds
           )
         })
-        return findIndex >= 0 ? findIndex : Object.keys(songTextWithMusicSymbol.value).length - 1
+        return index >= 0 ? index : 0
       }
       return 0
     })
     watch(
       () => indexPlayingPartTimeCode.value,
       () => {
+        scrollTo()
+      }
+    )
+    watch(
+      () => props.songTextWithTimecodes,
+      () => {
+        console.log(1)
         scrollTo()
       }
     )
