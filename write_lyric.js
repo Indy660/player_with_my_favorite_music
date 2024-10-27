@@ -1,14 +1,19 @@
 const fs = require('fs')
 const path = require('path')
 const axios = require('axios')
+const cheerio = require('cheerio')
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 // Пути к папкам и файлам
 const musicFolderPath = './public/music'
 const lyricFolderPath = './src/static_data'
-const lyricFolderFile = 'songs_text_with_timecodes.json'
+const lyricFolderFile = 'songs_text.json'
+
 const musicListFile = 'music_list.json'
-const apiUrl = 'https://api.textyl.co/api/lyrics?q='
+const apiUrl = 'https://genius.com'
+
+const lyricFolderFileTimecodes = 'songs_text_with_timecodes.json'
+const apiUrlTimecodes = 'https://api.textyl.co/api/lyrics?q='
 
 // Чтение и запись JSON файлов с обработкой ошибок
 async function readJsonFile(filePath) {
@@ -36,18 +41,66 @@ async function fetchLyricsAndSave(songTitle, originalName, lyricsData, outputFil
     console.log(`Данные для ${originalName} уже есть, запрос к API пропущен.`)
     return
   }
-
   try {
-    const requestUrl = `${apiUrl}${encodeURIComponent(songTitle)}`
-    const response = await axios.get(requestUrl)
+    const formatBandName = (songTitle) =>
+      songTitle.replace(/\s+/g, '-').replace('.', '').toLowerCase()
+    const formatSongTitle = formatBandName(songTitle)
+    const requestUrl = `${apiUrl}/${formatSongTitle}-lyrics`
+    const response = await axios.get(requestUrl, {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      }
+    })
+    const $ = cheerio.load(response.data)
 
-    lyricsData[originalName] = response.data || []
+    const lyricContainers = $('*[data-lyrics-container="true"]')
+
+    // Объединяем содержимое всех найденных элементов
+    const content = lyricContainers
+      .map(function () {
+        return $(this).html()
+      })
+      .get()
+      .join('\n')
+    console.log(content)
+    const removeLinks = (text) => text.replace(/<a[^>]*>(.*?)<\/a>/gi, '$1')
+    const contentWithoutLinks = removeLinks(content)
+    lyricsData[originalName] = contentWithoutLinks || ''
     await writeJsonFile(outputFilePath, lyricsData)
     console.log(`Текст песни для ${songTitle} сохранен в ${outputFilePath}`)
   } catch (error) {
-    console.error(`Ошибка при запросе текста песни для ${songTitle}:`, error)
-    lyricsData[originalName] = []
+    lyricsData[originalName] = ''
     await writeJsonFile(outputFilePath, lyricsData)
+    if (error.response.status !== 404) {
+      console.error(`Ошибка при запросе текста песни для ${songTitle}:`, error)
+    }
+  }
+}
+
+// Получение текста песни и сохранение в JSON файл в таймкодах
+async function fetchLyricsAndSaveTimecodes(
+  songTitle,
+  originalName,
+  lyricsDataTimecodes,
+  outputFilePathTimecodes
+) {
+  if (lyricsDataTimecodes[originalName]) {
+    console.log(`Данные для ${originalName} уже есть, запрос к API пропущен.`)
+    return
+  }
+
+  try {
+    const requestUrl = `${apiUrlTimecodes}${encodeURIComponent(songTitle)}`
+    const response = await axios.get(requestUrl)
+
+    lyricsDataTimecodes[originalName] = response.data || []
+    await writeJsonFile(outputFilePathTimecodes, lyricsDataTimecodes)
+    console.log(`Текст песни для ${songTitle} сохранен в ${outputFilePathTimecodes}`)
+  } catch (error) {
+    console.error(`Ошибка при запросе текста песни для ${songTitle}:`, error)
+    lyricsDataTimecodes[originalName] = []
+    await writeJsonFile(outputFilePathTimecodes, lyricsDataTimecodes)
   }
 }
 
@@ -66,11 +119,14 @@ async function checkAndUpdateMusicList(fileName, musicListPath, musicList) {
 async function processMusicFiles() {
   try {
     const files = await fs.promises.readdir(musicFolderPath)
-    const outputFilePath = path.join(lyricFolderPath, lyricFolderFile)
-    const musicListPath = path.join(lyricFolderPath, musicListFile)
 
-    const lyricsData = (await readJsonFile(outputFilePath)) || {}
+    const musicListPath = path.join(lyricFolderPath, musicListFile)
     const musicList = (await readJsonFile(musicListPath)) || []
+
+    const outputFilePath = path.join(lyricFolderPath, lyricFolderFile)
+    const lyricsData = (await readJsonFile(outputFilePath)) || {}
+    const outputFilePathTimecodes = path.join(lyricFolderPath, lyricFolderFileTimecodes)
+    const lyricsDataTimecodes = (await readJsonFile(outputFilePathTimecodes)) || {}
 
     await Promise.all(
       files.map(async (file) => {
@@ -78,6 +134,12 @@ async function processMusicFiles() {
           const fileNameWithoutExtension = path.basename(file, '.mp3').replace(/-/g, ' ')
           await checkAndUpdateMusicList(file, musicListPath, musicList)
           await fetchLyricsAndSave(fileNameWithoutExtension, file, lyricsData, outputFilePath)
+          await fetchLyricsAndSaveTimecodes(
+            fileNameWithoutExtension,
+            file,
+            lyricsDataTimecodes,
+            outputFilePathTimecodes
+          )
         }
       })
     )
@@ -88,58 +150,3 @@ async function processMusicFiles() {
 
 // Запуск обработки файлов
 processMusicFiles()
-////////////////////////////
-// синхронное чтение
-
-// async function fetchLyricsAndSave(songTitle, originalName) {
-//   try {
-//     // Формируем URL для запроса к API
-//     const requestUrl = `${apiUrl}${encodeURIComponent(songTitle)}`
-//     // Выполняем запрос к API
-//     const response = await axios.get(requestUrl)
-//
-//     // Проверяем, не пустой ли ответ
-//     if (response.data) {
-//       // Формируем путь для сохранения результата
-//       const outputFilePath = path.join(lyricFolderPath, 'songs_text_with_timecodes2.json')
-//
-//       // Загружаем существующий файл или создаем новый объект, если файл не существует
-//       let lyricsData = {}
-//       if (fs.existsSync(outputFilePath)) {
-//         const fileContent = fs.readFileSync(outputFilePath, 'utf8')
-//         lyricsData = JSON.parse(fileContent)
-//       }
-//
-//       // Добавляем новую песню в объект
-//       lyricsData[originalName] = response.data
-//
-//       // Сохраняем результат в файл
-//       fs.writeFileSync(outputFilePath, JSON.stringify(lyricsData, null, 2))
-//
-//       console.log(`Текст песни для ${songTitle} сохранен в ${outputFilePath}`)
-//     } else {
-//       console.log(`Текст песни для ${songTitle} не найден`)
-//     }
-//   } catch (error) {
-//     console.error(`Ошибка при запросе текста песни для ${songTitle}:`)
-//   }
-// }
-//
-// // Получаем все файлы MP3 в папке
-// fs.readdir(musicFolderPath, (err, files) => {
-//   if (err) {
-//     console.error('Ошибка при чтении папки:', err)
-//     return
-//   }
-//
-//   files
-//     .filter((file) => path.extname(file) === '.mp3')
-//     .forEach((file) => {
-//       // Извлекаем название файла без расширения и тире
-//       const fileNameWithoutExtension = path.basename(file, '.mp3')
-//       const fileNameWithoutExtensionAndDashes = fileNameWithoutExtension.replace(/-/g, ' ')
-//
-//       // Вызываем функцию для каждого MP3 файла
-//       fetchLyricsAndSave(fileNameWithoutExtensionAndDashes, file)
-//     })
-// })

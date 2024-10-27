@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent, computed, nextTick, watch, ref, watchEffect} from 'vue'
+import { defineComponent, computed, nextTick, watch, ref, watchEffect } from 'vue'
 import type { ComputedRef, Ref } from 'vue'
 export default defineComponent({
   props: {
@@ -37,16 +37,14 @@ export default defineComponent({
     function goToText(time: number): void {
       emit('time-change', time - 0.5)
     }
-    watchEffect(
-      () => {
-        if (!props.songText.length && props.songTextWithTimecodes.length) {
-          idTabSelected.value = 1
-        }
-        if (!props.songTextWithTimecodes.length && props.songText.length) {
-          idTabSelected.value = 2
-        }
-      },
-    )
+    watchEffect(() => {
+      if (!props.songText.length && props.songTextWithTimecodes.length) {
+        idTabSelected.value = 1
+      }
+      if (!props.songTextWithTimecodes.length && props.songText.length) {
+        idTabSelected.value = 2
+      }
+    })
 
     // TODO: переключение по инпуту трека закрывает этот компонент
     const songTextWithMusicSymbol: ComputedRef<SongTextWithTimeCode[]> = computed(() => {
@@ -133,7 +131,6 @@ export default defineComponent({
       </button>
     </div>
     <div class="song-text">
-      <span v-show="idTabSelected === 2" v-text="songText" />
       <div v-show="idTabSelected === 1" class="text-with-timestamps">
         {{ currentTime }}
         <span
@@ -146,6 +143,7 @@ export default defineComponent({
           v-html="`\n${partSong.seconds} ${partSong.lyrics}\n`"
         />
       </div>
+      <span v-show="idTabSelected === 2" v-html="songText" />
     </div>
   </div>
 </template>
