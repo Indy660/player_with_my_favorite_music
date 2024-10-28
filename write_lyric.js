@@ -13,7 +13,7 @@ const musicListFile = 'music_list.json'
 const apiUrl = 'https://genius.com'
 
 const lyricFolderFileTimecodes = 'songs_text_with_timecodes.json'
-const apiUrlTimecodes = 'https://api.textyl.co/api/lyrics?q='
+const apiUrlTimecodes = 'https://api.textyl.co'
 
 // Чтение и запись JSON файлов с обработкой ошибок
 async function readJsonFile(filePath) {
@@ -37,13 +37,13 @@ async function writeJsonFile(filePath, data) {
 
 // Получение текста песни и сохранение в JSON файл
 async function fetchLyricsAndSave(songTitle, originalName, lyricsData, outputFilePath) {
-  if (lyricsData[originalName]) {
+  if (lyricsData[originalName] || lyricsData[originalName] === '') {
     console.log(`Данные для ${originalName} уже есть, запрос к API пропущен.`)
     return
   }
   try {
     const formatBandName = (songTitle) =>
-      songTitle.replace(/\s+/g, '-').replace('.', '').toLowerCase()
+      songTitle.replace(/\s+/g, '-').replace('---', '-').replace('.', '').toLowerCase()
     const formatSongTitle = formatBandName(songTitle)
     const requestUrl = `${apiUrl}/${formatSongTitle}-lyrics`
     const response = await axios.get(requestUrl, {
@@ -63,7 +63,7 @@ async function fetchLyricsAndSave(songTitle, originalName, lyricsData, outputFil
       })
       .get()
       .join('\n')
-    console.log(content)
+    // console.log(content)
     const removeLinks = (text) => text.replace(/<a[^>]*>(.*?)<\/a>/gi, '$1')
     const contentWithoutLinks = removeLinks(content)
     lyricsData[originalName] = contentWithoutLinks || ''
@@ -74,6 +74,8 @@ async function fetchLyricsAndSave(songTitle, originalName, lyricsData, outputFil
     await writeJsonFile(outputFilePath, lyricsData)
     if (error.response.status !== 404) {
       console.error(`Ошибка при запросе текста песни для ${songTitle}:`, error)
+    } else {
+      console.warn(`Песня ${songTitle} в ${apiUrl} не найдена.`)
     }
   }
 }
@@ -91,16 +93,20 @@ async function fetchLyricsAndSaveTimecodes(
   }
 
   try {
-    const requestUrl = `${apiUrlTimecodes}${encodeURIComponent(songTitle)}`
+    const requestUrl = `${apiUrlTimecodes}/api/lyrics?q=${encodeURIComponent(songTitle)}`
     const response = await axios.get(requestUrl)
 
     lyricsDataTimecodes[originalName] = response.data || []
     await writeJsonFile(outputFilePathTimecodes, lyricsDataTimecodes)
     console.log(`Текст песни для ${songTitle} сохранен в ${outputFilePathTimecodes}`)
   } catch (error) {
-    console.error(`Ошибка при запросе текста песни для ${songTitle}:`, error)
     lyricsDataTimecodes[originalName] = []
     await writeJsonFile(outputFilePathTimecodes, lyricsDataTimecodes)
+    if (error.response.status !== 404) {
+      console.error(`Ошибка при запросе текста песни для ${songTitle}:`, error)
+    } else {
+      console.warn(`Песня ${songTitle} в ${apiUrlTimecodes} не найдена.`)
+    }
   }
 }
 
@@ -109,9 +115,9 @@ async function checkAndUpdateMusicList(fileName, musicListPath, musicList) {
   if (!musicList.some((item) => item.songName === fileName)) {
     musicList.push({ songName: fileName })
     await writeJsonFile(musicListPath, musicList)
-    console.log(`Добавлена новая песня: ${fileName}`)
+    // console.log(`Добавлена новая песня: ${fileName}`)
   } else {
-    console.log(`Песня "${fileName}" уже существует в списке.`)
+    // console.log(`Песня "${fileName}" уже существует в списке.`)
   }
 }
 
