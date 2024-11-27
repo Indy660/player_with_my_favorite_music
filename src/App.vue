@@ -277,6 +277,7 @@ export default defineComponent({
           return
         }
       }
+      // TODO: вызывается при переключении дважды
       console.log('nextTrack')
       handlerEnded()
     }

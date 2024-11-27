@@ -74,13 +74,20 @@ export default defineComponent({
 
     const indexPlayingPartTimeCode: ComputedRef<number> = computed(() => {
       if (props.songTextWithTimecodes.length) {
+        // если текущее время выходит за длину текста
+        if (
+          props.currentTime >=
+          songTextWithMusicSymbol.value[songTextWithMusicSymbol.value.length - 1].seconds
+        ) {
+          return songTextWithMusicSymbol.value.length - 1
+        }
         const index = songTextWithMusicSymbol.value?.findIndex((partSong, index, array) => {
           return (
             props.currentTime >= partSong.seconds - 1 &&
             props.currentTime < array?.[index + 1]?.seconds
           )
         })
-        return index >= 0 ? index : 0
+        return index > 0 ? index : 0
       }
       return 0
     })
@@ -91,9 +98,8 @@ export default defineComponent({
       }
     )
     watch(
-      () => props.songTextWithTimecodes,
+      () => props.songTextWithTimecodes.length,
       () => {
-        console.log(1)
         scrollTo()
       }
     )

@@ -2,6 +2,10 @@
 
 ### GH PAGE: https://indy660.github.io/player_with_my_favorite_music/
 
+<img src="./public/preview.png" alt="Preview image" height="600"/>
+
+[//]: # (![image info]&#40;./public/preview.png =100&#41;)
+
 ## Vue 3 with Composition Api + TS + Vite
 
 ### If you want use for yourself just do:

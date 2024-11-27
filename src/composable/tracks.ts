@@ -139,6 +139,7 @@ export function tracksApi() {
   }
 
   function nextTrack(): void {
+    console.log('nextTrack')
     currentTrackIndex.value =
       currentTrackIndex.value >= currentTracks.value.length - 1 ? 0 : currentTrackIndex.value + 1
   }
