@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent, computed, watch, nextTick } from 'vue'
-import type { ComputedRef } from 'vue'
 export default defineComponent({
   name: 'TrackList',
   props: {
@@ -15,7 +14,7 @@ export default defineComponent({
   },
   emits: ['select-track-from-list'],
   setup(props, { emit }) {
-    const currentTracksWithCorrectNames: ComputedRef<string[]> = computed(() => {
+    const currentTracksWithCorrectNames = computed<string[]>(() => {
       // TODO: хз как defineProps в props.currentTracks проверить типы
       return (props.currentTracks as string[]).map((item: string) => {
         const indexLastSlash: number = item.lastIndexOf('/')

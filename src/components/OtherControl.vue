@@ -48,12 +48,12 @@ export default defineComponent({
       emit('change-theme')
     }
 
-    const iconToggle: ComputedRef<string> = computed(() => {
+    const iconToggle = computed(() => {
       return props.isDarkTheme
         ? '<i class="fa-solid fa-toggle-on"/>'
         : '<i class="fa-solid fa-toggle-off"/>'
     })
-    const iconBar: ComputedRef<string> = computed(() => {
+    const iconBar = computed(() => {
       return props.isShowTrackList
         ? '<i class="fas fa-bars fa-rotate-90"/>'
         : '<i class="fas fa-bars"/>'

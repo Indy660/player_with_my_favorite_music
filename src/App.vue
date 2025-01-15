@@ -1,6 +1,5 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, ref, watchEffect, watch, onMounted } from 'vue'
-import type { Ref, ComputedRef } from 'vue'
 import { tracksApi } from './composable/tracks'
 import TrackList from './components/TrackList.vue'
 import PageTabs from './components/PageTabs.vue'
@@ -94,7 +93,7 @@ export default defineComponent({
         [
           'previoustrack',
           () => {
-            previousTrack()
+            previousTrackHandler()
           }
         ],
         // :TODO поправить seekTime, оно здесь работает но не перематывает
@@ -116,7 +115,7 @@ export default defineComponent({
       }
     })
 
-    const isDarkTheme: Ref<boolean> = ref(false)
+    const isDarkTheme = ref(false)
     function initChangeColorScheme(): void {
       const theme =
         (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ||
@@ -144,10 +143,10 @@ export default defineComponent({
       isDarkTheme.value = !isDarkTheme.value
     }
 
-    const audioPlayer: Ref<CustomAudioElement | null> = ref(null)
+    const audioPlayer = ref<CustomAudioElement | null>(null)
 
-    const currentTime: Ref<number> = ref(0)
-    const volume: Ref<number> = ref(0.8)
+    const currentTime = ref(0)
+    const volume = ref(0.8)
 
     function handlerCanPlay(event: Event): void {
       setTotalTime(event)
@@ -192,7 +191,7 @@ export default defineComponent({
       audioPlayer.value!.volume = value
     }
 
-    const totalTime: Ref<number> = ref(0)
+    const totalTime = ref(0)
     function setTotalTime(event: Event): void {
       const target = event.target as HTMLAudioElement
       totalTime.value = target.duration
@@ -211,7 +210,7 @@ export default defineComponent({
       }
     }
 
-    const isPlaying: Ref<boolean> = ref(false)
+    const isPlaying = ref(false)
     function togglePlayPause(): void {
       isPlaying.value = !isPlaying.value
       if (isPlaying.value) {
@@ -223,7 +222,7 @@ export default defineComponent({
     }
 
     // for 1 loop
-    const isVolumeChanging: Ref<boolean> = ref(false)
+    const isVolumeChanging = ref(false)
     async function changeVolumeSlowly(isDecrease: boolean = true): Promise<void> {
       isVolumeChanging.value = true
       let steps: number = 20
@@ -287,7 +286,7 @@ export default defineComponent({
         await shortTracksObserver(currentTime.value)
       }
     })
-    const distanceBetweenComponents: Ref<string> = ref('500px')
+    const distanceBetweenComponents = ref('500px')
     onMounted(() => {
       const main_control_ref = document.querySelector('.main_control_ref') as HTMLElement
       const containerDiv = document.querySelector('.container') as HTMLElement
@@ -307,12 +306,12 @@ export default defineComponent({
       }
     }
 
-    const isShowTrackList: Ref<boolean> = ref(false)
+    const isShowTrackList = ref(false)
     function handlerShowListBtn(): void {
       isShowTrackList.value = !isShowTrackList.value
     }
 
-    const isShowSongText: Ref<boolean> = ref(false)
+    const isShowSongText = ref(false)
     function handlerShowSongTextBtn(): void {
       isShowSongText.value = !isShowSongText.value
     }
@@ -328,7 +327,7 @@ export default defineComponent({
       playTrack()
     }
 
-    const isRepeatMode: Ref<boolean> = ref(false)
+    const isRepeatMode = ref(false)
     function repeatModeChange(): void {
       isRepeatMode.value = !isRepeatMode.value
     }
@@ -337,12 +336,12 @@ export default defineComponent({
       [key: string]: string
     }
     type SongsTextWithTimeCode = {
-      [key: string]: Array<SongTextWithTimeCode>
+      [key: string]: SongTextWithTimeCode[]
     }
-    const currentSongText: ComputedRef<string> = computed(
+    const currentSongText = computed(
       () => (SONGS_TEXT as SongsText)[currentSong.value.songName] || ''
     )
-    const currentSongTextWithTimecodes: ComputedRef<Array<SongTextWithTimeCode>> = computed(
+    const currentSongTextWithTimecodes = computed<SongTextWithTimeCode[]>(
       () => (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName] || []
     )
 

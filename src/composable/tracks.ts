@@ -1,5 +1,4 @@
 import { MUSIC_LIST } from '../const/music_list'
-import type { ComputedRef, Ref } from 'vue'
 import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 
 interface TopTrackList extends TrackList {
@@ -18,37 +17,35 @@ const TABS_OPTION: TabsOption[] = [
   { label: 'Not aggressive', id: 3, url: 'not_aggressive' },
   { label: 'Favorite', id: 5, url: 'favorite' }
 ]
-const favoriteSongs: Ref<Array<string>> = ref([])
-const totalNumbSongs: Ref<number> = ref(0)
-const isRandomTracks: Ref<boolean> = ref(false)
+const favoriteSongs = ref<string[]>([])
+const totalNumbSongs = ref(0)
+const isRandomTracks = ref(false)
 
 export function tracksApi() {
-  const defaultTrackList: Ref<TrackList[]> = ref(MUSIC_LIST)
-  const topTrackList: Ref<TopTrackList[]> = ref(
-    MUSIC_LIST.filter((item) => item.sort) as TopTrackList[]
-  )
-  const notAggressiveTrackList: Ref<NotAggressiveTrackList[]> = ref(
+  const defaultTrackList = ref<TrackList[]>(MUSIC_LIST)
+  const topTrackList = ref<TopTrackList[]>(MUSIC_LIST.filter((item) => item.sort) as TopTrackList[])
+  const notAggressiveTrackList = ref<NotAggressiveTrackList[]>(
     MUSIC_LIST.filter((item) => item.notAggressive) as NotAggressiveTrackList[]
   )
-  const currentTrackIndex: Ref<number> = ref(0)
+  const currentTrackIndex = ref(0)
   onBeforeMount(() => {
     defaultTrackList.value = MUSIC_LIST
     totalNumbSongs.value = currentTracksList.value.length
     getFavoriteSongsFromLocalStorage()
   })
 
-  const pathToCurrentFile: ComputedRef<string> = computed(() => {
+  const pathToCurrentFile = computed(() => {
     const basePath: string = import.meta.env.BASE_URL
     return currentTracksList.value[currentTrackIndex.value]
       ? `${basePath}music/${currentSong.value.songName}`
       : ``
   })
 
-  const sortingTopTrackList: ComputedRef<TopTrackList[]> = computed(() => {
+  const sortingTopTrackList = computed<TopTrackList[]>(() => {
     return [...topTrackList.value].sort((a, b) => a.sort - b.sort)
   })
 
-  const tabSelected: Ref<number> = ref(1)
+  const tabSelected = ref(1)
   function changeTab(option: TabsOption): void {
     if (
       !(tabSelected.value === 4 && option.id === 2) &&
@@ -87,7 +84,7 @@ export function tracksApi() {
     window.history.pushState({}, '', params)
   })
 
-  const tracksByTab: ComputedRef<TrackList[]> = computed(() => {
+  const tracksByTab = computed<TrackList[]>(() => {
     switch (tabSelected.value) {
       case 1:
         return defaultTrackList.value
@@ -103,31 +100,31 @@ export function tracksApi() {
         return []
     }
   })
-  const tracksByTabForFavorite: ComputedRef<TrackList[]> = computed(() => {
+  const tracksByTabForFavorite = computed<TrackList[]>(() => {
     return defaultTrackList.value.filter((item) => favoriteSongs.value.includes(item.songName))
   })
 
-  const TabsOptionRender: ComputedRef<TabsOption[]> = computed(() => {
+  const TabsOptionRender = computed<TabsOption[]>(() => {
     return tracksByTabForFavorite.value.length
       ? TABS_OPTION
       : TABS_OPTION.slice(0, TABS_OPTION.length - 1)
   })
 
-  const bestParties: ComputedRef<BestParties[] | []> = computed(() => {
+  const bestParties = computed<BestParties[] | []>(() => {
     return tabSelected.value === 4
       ? sortingTopTrackList.value[currentTrackIndex.value]?.bestParties || [{ start: 0, end: 30 }]
       : []
   })
 
-  const currentTracks: ComputedRef<TrackList[]> = computed(() => {
+  const currentTracks = computed<TrackList[]>(() => {
     return isRandomTracks.value ? getRandomTracks() : tracksByTab.value
   })
 
-  const currentTracksList: ComputedRef<string[]> = computed(() => {
+  const currentTracksList = computed<string[]>(() => {
     return currentTracks.value.map((item) => item.songName)
   })
 
-  const currentSong: ComputedRef<TrackList> = computed(() => {
+  const currentSong = computed<TrackList>(() => {
     return currentTracks.value[currentTrackIndex.value]
   })
 

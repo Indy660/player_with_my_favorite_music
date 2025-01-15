@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import type { ComputedRef } from 'vue'
 
 export default defineComponent({
   name: 'VolumeControl',
@@ -12,18 +11,18 @@ export default defineComponent({
   },
   emits: ['volume-change'],
   setup(props, { emit }) {
-    const convertToValue: ComputedRef<number> = computed(() => {
+    const convertToValue = computed(() => {
       return props.volume * 100
     })
     // TODO: не работает
     // const iconVolume = computed(() => {
     //   return props.volume > 0 ? 'fa-volume-up' : 'fa-volume-off'
     // })
-    const iconVolume: ComputedRef<string> = computed(() => {
+    const iconVolume = computed(() => {
       return props.volume > 0 ? '<i class="fas fa-volume-up"/>' : '<i class="fas fa-volume-off"/>'
     })
 
-    function volumeHandler(event: InputEvent): void {
+    function volumeHandler(event: InputEvent) {
       const volumeValue: number = parseFloat((event.target as HTMLInputElement).value) / 100
       emit('volume-change', volumeValue)
     }

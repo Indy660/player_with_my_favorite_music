@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent, computed, nextTick, watch, ref, watchEffect } from 'vue'
-import type { ComputedRef, Ref } from 'vue'
 export default defineComponent({
   props: {
     songText: {
@@ -23,7 +22,7 @@ export default defineComponent({
       id: number
       available: boolean
     }
-    const tabsOption: ComputedRef<TabsOption[]> = computed(() => {
+    const tabsOption = computed<TabsOption[]>(() => {
       return [
         {
           label: 'Timecodes',
@@ -33,7 +32,7 @@ export default defineComponent({
         { label: 'Raw', id: 2, available: Boolean(props.songText.length) }
       ]
     })
-    const idTabSelected: Ref<number> = ref(1)
+    const idTabSelected = ref(1)
     function goToText(time: number): void {
       emit('time-change', time - 0.5)
     }
@@ -46,8 +45,15 @@ export default defineComponent({
       }
     })
 
+    watch(
+      () => props.songText,
+      () => {
+        if (props.songText?.length && idTabSelected.value === 2) scrollToTop()
+      }
+    )
+
     // TODO: переключение по инпуту трека закрывает этот компонент
-    const songTextWithMusicSymbol: ComputedRef<SongTextWithTimeCode[]> = computed(() => {
+    const songTextWithMusicSymbol = computed<SongTextWithTimeCode[]>(() => {
       const result: SongTextWithTimeCode[] = []
       // https://www.compart.com/en/unicode/U+1F3B5
       // TODO: поправить тайпскрипт
@@ -72,7 +78,7 @@ export default defineComponent({
       return result
     })
 
-    const indexPlayingPartTimeCode: ComputedRef<number> = computed(() => {
+    const indexPlayingPartTimeCode = computed(() => {
       if (props.songTextWithTimecodes.length) {
         // если текущее время выходит за длину текста
         if (
@@ -91,22 +97,24 @@ export default defineComponent({
       }
       return 0
     })
-    watch(
-      () => indexPlayingPartTimeCode.value,
-      () => {
-        scrollTo()
+    watchEffect(() => {
+      if (indexPlayingPartTimeCode.value || props.songTextWithTimecodes.length) {
+        scrollToTimeCode()
       }
-    )
-    watch(
-      () => props.songTextWithTimecodes.length,
-      () => {
-        scrollTo()
-      }
-    )
-    async function scrollTo() {
+    })
+    async function scrollToTimeCode() {
       await nextTick()
+
       const selected = document.querySelector('.song-text .selected')
       selected?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+
+    function scrollToTop() {
+      // TODO: не всегда срабатывает перемотка вверх, с (можно с 16 трека)
+      // console.log(document.querySelector('.song-text span'))
+      document
+        .querySelector('.song-text span')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
 
     function btnHandler(option: TabsOption): void {
@@ -169,12 +177,12 @@ export default defineComponent({
   margin: 0;
   padding: 0 5px 10px;
   text-align: start;
-  overflow-y: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .tabs {
-  position: sticky;
-  top: 0;
   border-bottom: 1px solid;
   border-bottom-color: var(--main-color);
   z-index: 2;
@@ -183,6 +191,8 @@ export default defineComponent({
 }
 
 .song-text {
+  height: 100%;
+  overflow-y: auto;
 }
 
 .sidebar span {

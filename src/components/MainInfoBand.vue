@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent, ref, onBeforeMount, computed, watchEffect } from 'vue'
-import type { ComputedRef } from 'vue'
 
 export default defineComponent({
   name: 'MainInfoBand',
@@ -34,7 +33,7 @@ export default defineComponent({
       }
     })
 
-    const fullSongName: ComputedRef<string> = computed(() => {
+    const fullSongName = computed(() => {
       const indexSlice: number | undefined = props.songName?.lastIndexOf('.')
       return (props.songName && props.songName.substring(0, indexSlice)) || ''
     })
@@ -43,7 +42,7 @@ export default defineComponent({
       bandName: string
       songName: string
     }
-    const getInfoBand: ComputedRef<GetInfoBand> = computed(() => {
+    const getInfoBand = computed<GetInfoBand>(() => {
       const [bandName, songName] = fullSongName.value.split(' - ')
       return {
         bandName,
@@ -51,7 +50,7 @@ export default defineComponent({
       }
     })
 
-    const getLogoImage: ComputedRef<string> = computed(() => {
+    const getLogoImage = computed(() => {
       const { bandName } = getInfoBand.value
       return imagePaths.value[bandName] || imagePaths.value.default_logo
       // TODO: как сделать так, чтобы свг в default_logo заработало? Не работает require в css?
@@ -84,11 +83,11 @@ export default defineComponent({
         setMetadata()
       }
     })
-    const iconShowTextClass: ComputedRef<string> = computed(() => {
+    const iconShowTextClass = computed(() => {
       return props.hasText ? '' : 'disabled'
     })
 
-    const iconHeartClass: ComputedRef<string> = computed(() => {
+    const iconHeartClass = computed(() => {
       // return props.hasText ? '' : 'disabled'
       return props.isFavoriteSong ? 'active' : ''
     })
