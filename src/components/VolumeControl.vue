@@ -1,53 +1,41 @@
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 
-export default defineComponent({
-  name: 'VolumeControl',
-  props: {
-    volume: {
-      type: Number,
-      default: 0.8
-    }
-  },
-  emits: ['volume-change'],
-  setup(props, { emit }) {
-    const convertToValue = computed(() => {
-      return props.volume * 100
-    })
-    // TODO: не работает
-    // const iconVolume = computed(() => {
-    //   return props.volume > 0 ? 'fa-volume-up' : 'fa-volume-off'
-    // })
-    const iconVolume = computed(() => {
-      return props.volume > 0 ? '<i class="fas fa-volume-up"/>' : '<i class="fas fa-volume-off"/>'
-    })
+interface Props {
+  volume: number
+}
 
-    function volumeHandler(event: InputEvent) {
-      const volumeValue: number = parseFloat((event.target as HTMLInputElement).value) / 100
-      emit('volume-change', volumeValue)
-    }
+const props = defineProps<Props>()
+const emit = defineEmits(['volume-change'])
 
-    function volumeHandlerByClick(number: number): void {
-      emit('volume-change', number)
-    }
-
-    function onIconVolumeClick(): void {
-      const defaultVolume: number = 0.8
-      if (props.volume > 0) {
-        volumeHandlerByClick(0)
-      } else {
-        volumeHandlerByClick(defaultVolume)
-      }
-    }
-
-    return {
-      convertToValue,
-      volumeHandler,
-      onIconVolumeClick,
-      iconVolume
-    }
-  }
+const convertToValue = computed(() => {
+  return props.volume * 100
 })
+// TODO: не работает
+// const iconVolume = computed(() => {
+//   return props.volume > 0 ? 'fa-volume-up' : 'fa-volume-off'
+// })
+const iconVolume = computed(() => {
+  return props.volume > 0 ? '<i class="fas fa-volume-up"/>' : '<i class="fas fa-volume-off"/>'
+})
+
+function volumeHandler(event: InputEvent) {
+  const volumeValue: number = parseFloat((event.target as HTMLInputElement).value) / 100
+  emit('volume-change', volumeValue)
+}
+
+function volumeHandlerByClick(number: number): void {
+  emit('volume-change', number)
+}
+
+function onIconVolumeClick(): void {
+  const defaultVolume: number = 0.8
+  if (props.volume > 0) {
+    volumeHandlerByClick(0)
+  } else {
+    volumeHandlerByClick(defaultVolume)
+  }
+}
 </script>
 
 <template>

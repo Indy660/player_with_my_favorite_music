@@ -1,139 +1,118 @@
-<script lang="ts">
-import { defineComponent, computed, watch, ref, watchEffect } from 'vue'
-export default defineComponent({
-  props: {
-    songText: {
-      type: String,
-      default: ''
+<script lang="ts" setup>
+import { computed, watch, ref, watchEffect } from 'vue'
+
+interface Props {
+  songText: string
+  songTextWithTimecodes: SongTextWithTimeCode[]
+  currentTime: number
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits(['time-change'])
+
+type TabsOption = {
+  label: string
+  id: number
+  available: boolean
+}
+const tabsOption = computed<TabsOption[]>(() => {
+  return [
+    {
+      label: 'Timecodes',
+      id: 1,
+      available: Boolean(props.songTextWithTimecodes.length)
     },
-    songTextWithTimecodes: {
-      type: Array,
-      default: () => []
-    },
-    currentTime: {
-      type: Number,
-      default: 0
-    }
-  },
-  emits: ['time-change'],
-  setup(props, { emit }) {
-    type TabsOption = {
-      label: string
-      id: number
-      available: boolean
-    }
-    const tabsOption = computed<TabsOption[]>(() => {
-      return [
-        {
-          label: 'Timecodes',
-          id: 1,
-          available: Boolean(props.songTextWithTimecodes.length)
-        },
-        { label: 'Raw', id: 2, available: Boolean(props.songText.length) }
-      ]
-    })
-    const idTabSelected = ref(1)
-    function goToText(time: number): void {
-      emit('time-change', time - 0.5)
-    }
-    watchEffect(() => {
-      if (!props.songText.length && props.songTextWithTimecodes.length) {
-        idTabSelected.value = 1
-      }
-      if (!props.songTextWithTimecodes.length && props.songText.length) {
-        idTabSelected.value = 2
-      }
-    })
-
-    // TODO: переключение по инпуту трека закрывает этот компонент
-    const songTextWithMusicSymbol = computed<SongTextWithTimeCode[]>(() => {
-      const result: SongTextWithTimeCode[] = []
-      // https://www.compart.com/en/unicode/U+1F3B5
-      // TODO: поправить тайпскрипт
-      ;(props.songTextWithTimecodes as SongTextWithTimeCode[]).forEach((item, index) => {
-        if (
-          props.songTextWithTimecodes?.[index + 1]?.seconds &&
-          Number(
-            props.songTextWithTimecodes[index + 1].seconds -
-              props.songTextWithTimecodes[index].seconds
-          ) > 20
-        ) {
-          result.push(item)
-          result.push({
-            seconds: props.songTextWithTimecodes[index].seconds + 3,
-            lyrics: '&#127925'
-          })
-        } else {
-          result.push(item)
-        }
-      })
-
-      return result
-    })
-
-    const indexPlayingPartTimeCode = computed(() => {
-      if (props.songTextWithTimecodes.length) {
-        // если текущее время выходит за длину текста
-        if (
-          props.currentTime >=
-          songTextWithMusicSymbol.value[songTextWithMusicSymbol.value.length - 1].seconds
-        ) {
-          return songTextWithMusicSymbol.value.length - 1
-        }
-        const index = songTextWithMusicSymbol.value?.findIndex((partSong, index, array) => {
-          return (
-            props.currentTime >= partSong.seconds - 1 &&
-            props.currentTime < array?.[index + 1]?.seconds
-          )
-        })
-        return index > 0 ? index : 0
-      }
-      return 0
-    })
-    watchEffect(() => {
-      if (
-        (indexPlayingPartTimeCode.value || props.songTextWithTimecodes.length) &&
-        idTabSelected.value === 1
-      ) {
-        scrollToTimeCode()
-      }
-    })
-    watch(
-      () => props.songText,
-      () => {
-        if (props.songText?.length && idTabSelected.value === 2) scrollToTop()
-      }
-    )
-    function scrollToTimeCode() {
-      const selectedSongText = document.querySelector('.song-text .selected')
-      selectedSongText?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }
-
-    function scrollToTop() {
-      const songTextBlock = document.querySelector('.song-text .raw')
-      songTextBlock?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-
-    function btnHandler(option: TabsOption): void {
-      option.available && (idTabSelected.value = option.id)
-    }
-
-    // TODO:
-    // As I Lay Dying - Nothing Left [2007] - проблемы, каждый раз при перемотке разное время
-    // Are You Dead Yet
-    // Clayman
-    // Wasteland Discotheque
-    // Fucking Perfect
-    return {
-      goToText,
-      songTextWithMusicSymbol,
-      tabsOption,
-      idTabSelected,
-      btnHandler,
-      indexPlayingPartTimeCode
-    }
+    { label: 'Raw', id: 2, available: Boolean(props.songText.length) }
+  ]
+})
+const idTabSelected = ref(1)
+function goToText(time: number): void {
+  emit('time-change', time - 0.5)
+}
+watchEffect(() => {
+  if (!props.songText.length && props.songTextWithTimecodes.length) {
+    idTabSelected.value = 1
+  }
+  if (!props.songTextWithTimecodes.length && props.songText.length) {
+    idTabSelected.value = 2
   }
 })
+
+// TODO: переключение по инпуту трека закрывает этот компонент
+const songTextWithMusicSymbol = computed<SongTextWithTimeCode[]>(() => {
+  const result: SongTextWithTimeCode[] = []
+  props.songTextWithTimecodes.forEach((item, index) => {
+    if (
+      props.songTextWithTimecodes?.[index + 1]?.seconds &&
+      Number(
+        props.songTextWithTimecodes[index + 1].seconds - props.songTextWithTimecodes[index].seconds
+      ) > 20
+    ) {
+      result.push(item)
+      result.push({
+        seconds: props.songTextWithTimecodes[index].seconds + 3,
+        lyrics: '&#127925'
+      })
+    } else {
+      result.push(item)
+    }
+  })
+
+  return result
+})
+
+const indexPlayingPartTimeCode = computed(() => {
+  if (props.songTextWithTimecodes.length) {
+    // если текущее время выходит за длину текста
+    if (
+      props.currentTime >=
+      songTextWithMusicSymbol.value[songTextWithMusicSymbol.value.length - 1].seconds
+    ) {
+      return songTextWithMusicSymbol.value.length - 1
+    }
+    const index = songTextWithMusicSymbol.value?.findIndex((partSong, index, array) => {
+      return (
+        props.currentTime >= partSong.seconds - 1 && props.currentTime < array?.[index + 1]?.seconds
+      )
+    })
+    return index > 0 ? index : 0
+  }
+  return 0
+})
+watchEffect(() => {
+  if (
+    (indexPlayingPartTimeCode.value || props.songTextWithTimecodes.length) &&
+    idTabSelected.value === 1
+  ) {
+    scrollToTimeCode()
+  }
+})
+watch(
+  () => props.songText,
+  () => {
+    if (props.songText?.length && idTabSelected.value === 2) scrollToTop()
+  }
+)
+function scrollToTimeCode() {
+  const selectedSongText = document.querySelector('.song-text .selected')
+  selectedSongText?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
+function scrollToTop() {
+  const songTextBlock = document.querySelector('.song-text .raw')
+  songTextBlock?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+function btnHandler(option: TabsOption): void {
+  option.available && (idTabSelected.value = option.id)
+}
+
+// TODO:
+// As I Lay Dying - Nothing Left [2007] - проблемы, каждый раз при перемотке разное время
+// Are You Dead Yet
+// Clayman
+// Wasteland Discotheque
+// Fucking Perfect
 </script>
 
 <template>

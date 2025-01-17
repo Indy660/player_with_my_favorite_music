@@ -132,7 +132,6 @@ export function tracksApi() {
     return tracksByTab.value
       .map((value: TrackList) => ({ ...value, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
-      .map(({ sort, ...rest }) => rest)
   }
 
   function nextTrack(): void {

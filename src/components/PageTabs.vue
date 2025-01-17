@@ -1,28 +1,19 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { tracksApi } from '../composable/tracks'
+<script setup lang="ts">
+import { tracksApi } from '@/composable/tracks'
 
-export default defineComponent({
-  props: {
-    tabSelected: {
-      type: Number,
-      default: 1
-    }
-  },
-  emits: ['change-tab'],
-  setup(props, { emit }) {
-    const { TabsOptionRender } = tracksApi()
-    function btnHandler(option: TabsOption): void {
-      if (props.tabSelected !== option.id) {
-        emit('change-tab', option)
-      }
-    }
-    return {
-      btnHandler,
-      TabsOptionRender
-    }
+interface Props {
+  tabSelected: number
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits(['change-tab'])
+
+const { TabsOptionRender } = tracksApi()
+function btnHandler(option: TabsOption): void {
+  if (props.tabSelected !== option.id) {
+    emit('change-tab', option)
   }
-})
+}
 </script>
 
 <template>

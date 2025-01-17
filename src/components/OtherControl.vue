@@ -1,74 +1,43 @@
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
-import type { ComputedRef } from 'vue'
-import { tracksApi } from '../composable/tracks'
-export default defineComponent({
-  name: 'OtherControl',
-  props: {
-    currentNumbSong: {
-      type: Number,
-      default: 0
-    },
-    // totalNumbSongs: {
-    //   type: Number,
-    //   default: 0
-    // },
-    // isRandomTracks: {
-    //   type: Boolean,
-    //   default: false
-    // },
-    isRepeatMode: {
-      type: Boolean,
-      default: false
-    },
-    isShowTrackList: {
-      type: Boolean,
-      default: false
-    },
-    isDarkTheme: {
-      type: Boolean,
-      default: false
-    }
-  },
-  // 'random-click',
-  emits: ['show-list-click', 'repeat-mode-click', 'change-theme'],
-  setup(props, { emit }) {
-    //TODO: не обновляются данные из компонетс
-    const { totalNumbSongs, isRandomTracks, handlerRandomBtn } = tracksApi()
-    function iconClickRandomHandler(): void {
-      handlerRandomBtn()
-    }
-    function iconClickRepeatModeHandler(): void {
-      emit('repeat-mode-click')
-    }
-    function iconClickShowListHandler(): void {
-      emit('show-list-click')
-    }
-    function iconClickChangeThemeHandler(): void {
-      emit('change-theme')
-    }
+<script setup lang="ts">
+import { computed } from 'vue'
+import { tracksApi } from '@/composable/tracks'
 
-    const iconToggle = computed(() => {
-      return props.isDarkTheme
-        ? '<i class="fa-solid fa-toggle-on"/>'
-        : '<i class="fa-solid fa-toggle-off"/>'
-    })
-    const iconBar = computed(() => {
-      return props.isShowTrackList
-        ? '<i class="fas fa-bars fa-rotate-90"/>'
-        : '<i class="fas fa-bars"/>'
-    })
-    return {
-      totalNumbSongs,
-      isRandomTracks,
-      iconClickRandomHandler,
-      iconClickRepeatModeHandler,
-      iconClickShowListHandler,
-      iconClickChangeThemeHandler,
-      iconToggle,
-      iconBar
-    }
-  }
+interface Props {
+  currentNumbSong: number
+  totalNumbSongs: number
+  isRandomTracks: boolean
+  isRepeatMode: boolean
+  isShowTrackList: boolean
+  isDarkTheme: boolean
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits(['show-list-click', 'repeat-mode-click', 'change-theme'])
+
+//TODO: не обновляются данные из компонетс
+const { totalNumbSongs, isRandomTracks, handlerRandomBtn } = tracksApi()
+function iconClickRandomHandler(): void {
+  handlerRandomBtn()
+}
+function iconClickRepeatModeHandler(): void {
+  emit('repeat-mode-click')
+}
+function iconClickShowListHandler(): void {
+  emit('show-list-click')
+}
+function iconClickChangeThemeHandler(): void {
+  emit('change-theme')
+}
+
+const iconToggle = computed(() => {
+  return props.isDarkTheme
+    ? '<i class="fa-solid fa-toggle-on"/>'
+    : '<i class="fa-solid fa-toggle-off"/>'
+})
+const iconBar = computed(() => {
+  return props.isShowTrackList
+    ? '<i class="fas fa-bars fa-rotate-90"/>'
+    : '<i class="fas fa-bars"/>'
 })
 </script>
 

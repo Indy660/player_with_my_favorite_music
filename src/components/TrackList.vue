@@ -1,51 +1,37 @@
-<script lang="ts">
-import { defineComponent, computed, watch, nextTick } from 'vue'
-export default defineComponent({
-  name: 'TrackList',
-  props: {
-    currentTracks: {
-      type: Array,
-      default: () => []
-    },
-    currentTrackIndex: {
-      type: Number,
-      default: 0
-    }
-  },
-  emits: ['select-track-from-list'],
-  setup(props, { emit }) {
-    const currentTracksWithCorrectNames = computed<string[]>(() => {
-      // TODO: хз как defineProps в props.currentTracks проверить типы
-      return (props.currentTracks as string[]).map((item: string) => {
-        const indexLastSlash: number = item.lastIndexOf('/')
-        const indexSlice: number = item?.lastIndexOf('.')
-        return (item && item.substring(indexLastSlash + 1, indexSlice)) || ''
-      })
-    })
+<script setup lang="ts">
+import { computed, watch } from 'vue'
 
-    watch(
-      () => props.currentTrackIndex,
-      () => {
-        scrollTo()
-      }
-    )
-    // TODO: хз, что возвращает, войд не подходит
-    async function scrollTo() {
-      await nextTick()
-      const selected = document.querySelector('.tracks .selected')
-      selected?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }
+interface Props {
+  currentTracks: string[]
+  currentTrackIndex: number
+}
 
-    function selectTrackFromList(trackIndex: number): void {
-      emit('select-track-from-list', trackIndex)
-    }
+const props = defineProps<Props>()
+const emit = defineEmits(['select-track-from-list'])
 
-    return {
-      currentTracksWithCorrectNames,
-      selectTrackFromList
-    }
-  }
+const currentTracksWithCorrectNames = computed<string[]>(() => {
+  // TODO: хз как defineProps в props.currentTracks проверить типы
+  return (props.currentTracks as string[]).map((item: string) => {
+    const indexLastSlash: number = item.lastIndexOf('/')
+    const indexSlice: number = item?.lastIndexOf('.')
+    return (item && item.substring(indexLastSlash + 1, indexSlice)) || ''
+  })
 })
+
+watch(
+  () => props.currentTrackIndex,
+  () => {
+    scrollToCurrentTrack()
+  }
+)
+function scrollToCurrentTrack() {
+  const selected = document.querySelector('.tracks .selected')
+  selected?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
+function selectTrackFromList(trackIndex: number): void {
+  emit('select-track-from-list', trackIndex)
+}
 </script>
 
 <template>

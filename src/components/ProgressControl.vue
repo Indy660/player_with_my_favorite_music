@@ -1,88 +1,66 @@
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 
-export default defineComponent({
-  name: 'ProgressControl',
-  props: {
-    currentTime: {
-      type: Number,
-      default: 0
-    },
-    totalTime: {
-      type: Number,
-      default: 0
-    },
-    bestParties: {
-      type: Array,
-      default: () => []
-    }
-  },
-  emits: ['time-change', 'time-change-line'],
-  setup(props, { emit }) {
-    const convertToValue = computed(() => {
-      return (props.currentTime / props.totalTime) * 100
-    })
+interface Props {
+  currentTime: number
+  totalTime: number
+  bestParties: BestParties[]
+}
 
-    const convertCurrentTime = computed(() => {
-      return formatTime(props.currentTime)
-    })
+const props = defineProps<Props>()
+const emit = defineEmits(['time-change', 'time-change-line'])
 
-    const convertCurrentTimeSeconds = computed(() => {
-      return import.meta.env.DEV ? formatTimeSeconds(props.currentTime) : ''
-    })
-
-    const convertTotalTime = computed(() => {
-      return formatTime(props.totalTime)
-    })
-
-    // type TypeParties = 'start' | 'end'
-    interface BestPartiesPosition {
-      left: string
-      right: string
-    }
-    const convertBestPartiesInPercentage = computed<BestPartiesPosition[]>(() => {
-      const oneSecondSongInPercent: number = Number((100 / props.totalTime).toFixed(2))
-      // TODO: хз как defineProps в props.bestParties проверить типы
-      return (props.bestParties as BestParties[]).map((item) => ({
-        left: `${item.start * oneSecondSongInPercent}%`,
-        right: `${100 - item.end * oneSecondSongInPercent}%`
-      }))
-    })
-
-    function formatTimeSeconds(timeInSeconds: number): string {
-      return `${timeInSeconds.toFixed(2)}`
-    }
-
-    function formatTime(timeInSeconds: number): string {
-      const minutes: number = Math.floor(timeInSeconds / 60)
-      const seconds: number = Math.floor(timeInSeconds % 60)
-      return `${minutes}:${String(seconds).padStart(2, '0')}`
-    }
-
-    function timeHandlerEmit(e: MouseEvent): void {
-      const parentLine: Element = <HTMLElement>(<HTMLElement>e.target).parentNode || null
-      const clientWidth: number = parentLine?.clientWidth || 0
-      const rect: DOMRect = parentLine.getBoundingClientRect()
-      const x: number = e.clientX - rect.left // Позиция по оси X относительно родительского элемента
-      emit('time-change', (x / clientWidth) * props.totalTime)
-    }
-
-    function timeHandler(event: Event): void {
-      const target = event.target as HTMLInputElement
-      emit('time-change', (Number(target.value) / 100) * (props.totalTime || 0))
-    }
-
-    return {
-      convertToValue,
-      convertCurrentTime,
-      convertTotalTime,
-      timeHandler,
-      timeHandlerEmit,
-      convertBestPartiesInPercentage,
-      convertCurrentTimeSeconds
-    }
-  }
+const convertToValue = computed(() => {
+  return (props.currentTime / props.totalTime) * 100
 })
+
+const convertCurrentTime = computed(() => {
+  return formatTime(props.currentTime)
+})
+
+const convertCurrentTimeSeconds = computed(() => {
+  return import.meta.env.DEV ? formatTimeSeconds(props.currentTime) : ''
+})
+
+const convertTotalTime = computed(() => {
+  return formatTime(props.totalTime)
+})
+
+interface BestPartiesPosition {
+  left: string
+  right: string
+}
+const convertBestPartiesInPercentage = computed<BestPartiesPosition[]>(() => {
+  const oneSecondSongInPercent: number = Number((100 / props.totalTime).toFixed(2))
+  // TODO: хз как defineProps в props.bestParties проверить типы
+  return props.bestParties.map((item) => ({
+    left: `${item.start * oneSecondSongInPercent}%`,
+    right: `${100 - item.end * oneSecondSongInPercent}%`
+  }))
+})
+
+function formatTimeSeconds(timeInSeconds: number): string {
+  return `${timeInSeconds.toFixed(2)}`
+}
+
+function formatTime(timeInSeconds: number): string {
+  const minutes: number = Math.floor(timeInSeconds / 60)
+  const seconds: number = Math.floor(timeInSeconds % 60)
+  return `${minutes}:${String(seconds).padStart(2, '0')}`
+}
+
+function timeHandlerEmit(e: MouseEvent): void {
+  const parentLine: Element = <HTMLElement>(<HTMLElement>e.target).parentNode || null
+  const clientWidth: number = parentLine?.clientWidth || 0
+  const rect: DOMRect = parentLine.getBoundingClientRect()
+  const x: number = e.clientX - rect.left // Позиция по оси X относительно родительского элемента
+  emit('time-change', (x / clientWidth) * props.totalTime)
+}
+
+function timeHandler(event: Event): void {
+  const target = event.target as HTMLInputElement
+  emit('time-change', (Number(target.value) / 100) * (props.totalTime || 0))
+}
 </script>
 
 <template>

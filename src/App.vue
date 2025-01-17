@@ -1,5 +1,5 @@
-<script lang="ts">
-import { computed, defineComponent, onBeforeMount, ref, watchEffect, watch, onMounted } from 'vue'
+<script setup lang="ts">
+import { computed, onBeforeMount, ref, watchEffect, watch, onMounted } from 'vue'
 import { tracksApi } from './composable/tracks'
 import TrackList from './components/TrackList.vue'
 import PageTabs from './components/PageTabs.vue'
@@ -19,398 +19,336 @@ interface CustomAudioElement extends HTMLAudioElement {
   currentTime: number
 }
 
-export default defineComponent({
-  name: 'MainComponent',
-  components: {
-    TrackList,
-    PageTabs,
-    MainInfoBand,
-    VolumeControl,
-    ProgressControl,
-    MainControl,
-    OtherControl,
-    SongText
-  },
-  setup() {
-    const {
-      bestParties,
-      nextTrack,
-      previousTrack,
-      pathToCurrentFile,
-      currentTrackIndex,
-      changeTab,
-      selectTrack,
-      tabSelected,
-      currentTracks,
-      currentSong,
-      currentTracksList,
-      favoriteSongs,
-      handleAddFavoriteSongBtn
-    } = tracksApi()
-    onBeforeMount(async () => {
-      // старый способ импорта музыки прямо из папки
-      // const music = import.meta.glob('@assets/music/*.mp3')
-      // for (const path in music) {
-      //   const songPath = (await music[path]()).default
-      //   defaultTrackList.value.push(songPath)
-      //   TOP_MUSIC.forEach((item) => {
-      //     if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
-      //   })
-      //   // TOP_MUSIC.forEach((item) => {
-      //   //   if (songPath.includes(item)) topTrackList.value.push(songPath)
-      //   // })
-      //   NOT_AGGRESSIVE_MUSIC.forEach((item) => {
-      //     if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
-      //   })
-      // }
+const {
+  bestParties,
+  nextTrack,
+  previousTrack,
+  pathToCurrentFile,
+  currentTrackIndex,
+  changeTab,
+  selectTrack,
+  tabSelected,
+  currentTracks,
+  currentSong,
+  currentTracksList,
+  favoriteSongs,
+  handleAddFavoriteSongBtn
+} = tracksApi()
+onBeforeMount(async () => {
+  // старый способ импорта музыки прямо из папки
+  // const music = import.meta.glob('@assets/music/*.mp3')
+  // for (const path in music) {
+  //   const songPath = (await music[path]()).default
+  //   defaultTrackList.value.push(songPath)
+  //   TOP_MUSIC.forEach((item) => {
+  //     if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
+  //   })
+  //   // TOP_MUSIC.forEach((item) => {
+  //   //   if (songPath.includes(item)) topTrackList.value.push(songPath)
+  //   // })
+  //   NOT_AGGRESSIVE_MUSIC.forEach((item) => {
+  //     if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
+  //   })
+  // }
 
-      initChangeColorScheme()
-      type Action = () => void
-      type ActionName = 'play' | 'pause' | 'nexttrack' | 'previoustrack' | 'seekto'
-      type ActionHandler = [ActionName, Action]
+  initChangeColorScheme()
+  type Action = () => void
+  type ActionName = 'play' | 'pause' | 'nexttrack' | 'previoustrack' | 'seekto'
+  type ActionHandler = [ActionName, Action]
 
-      const actionHandlers: ActionHandler[] = [
-        [
-          'play',
-          () => {
-            togglePlayPause()
-            navigator.mediaSession.playbackState = 'playing'
-          }
-        ],
-        [
-          'pause',
-          () => {
-            togglePlayPause()
-            navigator.mediaSession.playbackState = 'paused'
-          }
-        ],
-        [
-          'nexttrack',
-          () => {
-            nextTrack()
-          }
-        ],
-        [
-          'previoustrack',
-          () => {
-            previousTrackHandler()
-          }
-        ],
-        // :TODO поправить seekTime, оно здесь работает но не перематывает
-        [
-          'seekto',
-          (e: Event) => {
-            console.log(e)
-            audioPlayer.value!.currentTime = e.seekTime
-          }
-        ]
-      ]
-
-      for (const [action, handler] of actionHandlers) {
-        try {
-          navigator.mediaSession.setActionHandler(action, handler)
-        } catch (error) {
-          console.log(`The media session action "${action}" is not supported yet.`)
-        }
+  const actionHandlers: ActionHandler[] = [
+    [
+      'play',
+      () => {
+        togglePlayPause()
+        navigator.mediaSession.playbackState = 'playing'
       }
-    })
-
-    const isDarkTheme = ref(false)
-    function initChangeColorScheme(): void {
-      const theme =
-        (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ||
-        (localStorage.getItem('dark-color-scheme') &&
-          JSON.parse(localStorage.getItem('dark-color-scheme') as string))
-          ? 'dark'
-          : 'light'
-      isDarkTheme.value = theme === 'dark'
-      updateColorScheme()
-    }
-
-    watch(isDarkTheme, () => {
-      updateColorScheme()
-    })
-
-    function updateColorScheme(): void {
-      document.documentElement.style.setProperty(
-        'color-scheme',
-        isDarkTheme.value ? 'dark' : 'light'
-      )
-      localStorage.setItem('dark-color-scheme', JSON.stringify(isDarkTheme.value))
-    }
-
-    function handlerChangeThemeBtn(): void {
-      isDarkTheme.value = !isDarkTheme.value
-    }
-
-    const audioPlayer = ref<CustomAudioElement | null>(null)
-
-    const currentTime = ref(0)
-    const volume = ref(0.8)
-
-    function handlerCanPlay(event: Event): void {
-      setTotalTime(event)
-      if (isPlaying.value) {
-        playTrack()
+    ],
+    [
+      'pause',
+      () => {
+        togglePlayPause()
+        navigator.mediaSession.playbackState = 'paused'
       }
-    }
-
-    function handlerEnded(): void {
-      if (!isRepeatMode.value) {
+    ],
+    [
+      'nexttrack',
+      () => {
         nextTrack()
-      } else {
-        audioPlayer.value!.currentTime = 0
       }
-    }
-
-    function handlerTimeChange(seconds: number): void {
-      audioPlayer.value!.currentTime = seconds
-      isPlaying.value = true
-      playTrack()
-    }
-
-    // TODO: проблема при перемотке, Failed to execute 'setPositionState' on 'MediaSession': The provided position cannot be greater than the duration.
-    function onTimeUpdate(event: Event): void {
-      // console.log(event)
-      currentTime.value = (event.target as HTMLAudioElement).currentTime
-      // console.log(currentTime.value, totalTime.value)
-      // TODO: не работает иногда перемотка в MediaSession
-      // сразу ставится ползунок в конец, на паузе правильная позиция указывается
-      navigator.mediaSession.setPositionState({
-        duration: totalTime.value,
-        playbackRate: 1,
-        position: currentTime.value
-      })
-    }
-
-    function onVolumeUpdate(event: Event): void {
-      volume.value = (event.target as HTMLAudioElement).volume
-    }
-
-    function setVolume(value: number): void {
-      audioPlayer.value!.volume = value
-    }
-
-    const totalTime = ref(0)
-    function setTotalTime(event: Event): void {
-      const target = event.target as HTMLAudioElement
-      totalTime.value = target.duration
-      navigator.mediaSession.setPositionState({
-        duration: totalTime.value,
-        playbackRate: 1,
-        position: 0
-      })
-    }
-
-    function playTrack(): void {
-      try {
-        audioPlayer.value!.play().then((r) => r)
-      } catch (error) {
-        console.log('error', error)
+    ],
+    [
+      'previoustrack',
+      () => {
+        previousTrackHandler()
       }
-    }
-
-    const isPlaying = ref(false)
-    function togglePlayPause(): void {
-      isPlaying.value = !isPlaying.value
-      if (isPlaying.value) {
-        playTrack()
-      } else {
-        // TODO: Cannot read properties of null (reading 'pause') на пробел
-        audioPlayer.value!.pause()
+    ],
+    // :TODO поправить seekTime, оно здесь работает но не перематывает
+    [
+      'seekto',
+      (e: Event) => {
+        console.log(e)
+        audioPlayer.value!.currentTime = e.seekTime
       }
-    }
+    ]
+  ]
 
-    // for 1 loop
-    const isVolumeChanging = ref(false)
-    async function changeVolumeSlowly(isDecrease: boolean = true): Promise<void> {
-      isVolumeChanging.value = true
-      let steps: number = 20
-      const stepValue: number = 0.01
-      async function changeVolume(isDecrease: boolean): Promise<string> {
-        return await new Promise((resolve) => {
-          const intervalId = setInterval(() => {
-            if (steps >= 0) {
-              const newVolume: string = isDecrease
-                ? (volume.value - stepValue).toFixed(2)
-                : (volume.value + stepValue).toFixed(2)
-              console.log(`${isDecrease ? '-' : '+'}`, newVolume)
-              steps--
-              audioPlayer.value!.volume = Number(newVolume)
-            } else {
-              clearInterval(intervalId)
-              isVolumeChanging.value = false
-              return resolve('done')
-            }
-          }, 100)
-        })
-      }
-      await changeVolume(isDecrease)
-    }
-
-    async function shortTracksObserver(time: number): Promise<void> {
-      // console.log('shortTracksObserver')
-      // audioPlayer.value!.volume = 0.6
-      for (let i = 0; i < bestParties.value.length; i++) {
-        const currentBestParty = bestParties.value[i]
-        // TODO: проблема при переключении, звук уходит со временем на 100%
-        if (time <= currentBestParty.start && !isVolumeChanging.value) {
-          console.log('start')
-          // audioPlayer.value!.volume = 0.6
-          audioPlayer.value!.currentTime = currentBestParty.start
-          // TODO: отвратительно работает переключение песен
-          // await changeVolumeSlowly(false)
-          return
-        } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
-          console.log('continue')
-          // TODO: второе условие как хак
-          if (
-            time >= currentBestParty.end - 3 &&
-            time <= currentBestParty.end - 2 &&
-            !isVolumeChanging.value
-          ) {
-            console.log('end')
-            // audioPlayer.value!.volume = 0.8
-            // await changeVolumeSlowly(true)
-          }
-          return
-        }
-      }
-      // TODO: вызывается при переключении дважды
-      console.log('nextTrack')
-      handlerEnded()
-    }
-
-    watchEffect(async () => {
-      if (tabSelected.value === 4 && isPlaying.value && currentTrackIndex) {
-        await shortTracksObserver(currentTime.value)
-      }
-    })
-    const distanceBetweenComponents = ref('500px')
-    onMounted(() => {
-      const main_control_ref = document.querySelector('.main_control_ref') as HTMLElement
-      const containerDiv = document.querySelector('.container') as HTMLElement
-      // todo: через реф main_control_ref не видит, подобрал по классу
-      // const main_control_ref = ref(null)
-      // const rect1 = main_control_ref?.value?.$el?.getBoundingClientRect()
-      const rect1: DOMRect = main_control_ref.getBoundingClientRect()
-      const rect2: DOMRect = containerDiv?.getBoundingClientRect()
-      distanceBetweenComponents.value = `${Math.abs(rect1.top - rect2.top) + 25}px`
-      audioPlayer.value!.volume = 0.8
-      document.addEventListener('keydown', handleKeyDown)
-    })
-    function previousTrackHandler(): void {
-      if (audioPlayer.value!.currentTime <= 20 || tabSelected.value === 4) previousTrack()
-      else {
-        audioPlayer.value!.currentTime = 0
-      }
-    }
-
-    const isShowTrackList = ref(false)
-    function handlerShowListBtn(): void {
-      isShowTrackList.value = !isShowTrackList.value
-    }
-
-    const isShowSongText = ref(false)
-    function handlerShowSongTextBtn(): void {
-      isShowSongText.value = !isShowSongText.value
-    }
-
-    function closeAllBars(): void {
-      isShowTrackList.value = false
-      isShowSongText.value = false
-    }
-
-    function handlerSelectTrack(trackIndex: number): void {
-      selectTrack(trackIndex)
-      isPlaying.value = true
-      playTrack()
-    }
-
-    const isRepeatMode = ref(false)
-    function repeatModeChange(): void {
-      isRepeatMode.value = !isRepeatMode.value
-    }
-
-    type SongsText = {
-      [key: string]: string
-    }
-    type SongsTextWithTimeCode = {
-      [key: string]: SongTextWithTimeCode[]
-    }
-    const currentSongText = computed(
-      () => (SONGS_TEXT as SongsText)[currentSong.value.songName] || ''
-    )
-    const currentSongTextWithTimecodes = computed<SongTextWithTimeCode[]>(
-      () => (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName] || []
-    )
-
-    interface KeyboardEvent {
-      key: string
-    }
-    const handleKeyDown = (event: KeyboardEvent): void => {
-      switch (event.key) {
-        case ' ':
-          togglePlayPause()
-          break
-        case 'ArrowRight':
-          nextTrack()
-          break
-        case 'ArrowLeft':
-          previousTrackHandler()
-          break
-        case 'ArrowUp':
-          audioPlayer.value!.volume <= 0.9 && setVolume(audioPlayer.value!.volume + 0.1)
-          break
-        case 'ArrowDown':
-          audioPlayer.value!.volume >= 0.1 && setVolume(audioPlayer.value!.volume - 0.1)
-          break
-      }
-    }
-
-    return {
-      audioPlayer,
-      isPlaying,
-      currentTime,
-      volume,
-      onVolumeUpdate,
-      totalTime,
-      pathToCurrentFile,
-
-      currentTracks,
-      currentTrackIndex,
-      currentTracksList,
-      currentSong,
-
-      handlerCanPlay,
-      handlerEnded,
-      handlerTimeChange,
-      onTimeUpdate,
-      setVolume,
-      togglePlayPause,
-      nextTrack,
-      previousTrackHandler,
-      handlerShowListBtn,
-      handlerSelectTrack,
-      tabSelected,
-      changeTab,
-      isShowTrackList,
-      repeatModeChange,
-      isRepeatMode,
-      bestParties,
-      isDarkTheme,
-      handlerChangeThemeBtn,
-      handlerShowSongTextBtn,
-      handleAddFavoriteSongBtn,
-      isShowSongText,
-      closeAllBars,
-      currentSongText,
-      currentSongTextWithTimecodes,
-      distanceBetweenComponents,
-      favoriteSongs
+  for (const [action, handler] of actionHandlers) {
+    try {
+      navigator.mediaSession.setActionHandler(action, handler)
+    } catch (error) {
+      console.log(`The media session action "${action}" is not supported yet.`)
     }
   }
 })
+
+const isDarkTheme = ref(false)
+function initChangeColorScheme(): void {
+  const theme =
+    (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    (localStorage.getItem('dark-color-scheme') &&
+      JSON.parse(localStorage.getItem('dark-color-scheme') as string))
+      ? 'dark'
+      : 'light'
+  isDarkTheme.value = theme === 'dark'
+  updateColorScheme()
+}
+
+watch(isDarkTheme, () => {
+  updateColorScheme()
+})
+
+function updateColorScheme(): void {
+  document.documentElement.style.setProperty('color-scheme', isDarkTheme.value ? 'dark' : 'light')
+  localStorage.setItem('dark-color-scheme', JSON.stringify(isDarkTheme.value))
+}
+
+function handlerChangeThemeBtn(): void {
+  isDarkTheme.value = !isDarkTheme.value
+}
+
+const audioPlayer = ref<CustomAudioElement | null>(null)
+
+const currentTime = ref(0)
+const volume = ref(0.8)
+
+function handlerCanPlay(event: Event): void {
+  setTotalTime(event)
+  if (isPlaying.value) {
+    playTrack()
+  }
+}
+
+function handlerEnded(): void {
+  if (!isRepeatMode.value) {
+    nextTrack()
+  } else {
+    audioPlayer.value!.currentTime = 0
+  }
+}
+
+function handlerTimeChange(seconds: number): void {
+  audioPlayer.value!.currentTime = seconds
+  isPlaying.value = true
+  playTrack()
+}
+
+// TODO: проблема при перемотке, Failed to execute 'setPositionState' on 'MediaSession': The provided position cannot be greater than the duration.
+function onTimeUpdate(event: Event): void {
+  // console.log(event)
+  currentTime.value = (event.target as HTMLAudioElement).currentTime
+  // console.log(currentTime.value, totalTime.value)
+  // TODO: не работает иногда перемотка в MediaSession
+  // сразу ставится ползунок в конец, на паузе правильная позиция указывается
+  navigator.mediaSession.setPositionState({
+    duration: totalTime.value,
+    playbackRate: 1,
+    position: currentTime.value
+  })
+}
+
+function onVolumeUpdate(event: Event): void {
+  volume.value = (event.target as HTMLAudioElement).volume
+}
+
+function setVolume(value: number): void {
+  audioPlayer.value!.volume = value
+}
+
+const totalTime = ref(0)
+function setTotalTime(event: Event): void {
+  const target = event.target as HTMLAudioElement
+  totalTime.value = target.duration
+  navigator.mediaSession.setPositionState({
+    duration: totalTime.value,
+    playbackRate: 1,
+    position: 0
+  })
+}
+
+function playTrack(): void {
+  try {
+    audioPlayer.value!.play().then((r) => r)
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+
+const isPlaying = ref(false)
+function togglePlayPause(): void {
+  isPlaying.value = !isPlaying.value
+  if (isPlaying.value) {
+    playTrack()
+  } else {
+    // TODO: Cannot read properties of null (reading 'pause') на пробел
+    audioPlayer.value!.pause()
+  }
+}
+
+// for 1 loop
+const isVolumeChanging = ref(false)
+async function changeVolumeSlowly(isDecrease: boolean = true): Promise<void> {
+  isVolumeChanging.value = true
+  let steps: number = 20
+  const stepValue: number = 0.01
+  async function changeVolume(isDecrease: boolean): Promise<string> {
+    return await new Promise((resolve) => {
+      const intervalId = setInterval(() => {
+        if (steps >= 0) {
+          const newVolume: string = isDecrease
+            ? (volume.value - stepValue).toFixed(2)
+            : (volume.value + stepValue).toFixed(2)
+          console.log(`${isDecrease ? '-' : '+'}`, newVolume)
+          steps--
+          audioPlayer.value!.volume = Number(newVolume)
+        } else {
+          clearInterval(intervalId)
+          isVolumeChanging.value = false
+          return resolve('done')
+        }
+      }, 100)
+    })
+  }
+  await changeVolume(isDecrease)
+}
+
+async function shortTracksObserver(time: number): Promise<void> {
+  // console.log('shortTracksObserver')
+  // audioPlayer.value!.volume = 0.6
+  for (let i = 0; i < bestParties.value.length; i++) {
+    const currentBestParty = bestParties.value[i]
+    // TODO: проблема при переключении, звук уходит со временем на 100%
+    if (time <= currentBestParty.start && !isVolumeChanging.value) {
+      console.log('start')
+      // audioPlayer.value!.volume = 0.6
+      audioPlayer.value!.currentTime = currentBestParty.start
+      // TODO: отвратительно работает переключение песен
+      // await changeVolumeSlowly(false)
+      return
+    } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
+      console.log('continue')
+      // TODO: второе условие как хак
+      if (
+        time >= currentBestParty.end - 3 &&
+        time <= currentBestParty.end - 2 &&
+        !isVolumeChanging.value
+      ) {
+        console.log('end')
+        // audioPlayer.value!.volume = 0.8
+        // await changeVolumeSlowly(true)
+      }
+      return
+    }
+  }
+  // TODO: вызывается при переключении дважды
+  console.log('nextTrack')
+  handlerEnded()
+}
+
+watchEffect(async () => {
+  if (tabSelected.value === 4 && isPlaying.value && currentTrackIndex) {
+    await shortTracksObserver(currentTime.value)
+  }
+})
+const distanceBetweenComponents = ref('500px')
+onMounted(() => {
+  const main_control_ref = document.querySelector('.main_control_ref') as HTMLElement
+  const containerDiv = document.querySelector('.container') as HTMLElement
+  // todo: через реф main_control_ref не видит, подобрал по классу
+  // const main_control_ref = ref(null)
+  // const rect1 = main_control_ref?.value?.$el?.getBoundingClientRect()
+  const rect1: DOMRect = main_control_ref.getBoundingClientRect()
+  const rect2: DOMRect = containerDiv?.getBoundingClientRect()
+  distanceBetweenComponents.value = `${Math.abs(rect1.top - rect2.top) + 25}px`
+  audioPlayer.value!.volume = 0.8
+  document.addEventListener('keydown', handleKeyDown)
+})
+function previousTrackHandler(): void {
+  if (audioPlayer.value!.currentTime <= 20 || tabSelected.value === 4) previousTrack()
+  else {
+    audioPlayer.value!.currentTime = 0
+  }
+}
+
+const isShowTrackList = ref(false)
+function handlerShowListBtn(): void {
+  isShowTrackList.value = !isShowTrackList.value
+}
+
+const isShowSongText = ref(false)
+function handlerShowSongTextBtn(): void {
+  isShowSongText.value = !isShowSongText.value
+}
+
+function closeAllBars(): void {
+  isShowTrackList.value = false
+  isShowSongText.value = false
+}
+
+function handlerSelectTrack(trackIndex: number): void {
+  selectTrack(trackIndex)
+  isPlaying.value = true
+  playTrack()
+}
+
+const isRepeatMode = ref(false)
+function repeatModeChange(): void {
+  isRepeatMode.value = !isRepeatMode.value
+}
+
+type SongsText = {
+  [key: string]: string
+}
+type SongsTextWithTimeCode = {
+  [key: string]: SongTextWithTimeCode[]
+}
+const currentSongText = computed(() => (SONGS_TEXT as SongsText)[currentSong.value.songName] || '')
+const currentSongTextWithTimecodes = computed<SongTextWithTimeCode[]>(
+  () => (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName] || []
+)
+
+interface KeyboardEvent {
+  key: string
+}
+const handleKeyDown = (event: KeyboardEvent): void => {
+  switch (event.key) {
+    case ' ':
+      togglePlayPause()
+      break
+    case 'ArrowRight':
+      nextTrack()
+      break
+    case 'ArrowLeft':
+      previousTrackHandler()
+      break
+    case 'ArrowUp':
+      audioPlayer.value!.volume <= 0.9 && setVolume(audioPlayer.value!.volume + 0.1)
+      break
+    case 'ArrowDown':
+      audioPlayer.value!.volume >= 0.1 && setVolume(audioPlayer.value!.volume - 0.1)
+      break
+  }
+}
 </script>
 
 <template>

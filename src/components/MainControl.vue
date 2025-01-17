@@ -1,41 +1,28 @@
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
-import type { ComputedRef } from 'vue'
-// import { ComputedRef } from 'vue/dist/vue'
-export default defineComponent({
-  name: 'MainControl',
-  props: {
-    isPlaying: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['previous', 'play-pause', 'next'],
-  setup(props, { emit }) {
-    function previousButtonHandler(): void {
-      emit('previous')
-    }
+<script setup lang="ts">
+import { computed } from 'vue'
 
-    const iconPlayerButton: ComputedRef<string> = computed(() => {
-      return props.isPlaying ? '<i class="fas fa-pause"/>' : ' <i class="fas fa-play"/>'
-    })
+interface Props {
+  isPlaying: boolean
+}
 
-    function playerButtonHandler(): void {
-      emit('play-pause')
-    }
+const props = defineProps<Props>()
+const emit = defineEmits(['previous', 'play-pause', 'next'])
 
-    function nextButtonHandler(): void {
-      emit('next')
-    }
+function previousButtonHandler(): void {
+  emit('previous')
+}
 
-    return {
-      previousButtonHandler,
-      playerButtonHandler,
-      iconPlayerButton,
-      nextButtonHandler
-    }
-  }
+const iconPlayerButton = computed(() => {
+  return props.isPlaying ? '<i class="fas fa-pause"/>' : ' <i class="fas fa-play"/>'
 })
+
+function playerButtonHandler(): void {
+  emit('play-pause')
+}
+
+function nextButtonHandler(): void {
+  emit('next')
+}
 </script>
 
 <template>
