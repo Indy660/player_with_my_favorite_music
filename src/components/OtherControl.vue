@@ -4,8 +4,6 @@ import { tracksApi } from '@/composable/tracks'
 
 interface Props {
   currentNumbSong: number
-  totalNumbSongs: number
-  isRandomTracks: boolean
   isRepeatMode: boolean
   isShowTrackList: boolean
   isDarkTheme: boolean
@@ -14,7 +12,6 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['show-list-click', 'repeat-mode-click', 'change-theme'])
 
-//TODO: не обновляются данные из компонетс
 const { totalNumbSongs, isRandomTracks, handlerRandomBtn } = tracksApi()
 function iconClickRandomHandler(): void {
   handlerRandomBtn()
@@ -42,6 +39,7 @@ const iconBar = computed(() => {
 </script>
 
 <template>
+  <!--  TODO: isRandomTracks/isRepeatMode/isShowTrackList - не подсвечиваются в шаблоне-->
   <div class="other">
     <button :class="{ active: isRandomTracks }" @click.stop="iconClickRandomHandler">
       <i class="fas fa-shuffle"></i>

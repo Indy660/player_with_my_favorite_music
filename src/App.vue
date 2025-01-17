@@ -53,8 +53,7 @@ onBeforeMount(async () => {
 
   initChangeColorScheme()
   type Action = () => void
-  type ActionName = 'play' | 'pause' | 'nexttrack' | 'previoustrack' | 'seekto'
-  type ActionHandler = [ActionName, Action]
+  type ActionHandler = [MediaSessionAction, Action]
 
   const actionHandlers: ActionHandler[] = [
     [

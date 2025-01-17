@@ -11,15 +11,11 @@ const emit = defineEmits(['volume-change'])
 const convertToValue = computed(() => {
   return props.volume * 100
 })
-// TODO: не работает
-// const iconVolume = computed(() => {
-//   return props.volume > 0 ? 'fa-volume-up' : 'fa-volume-off'
-// })
 const iconVolume = computed(() => {
   return props.volume > 0 ? '<i class="fas fa-volume-up"/>' : '<i class="fas fa-volume-off"/>'
 })
 
-function volumeHandler(event: InputEvent) {
+function volumeHandler(event: Event) {
   const volumeValue: number = parseFloat((event.target as HTMLInputElement).value) / 100
   emit('volume-change', volumeValue)
 }
@@ -41,9 +37,7 @@ function onIconVolumeClick(): void {
 <template>
   <div class="volume-control">
     <button class="player-button margin" @click.stop="onIconVolumeClick">
-      <!--      // TODO: можно ли без span?-->
       <span v-html="iconVolume"></span>
-      <!--      <i class="fas" :class="iconVolume" />-->
     </button>
     <input
       class="margin"
