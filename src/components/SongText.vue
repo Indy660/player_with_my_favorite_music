@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, computed, nextTick, watch, ref, watchEffect } from 'vue'
+import { defineComponent, computed, watch, ref, watchEffect } from 'vue'
 export default defineComponent({
   props: {
     songText: {
@@ -44,13 +44,6 @@ export default defineComponent({
         idTabSelected.value = 2
       }
     })
-
-    watch(
-      () => props.songText,
-      () => {
-        if (props.songText?.length && idTabSelected.value === 2) scrollToTop()
-      }
-    )
 
     // TODO: переключение по инпуту трека закрывает этот компонент
     const songTextWithMusicSymbol = computed<SongTextWithTimeCode[]>(() => {
@@ -98,23 +91,27 @@ export default defineComponent({
       return 0
     })
     watchEffect(() => {
-      if (indexPlayingPartTimeCode.value || props.songTextWithTimecodes.length) {
+      if (
+        (indexPlayingPartTimeCode.value || props.songTextWithTimecodes.length) &&
+        idTabSelected.value === 1
+      ) {
         scrollToTimeCode()
       }
     })
-    async function scrollToTimeCode() {
-      await nextTick()
-
-      const selected = document.querySelector('.song-text .selected')
-      selected?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    watch(
+      () => props.songText,
+      () => {
+        if (props.songText?.length && idTabSelected.value === 2) scrollToTop()
+      }
+    )
+    function scrollToTimeCode() {
+      const selectedSongText = document.querySelector('.song-text .selected')
+      selectedSongText?.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
 
     function scrollToTop() {
-      // TODO: не всегда срабатывает перемотка вверх, с (можно с 16 трека)
-      // console.log(document.querySelector('.song-text span'))
-      document
-        .querySelector('.song-text span')
-        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const songTextBlock = document.querySelector('.song-text .raw')
+      songTextBlock?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
 
     function btnHandler(option: TabsOption): void {
@@ -164,7 +161,7 @@ export default defineComponent({
           v-html="`\n${partSong.seconds} ${partSong.lyrics}\n`"
         />
       </div>
-      <span v-show="idTabSelected === 2" v-html="songText" />
+      <span v-show="idTabSelected === 2" class="raw" v-html="songText" />
     </div>
   </div>
 </template>
