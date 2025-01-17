@@ -1,13 +1,19 @@
-import { MUSIC_LIST } from '../const/music_list'
+import { MUSIC_LIST } from '@/const/music_list'
 import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 
 interface TopTrackList extends TrackList {
   sort: number
   bestParties: BestParties[]
 }
-
 interface NotAggressiveTrackList extends TrackList {
   notAggressive: boolean
+}
+function isTopTrackList(item: TrackList): item is TopTrackList {
+  return typeof item.sort === 'number' && item.bestParties !== undefined
+}
+
+function isNotAggressiveTrackList(item: TrackList): item is NotAggressiveTrackList {
+  return typeof item.notAggressive === 'boolean'
 }
 
 const TABS_OPTION: TabsOption[] = [
@@ -23,10 +29,16 @@ const isRandomTracks = ref(false)
 
 export function tracksApi() {
   const defaultTrackList = ref<TrackList[]>(MUSIC_LIST)
-  const topTrackList = ref<TopTrackList[]>(MUSIC_LIST.filter((item) => item.sort) as TopTrackList[])
+  // TODO: можно ли как-то без as и is
+  const topTrackList = ref<TopTrackList[]>(MUSIC_LIST.filter(isTopTrackList))
   const notAggressiveTrackList = ref<NotAggressiveTrackList[]>(
-    MUSIC_LIST.filter((item) => item.notAggressive) as NotAggressiveTrackList[]
+    MUSIC_LIST.filter(isNotAggressiveTrackList)
   )
+  // const topTrackList = ref<TopTrackList[]>(MUSIC_LIST.filter((item) => item.sort) as TopTrackList[])
+  // const notAggressiveTrackList = ref<NotAggressiveTrackList[]>(
+  //   MUSIC_LIST.filter((item) => item.notAggressive) as NotAggressiveTrackList[]
+  // )
+
   const currentTrackIndex = ref(0)
   onBeforeMount(() => {
     defaultTrackList.value = MUSIC_LIST

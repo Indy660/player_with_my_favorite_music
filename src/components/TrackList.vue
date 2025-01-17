@@ -10,8 +10,7 @@ const props = defineProps<Props>()
 const emit = defineEmits(['select-track-from-list'])
 
 const currentTracksWithCorrectNames = computed<string[]>(() => {
-  // TODO: хз как defineProps в props.currentTracks проверить типы
-  return (props.currentTracks as string[]).map((item: string) => {
+  return props.currentTracks.map((item: string) => {
     const indexLastSlash: number = item.lastIndexOf('/')
     const indexSlice: number = item?.lastIndexOf('.')
     return (item && item.substring(indexLastSlash + 1, indexSlice)) || ''
