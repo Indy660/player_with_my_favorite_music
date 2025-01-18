@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "homepage": "/player_with_my_favorite_music/#",
   "private": true,
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "dev": "vite --port 5000",
     "build": "vite build",
@@ -23,7 +23,9 @@
     "@fortawesome/vue-fontawesome": "^3.0.5",
     "axios": "^1.6.8",
     "cheerio": "^1.0.0",
+    "dotenv": "^16.4.7",
     "fs": "^0.0.1-security",
+    "openai": "^4.79.1",
     "path": "^0.12.7",
     "vue": "^3.3.11"
   },

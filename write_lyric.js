@@ -1,7 +1,8 @@
-const fs = require('fs')
-const path = require('path')
-const axios = require('axios')
-const cheerio = require('cheerio')
+import fs from 'node:fs'
+import path from 'node:path'
+import axios from 'axios'
+import * as cheerio from 'cheerio'
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 // Пути к папкам и файлам
