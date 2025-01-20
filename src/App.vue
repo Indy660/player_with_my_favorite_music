@@ -11,6 +11,7 @@ import OtherControl from './components/OtherControl.vue'
 import SongText from './components/SongText.vue'
 import SONGS_TEXT from './static_data/songs_text.json'
 import SONGS_TEXT_WITH_TIMECODES from './static_data/songs_text_with_timecodes.json'
+// import SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI from './static_data/songs_text_with_timecodes_assembly_ai.json'
 
 interface CustomAudioElement extends HTMLAudioElement {
   currentRange: number
@@ -28,7 +29,6 @@ const {
   changeTab,
   selectTrack,
   tabSelected,
-  currentTracks,
   currentSong,
   currentTracksList,
   favoriteSongs,
@@ -325,6 +325,11 @@ const currentSongText = computed(() => (SONGS_TEXT as SongsText)[currentSong.val
 const currentSongTextWithTimecodes = computed<SongTextWithTimeCode[]>(
   () => (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName] || []
 )
+// const currentSongTextWithTimecodesAssemblyAi = computed<SongTextWithTimeCode[]>(
+//   () =>
+//     (SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI as SongsTextWithTimeCode)[currentSong.value.songName] ||
+//     []
+// )
 
 interface KeyboardEvent {
   key: string
@@ -363,11 +368,13 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         />
       </transition>
       <transition name="slide-song-text">
+        <!--        currentSongTextWithTimecodesAssemblyAi-->
         <SongText
           v-show="isShowSongText && (currentSongText.length || currentSongTextWithTimecodes.length)"
           :current-time="currentTime"
           :song-text="currentSongText"
           :song-text-with-timecodes="currentSongTextWithTimecodes"
+          :song-text-with-timecodes-assembly-ai="[]"
           class="top_bar"
           @time-change="handlerTimeChange"
         />

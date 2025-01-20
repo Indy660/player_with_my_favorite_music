@@ -4,6 +4,7 @@ import { computed, watch, ref, watchEffect } from 'vue'
 interface Props {
   songText: string
   songTextWithTimecodes: SongTextWithTimeCode[]
+  songTextWithTimecodesAssemblyAi: SongTextWithTimeCode[]
   currentTime: number
 }
 
@@ -23,6 +24,11 @@ const tabsOption = computed<TabsOption[]>(() => {
       available: Boolean(props.songTextWithTimecodes.length)
     },
     { label: 'Raw', id: 2, available: Boolean(props.songText.length) }
+    // {
+    //   label: 'Assembly AI',
+    //   id: 3,
+    //   available: Boolean(props.songTextWithTimecodesAssemblyAi.length)
+    // }
   ]
 })
 const idTabSelected = ref(1)
@@ -41,16 +47,13 @@ watchEffect(() => {
 // TODO: переключение по инпуту трека закрывает этот компонент
 const songTextWithMusicSymbol = computed<SongTextWithTimeCode[]>(() => {
   const result: SongTextWithTimeCode[] = []
-  props.songTextWithTimecodes.forEach((item, index) => {
-    if (
-      props.songTextWithTimecodes?.[index + 1]?.seconds &&
-      Number(
-        props.songTextWithTimecodes[index + 1].seconds - props.songTextWithTimecodes[index].seconds
-      ) > 20
-    ) {
+  const song =
+    idTabSelected.value === 3 ? props.songTextWithTimecodesAssemblyAi : props.songTextWithTimecodes
+  song.forEach((item, index) => {
+    if (song?.[index + 1]?.seconds && Number(song[index + 1].seconds - song[index].seconds) > 20) {
       result.push(item)
       result.push({
-        seconds: props.songTextWithTimecodes[index].seconds + 3,
+        seconds: song[index].seconds + 3,
         lyrics: '&#127925'
       })
     } else {
@@ -128,7 +131,7 @@ function btnHandler(option: TabsOption): void {
       </button>
     </div>
     <div class="song-text">
-      <div v-show="idTabSelected === 1" class="text-with-timestamps">
+      <div v-show="idTabSelected === 1 || idTabSelected === 3" class="text-with-timestamps">
         {{ currentTime }}
         <span
           v-for="(partSong, key) in songTextWithMusicSymbol"
