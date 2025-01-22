@@ -63,9 +63,7 @@ async function fetchLyricsAndSave(songTitle, originalName, lyricsData, outputFil
       }
     })
     const $ = cheerio.load(response.data)
-
     const lyricContainers = $('*[data-lyrics-container="true"]')
-
     // Объединяем содержимое всех найденных элементов
     const content = lyricContainers
       .map(function () {
@@ -77,16 +75,16 @@ async function fetchLyricsAndSave(songTitle, originalName, lyricsData, outputFil
     const removeLinks = (text) => text.replace(/<a[^>]*>(.*?)<\/a>/gi, '$1')
     const contentWithoutLinks = removeLinks(content)
     lyricsData[originalName] = contentWithoutLinks || ''
-    await writeJsonFile(outputFilePath, lyricsData)
     console.log(`Текст песни для ${songTitle} сохранен в ${outputFilePath}`)
   } catch (error) {
     lyricsData[originalName] = ''
-    await writeJsonFile(outputFilePath, lyricsData)
     if (error.response.status !== 404) {
       console.error(`Ошибка при запросе текста песни для ${songTitle}:`, error)
     } else {
       console.warn(`Песня ${songTitle} в ${apiUrl} не найдена.`)
     }
+  } finally {
+    await writeJsonFile(outputFilePath, lyricsData)
   }
 }
 
@@ -101,22 +99,20 @@ async function fetchLyricsAndSaveTimecodes(
     console.log(`Данные для ${originalName} уже есть, запрос к API пропущен.`)
     return
   }
-
   try {
     const requestUrl = `${apiUrlTimecodes}/api/lyrics?q=${encodeURIComponent(songTitle)}`
     const response = await axios.get(requestUrl)
-
     lyricsDataTimecodes[originalName] = response.data || []
-    await writeJsonFile(outputFilePathTimecodes, lyricsDataTimecodes)
     console.log(`Текст песни для ${songTitle} сохранен в ${outputFilePathTimecodes}`)
   } catch (error) {
     lyricsDataTimecodes[originalName] = []
-    await writeJsonFile(outputFilePathTimecodes, lyricsDataTimecodes)
     if (error.response.status !== 404) {
       console.error(`Ошибка при запросе текста песни для ${songTitle}:`, error)
     } else {
       console.warn(`Песня ${songTitle} в ${apiUrlTimecodes} не найдена.`)
     }
+  } finally {
+    await writeJsonFile(outputFilePathTimecodes, lyricsDataTimecodes)
   }
 }
 
@@ -137,41 +133,22 @@ async function fetchLyricsAndSaveTimecodesAssemblyAI(
       audio: fileUrl
     }
     const transcript = await client.transcripts.transcribe(data)
-    // console.log(transcript.words)
+    let result = []
     if (transcript.words?.length) {
-      const mappedTranscript = transcript.words.map((item) => ({
-        text: item.text,
-        secondsEnd: item.end / 1000
-      }))
-
-      // экспериментально
-      const timeToNextLine = 1
-      const mappedTranscriptByLines = mappedTranscript.reduce(
-        (acc, curr) => {
-          const lastElement = acc[acc.length - 1]
-          if (curr.secondsEnd - lastElement[lastElement.length - 1]?.secondsEnd > timeToNextLine) {
-            acc.push([])
-          }
-          lastElement.push(curr)
-          return acc
-        },
-        [[]]
-      )
-
-      const songWithTimeCode = mappedTranscriptByLines.reduce((acc, curr) => {
-        const lyrics = curr
-          .reduce((accStr, currStr) => (accStr += `${currStr?.text || ''} `), '')
-          .trim()
-        acc.push({ lyrics, seconds: curr[0]?.secondsEnd })
-        return acc
-      }, [])
-      // console.log(fileUrl, songWithTimeCode)
-      lyricsDataTimecodes[originalName] = songWithTimeCode || []
-      await writeJsonFile(outputFilePathTimecodes, lyricsDataTimecodes)
-      console.log(`Текст песни для ${songTitle} сохранен в ${outputFilePathTimecodes}`)
+      const minConfidence = 0.75
+      const minWords = 10
+      const realAverageConfidence =
+        transcript.words.reduce((sum, item) => sum + item.confidence, 0) / transcript.words.length
+      if (realAverageConfidence >= minConfidence && transcript.words.length >= minWords) {
+        result = transcript.words
+      }
     }
+    lyricsDataTimecodes[originalName] = result
+    console.log(`Текст песни для ${songTitle} сохранен в ${outputFilePathTimecodes}`)
   } catch (error) {
+    console.error(error)
     lyricsDataTimecodes[originalName] = []
+  } finally {
     await writeJsonFile(outputFilePathTimecodes, lyricsDataTimecodes)
   }
 }

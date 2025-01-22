@@ -19,3 +19,11 @@ type SongTextWithTimeCode = {
   seconds: number
   lyrics: string
 }
+
+type SongTextWithTimeCodeAssemblyAi = {
+  text: string
+  start: number
+  end: number
+  confidence: number
+  speaker: null
+}
