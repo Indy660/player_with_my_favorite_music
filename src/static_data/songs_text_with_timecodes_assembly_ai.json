@@ -1,8 +1,5 @@
 {
-  "The Doors - Alabama song.mp3": [],
-  "Raunchy - Twelve Feet Tall.mp3": [],
   "Breakwater - five.mp3": [],
-  "Rhapsody of Fire - Wisdom of the Kings.mp3": [],
   "Sum 41 - Still Waiting.mp3": [
     {
       "text": "So",
@@ -8489,8 +8486,6 @@
   ],
   "Within The Ruins - Beautiful Agony.mp3": [],
   "As I Lay Dying - Forever.mp3": [],
-  "August Burns Red - Barbarian.mp3": [],
-  "In Flames - Trigger.mp3": [],
   "Ozoi The Maid - Unfortunately.mp3": [],
   "Rise Of The Northstar - The New Path.mp3": [],
   "What Mad Universe - Nebula My Love.mp3": [],
@@ -8498,7 +8493,6 @@
   "August Burns Red - Your Little Suburbia Is in Ruins.mp3": [],
   "Psygnosis - Synaptic Plasticity.mp3": [],
   "Siberian Meat Grinder feat Distemper - Пламя в Груди.mp3": [],
-  "Machine Head - Beautiful Mourning.mp3": [],
   "Anaal Nathrakh - Between Shit and Piss We Are Born.mp3": [
     {
       "text": "Satisfy.",
@@ -9564,8 +9558,6 @@
   ],
   "Killing Floor - Abandon All.mp3": [],
   "What Mad Universe - the world of leviathan.mp3": [],
-  "Aspirin Rose - Fucking Perfect (Pink cover).mp3": [],
-  "Machine Head - Halo.mp3": [],
   "Machine Head - Hallowed Be Thy Name.mp3": [
     {
       "text": "I'm",
@@ -11234,7 +11226,6 @@
       "speaker": null
     }
   ],
-  "In Flames - Clayman.mp3": [],
   "If These Trees Could Talk - From Roots to Needles.mp3": [],
   "Psygnosis - Lost in Oblivion.mp3": [
     {
@@ -11364,7 +11355,6 @@
       "speaker": null
     }
   ],
-  "Raunchy - The Yeah Thing.mp3": [],
   "Angel Vivaldi - A Martian Winter.mp3": [],
   "Between the Buried and Me - All Bodies.mp3": [],
   "August Burns Red - Consumer.mp3": [],
@@ -12582,7 +12572,6 @@
       "speaker": null
     }
   ],
-  "Raunchy - Wasteland Discotheque.mp3": [],
   "Cerebral Bore - The Bald Cadaver.mp3": [],
   "What Mad Universe - head of column.mp3": [],
   "As I Lay Dying - Nothing Left.mp3": [],
@@ -12788,7 +12777,6 @@
     }
   ],
   "Ozoi The Maid Yakui The Maid - Lanterns.mp3": [],
-  "Children Of Bodom - Are You Dead Yet.mp3": [],
   "The Faceless - Shake The Disease.mp3": [
     {
       "text": "When",
@@ -13949,7 +13937,6 @@
   "Ozoi The Maid Yakui The Maid - Frontier.mp3": [],
   "BATUSHKA - Yekteniya 4.mp3": [],
   "As I Lay Dying - The Sound Of Truth.mp3": [],
-  "Raunchy - Live The Myth.mp3": [],
   "Killing Floor OST - Wake.mp3": [],
   "What Mad Universe - mythical sacred firebird.mp3": [],
   "Toundra - Bizancio Byzantium.mp3": [],
@@ -20453,5 +20440,1264 @@
   "Ozoi The Maid Yakui The Maid - Wonderland.mp3": [],
   "Between The Buried And Me - Ants Of The Sky.mp3": [],
   "Rhapsody - The Mighty Ride of the Firelord.mp3": [],
-  "Between The Buried And Me - Swim To The Moon.mp3": []
+  "Between The Buried And Me - Swim To The Moon.mp3": [],
+  "Aspirin Rose - Fucking Perfect (Pink cover).mp3": [],
+  "August Burns Red - Barbarian.mp3": [],
+  "Raunchy - Wasteland Discotheque.mp3": [],
+  "Raunchy - The Yeah Thing.mp3": [],
+  "Raunchy - Live The Myth.mp3": [],
+  "Machine Head - Halo.mp3": [],
+  "Machine Head - Beautiful Mourning.mp3": [],
+  "In Flames - Trigger.mp3": [],
+  "In Flames - Clayman.mp3": [],
+  "Children Of Bodom - Are You Dead Yet.mp3": [],
+  "Raunchy - Twelve Feet Tall.mp3": [],
+  "The Doors - Alabama song.mp3": [
+    {
+      "text": "Show",
+      "start": 12320,
+      "end": 12576,
+      "confidence": 0.95246,
+      "speaker": null
+    },
+    {
+      "text": "me",
+      "start": 12608,
+      "end": 13080,
+      "confidence": 0.99988,
+      "speaker": null
+    },
+    {
+      "text": "the",
+      "start": 13200,
+      "end": 13576,
+      "confidence": 0.99969,
+      "speaker": null
+    },
+    {
+      "text": "way",
+      "start": 13648,
+      "end": 14168,
+      "confidence": 0.9993,
+      "speaker": null
+    },
+    {
+      "text": "to",
+      "start": 14304,
+      "end": 14648,
+      "confidence": 0.99933,
+      "speaker": null
+    },
+    {
+      "text": "the",
+      "start": 14704,
+      "end": 15016,
+      "confidence": 0.99976,
+      "speaker": null
+    },
+    {
+      "text": "next",
+      "start": 15088,
+      "end": 15560,
+      "confidence": 0.99969,
+      "speaker": null
+    },
+    {
+      "text": "whiskey",
+      "start": 15680,
+      "end": 16424,
+      "confidence": 0.80947,
+      "speaker": null
+    },
+    {
+      "text": "bar",
+      "start": 16472,
+      "end": 17060,
+      "confidence": 0.9968,
+      "speaker": null
+    },
+    {
+      "text": "oh",
+      "start": 17840,
+      "end": 18488,
+      "confidence": 0.91848,
+      "speaker": null
+    },
+    {
+      "text": "don't",
+      "start": 18584,
+      "end": 18952,
+      "confidence": 0.56155,
+      "speaker": null
+    },
+    {
+      "text": "ask",
+      "start": 19016,
+      "end": 19336,
+      "confidence": 0.9999,
+      "speaker": null
+    },
+    {
+      "text": "why",
+      "start": 19408,
+      "end": 20020,
+      "confidence": 0.99509,
+      "speaker": null
+    },
+    {
+      "text": "oh",
+      "start": 20640,
+      "end": 21336,
+      "confidence": 0.92647,
+      "speaker": null
+    },
+    {
+      "text": "don't",
+      "start": 21448,
+      "end": 21784,
+      "confidence": 0.93968,
+      "speaker": null
+    },
+    {
+      "text": "ask",
+      "start": 21832,
+      "end": 22136,
+      "confidence": 0.99992,
+      "speaker": null
+    },
+    {
+      "text": "why",
+      "start": 22208,
+      "end": 22820,
+      "confidence": 0.99558,
+      "speaker": null
+    },
+    {
+      "text": "show",
+      "start": 23360,
+      "end": 23864,
+      "confidence": 0.9997,
+      "speaker": null
+    },
+    {
+      "text": "me",
+      "start": 23952,
+      "end": 24440,
+      "confidence": 0.99982,
+      "speaker": null
+    },
+    {
+      "text": "the",
+      "start": 24560,
+      "end": 24888,
+      "confidence": 0.99661,
+      "speaker": null
+    },
+    {
+      "text": "way",
+      "start": 24944,
+      "end": 25448,
+      "confidence": 0.99599,
+      "speaker": null
+    },
+    {
+      "text": "to",
+      "start": 25584,
+      "end": 25976,
+      "confidence": 0.99894,
+      "speaker": null
+    },
+    {
+      "text": "the",
+      "start": 26048,
+      "end": 26328,
+      "confidence": 0.99957,
+      "speaker": null
+    },
+    {
+      "text": "next",
+      "start": 26384,
+      "end": 26840,
+      "confidence": 0.99931,
+      "speaker": null
+    },
+    {
+      "text": "whiskey",
+      "start": 26960,
+      "end": 27640,
+      "confidence": 0.51005,
+      "speaker": null
+    },
+    {
+      "text": "bar",
+      "start": 27720,
+      "end": 28340,
+      "confidence": 0.9987,
+      "speaker": null
+    },
+    {
+      "text": "oh",
+      "start": 29120,
+      "end": 29736,
+      "confidence": 0.66919,
+      "speaker": null
+    },
+    {
+      "text": "don't",
+      "start": 29848,
+      "end": 30184,
+      "confidence": 0.83495,
+      "speaker": null
+    },
+    {
+      "text": "ask",
+      "start": 30232,
+      "end": 30536,
+      "confidence": 0.99981,
+      "speaker": null
+    },
+    {
+      "text": "why",
+      "start": 30608,
+      "end": 31220,
+      "confidence": 0.98626,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 31900,
+      "end": 32548,
+      "confidence": 0.38384,
+      "speaker": null
+    },
+    {
+      "text": "don't",
+      "start": 32684,
+      "end": 33044,
+      "confidence": 0.9868,
+      "speaker": null
+    },
+    {
+      "text": "ask",
+      "start": 33092,
+      "end": 33348,
+      "confidence": 0.99054,
+      "speaker": null
+    },
+    {
+      "text": "why",
+      "start": 33404,
+      "end": 34000,
+      "confidence": 0.49262,
+      "speaker": null
+    },
+    {
+      "text": "for",
+      "start": 34700,
+      "end": 35300,
+      "confidence": 0.86311,
+      "speaker": null
+    },
+    {
+      "text": "if",
+      "start": 35420,
+      "end": 35988,
+      "confidence": 0.90447,
+      "speaker": null
+    },
+    {
+      "text": "we",
+      "start": 36124,
+      "end": 36468,
+      "confidence": 0.99901,
+      "speaker": null
+    },
+    {
+      "text": "don't",
+      "start": 36524,
+      "end": 36900,
+      "confidence": 0.64909,
+      "speaker": null
+    },
+    {
+      "text": "find",
+      "start": 36980,
+      "end": 37460,
+      "confidence": 0.99748,
+      "speaker": null
+    },
+    {
+      "text": "the",
+      "start": 37580,
+      "end": 37908,
+      "confidence": 0.99892,
+      "speaker": null
+    },
+    {
+      "text": "next",
+      "start": 37964,
+      "end": 38276,
+      "confidence": 0.99965,
+      "speaker": null
+    },
+    {
+      "text": "whiskey",
+      "start": 38348,
+      "end": 38884,
+      "confidence": 0.70812,
+      "speaker": null
+    },
+    {
+      "text": "bar",
+      "start": 38932,
+      "end": 39520,
+      "confidence": 0.58902,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 39980,
+      "end": 40388,
+      "confidence": 0.99888,
+      "speaker": null
+    },
+    {
+      "text": "tell",
+      "start": 40444,
+      "end": 40708,
+      "confidence": 0.99979,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 40764,
+      "end": 41028,
+      "confidence": 0.99934,
+      "speaker": null
+    },
+    {
+      "text": "we",
+      "start": 41084,
+      "end": 41348,
+      "confidence": 0.99934,
+      "speaker": null
+    },
+    {
+      "text": "must",
+      "start": 41404,
+      "end": 41716,
+      "confidence": 0.99996,
+      "speaker": null
+    },
+    {
+      "text": "die",
+      "start": 41788,
+      "end": 42596,
+      "confidence": 0.94205,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 42788,
+      "end": 43188,
+      "confidence": 0.99946,
+      "speaker": null
+    },
+    {
+      "text": "tell",
+      "start": 43244,
+      "end": 43508,
+      "confidence": 0.99993,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 43564,
+      "end": 43876,
+      "confidence": 0.99926,
+      "speaker": null
+    },
+    {
+      "text": "we",
+      "start": 43948,
+      "end": 44228,
+      "confidence": 0.99883,
+      "speaker": null
+    },
+    {
+      "text": "must",
+      "start": 44284,
+      "end": 44548,
+      "confidence": 0.99997,
+      "speaker": null
+    },
+    {
+      "text": "die",
+      "start": 44604,
+      "end": 45396,
+      "confidence": 0.86313,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 45588,
+      "end": 45940,
+      "confidence": 0.99743,
+      "speaker": null
+    },
+    {
+      "text": "tell",
+      "start": 45980,
+      "end": 46276,
+      "confidence": 0.99981,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 46348,
+      "end": 46868,
+      "confidence": 0.99936,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 47004,
+      "end": 47348,
+      "confidence": 0.99309,
+      "speaker": null
+    },
+    {
+      "text": "tell",
+      "start": 47404,
+      "end": 47620,
+      "confidence": 0.99972,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 47660,
+      "end": 48196,
+      "confidence": 0.99957,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 48348,
+      "end": 48708,
+      "confidence": 0.99557,
+      "speaker": null
+    },
+    {
+      "text": "tell",
+      "start": 48764,
+      "end": 49076,
+      "confidence": 0.99975,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 49148,
+      "end": 49428,
+      "confidence": 0.99889,
+      "speaker": null
+    },
+    {
+      "text": "we",
+      "start": 49484,
+      "end": 49748,
+      "confidence": 0.99963,
+      "speaker": null
+    },
+    {
+      "text": "must",
+      "start": 49804,
+      "end": 50116,
+      "confidence": 0.9998,
+      "speaker": null
+    },
+    {
+      "text": "die",
+      "start": 50188,
+      "end": 50840,
+      "confidence": 0.84222,
+      "speaker": null
+    },
+    {
+      "text": "must",
+      "start": 64520,
+      "end": 64976,
+      "confidence": 0.98529,
+      "speaker": null
+    },
+    {
+      "text": "say",
+      "start": 65048,
+      "end": 65328,
+      "confidence": 0.99954,
+      "speaker": null
+    },
+    {
+      "text": "goodbye",
+      "start": 65384,
+      "end": 66340,
+      "confidence": 0.53106,
+      "speaker": null
+    },
+    {
+      "text": "with",
+      "start": 67720,
+      "end": 68320,
+      "confidence": 0.91279,
+      "speaker": null
+    },
+    {
+      "text": "love",
+      "start": 68440,
+      "end": 69100,
+      "confidence": 0.9619,
+      "speaker": null
+    },
+    {
+      "text": "I'll",
+      "start": 70120,
+      "end": 70496,
+      "confidence": 0.40476,
+      "speaker": null
+    },
+    {
+      "text": "get",
+      "start": 70528,
+      "end": 70816,
+      "confidence": 0.93341,
+      "speaker": null
+    },
+    {
+      "text": "all",
+      "start": 70888,
+      "end": 71500,
+      "confidence": 0.31344,
+      "speaker": null
+    },
+    {
+      "text": "more",
+      "start": 71880,
+      "end": 72620,
+      "confidence": 0.54422,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 73960,
+      "end": 74512,
+      "confidence": 0.992,
+      "speaker": null
+    },
+    {
+      "text": "must",
+      "start": 74616,
+      "end": 74976,
+      "confidence": 0.99988,
+      "speaker": null
+    },
+    {
+      "text": "have",
+      "start": 75048,
+      "end": 75328,
+      "confidence": 0.99717,
+      "speaker": null
+    },
+    {
+      "text": "whiskey",
+      "start": 75384,
+      "end": 75984,
+      "confidence": 0.9525,
+      "speaker": null
+    },
+    {
+      "text": "all",
+      "start": 76032,
+      "end": 76240,
+      "confidence": 0.59393,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 76280,
+      "end": 76432,
+      "confidence": 0.78032,
+      "speaker": null
+    },
+    {
+      "text": "know",
+      "start": 76456,
+      "end": 76736,
+      "confidence": 0.98999,
+      "speaker": null
+    },
+    {
+      "text": "why",
+      "start": 76808,
+      "end": 77420,
+      "confidence": 0.49118,
+      "speaker": null
+    },
+    {
+      "text": "I'll",
+      "start": 78760,
+      "end": 79392,
+      "confidence": 0.49616,
+      "speaker": null
+    },
+    {
+      "text": "move",
+      "start": 79456,
+      "end": 80060,
+      "confidence": 0.97779,
+      "speaker": null
+    },
+    {
+      "text": "I'll",
+      "start": 81160,
+      "end": 81584,
+      "confidence": 0.48068,
+      "speaker": null
+    },
+    {
+      "text": "follow",
+      "start": 81632,
+      "end": 82220,
+      "confidence": 0.22032,
+      "speaker": null
+    },
+    {
+      "text": "my",
+      "start": 83480,
+      "end": 84220,
+      "confidence": 0.95785,
+      "speaker": null
+    },
+    {
+      "text": "good",
+      "start": 84680,
+      "end": 85088,
+      "confidence": 0.48951,
+      "speaker": null
+    },
+    {
+      "text": "night",
+      "start": 85144,
+      "end": 85740,
+      "confidence": 0.60152,
+      "speaker": null
+    },
+    {
+      "text": "must",
+      "start": 86680,
+      "end": 87088,
+      "confidence": 0.99709,
+      "speaker": null
+    },
+    {
+      "text": "say",
+      "start": 87144,
+      "end": 87408,
+      "confidence": 0.99874,
+      "speaker": null
+    },
+    {
+      "text": "goodbye",
+      "start": 87464,
+      "end": 88500,
+      "confidence": 0.81934,
+      "speaker": null
+    },
+    {
+      "text": "we",
+      "start": 89800,
+      "end": 90352,
+      "confidence": 0.91821,
+      "speaker": null
+    },
+    {
+      "text": "lost",
+      "start": 90456,
+      "end": 91100,
+      "confidence": 0.48712,
+      "speaker": null
+    },
+    {
+      "text": "I'll",
+      "start": 92120,
+      "end": 92576,
+      "confidence": 0.91178,
+      "speaker": null
+    },
+    {
+      "text": "give",
+      "start": 92608,
+      "end": 92848,
+      "confidence": 0.77576,
+      "speaker": null
+    },
+    {
+      "text": "up",
+      "start": 92904,
+      "end": 93216,
+      "confidence": 0.59888,
+      "speaker": null
+    },
+    {
+      "text": "my",
+      "start": 93288,
+      "end": 93808,
+      "confidence": 0.41625,
+      "speaker": null
+    },
+    {
+      "text": "mom",
+      "start": 93944,
+      "end": 94620,
+      "confidence": 0.57397,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 96020,
+      "end": 96572,
+      "confidence": 0.59306,
+      "speaker": null
+    },
+    {
+      "text": "must",
+      "start": 96676,
+      "end": 97036,
+      "confidence": 0.99985,
+      "speaker": null
+    },
+    {
+      "text": "have",
+      "start": 97108,
+      "end": 97340,
+      "confidence": 0.99964,
+      "speaker": null
+    },
+    {
+      "text": "whiskey",
+      "start": 97380,
+      "end": 98044,
+      "confidence": 0.58409,
+      "speaker": null
+    },
+    {
+      "text": "all",
+      "start": 98092,
+      "end": 98300,
+      "confidence": 0.85232,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 98340,
+      "end": 98492,
+      "confidence": 0.95171,
+      "speaker": null
+    },
+    {
+      "text": "know",
+      "start": 98516,
+      "end": 98796,
+      "confidence": 0.9986,
+      "speaker": null
+    },
+    {
+      "text": "what",
+      "start": 98868,
+      "end": 99480,
+      "confidence": 0.56013,
+      "speaker": null
+    },
+    {
+      "text": "yeah",
+      "start": 100660,
+      "end": 101520,
+      "confidence": 0.41269,
+      "speaker": null
+    },
+    {
+      "text": "or",
+      "start": 106660,
+      "end": 107068,
+      "confidence": 0.51375,
+      "speaker": null
+    },
+    {
+      "text": "show",
+      "start": 107124,
+      "end": 107436,
+      "confidence": 0.99969,
+      "speaker": null
+    },
+    {
+      "text": "me",
+      "start": 107508,
+      "end": 108028,
+      "confidence": 0.99982,
+      "speaker": null
+    },
+    {
+      "text": "the",
+      "start": 108164,
+      "end": 108556,
+      "confidence": 0.9996,
+      "speaker": null
+    },
+    {
+      "text": "way",
+      "start": 108628,
+      "end": 109100,
+      "confidence": 0.99943,
+      "speaker": null
+    },
+    {
+      "text": "to",
+      "start": 109220,
+      "end": 109596,
+      "confidence": 0.99894,
+      "speaker": null
+    },
+    {
+      "text": "the",
+      "start": 109668,
+      "end": 109996,
+      "confidence": 0.99973,
+      "speaker": null
+    },
+    {
+      "text": "next",
+      "start": 110068,
+      "end": 110588,
+      "confidence": 0.99949,
+      "speaker": null
+    },
+    {
+      "text": "little",
+      "start": 110724,
+      "end": 111164,
+      "confidence": 0.9995,
+      "speaker": null
+    },
+    {
+      "text": "girl",
+      "start": 111252,
+      "end": 111880,
+      "confidence": 0.51476,
+      "speaker": null
+    },
+    {
+      "text": "oh",
+      "start": 112740,
+      "end": 113356,
+      "confidence": 0.66533,
+      "speaker": null
+    },
+    {
+      "text": "don't",
+      "start": 113468,
+      "end": 113836,
+      "confidence": 0.99439,
+      "speaker": null
+    },
+    {
+      "text": "ask",
+      "start": 113868,
+      "end": 114156,
+      "confidence": 0.99995,
+      "speaker": null
+    },
+    {
+      "text": "why",
+      "start": 114228,
+      "end": 114840,
+      "confidence": 0.68394,
+      "speaker": null
+    },
+    {
+      "text": "oh",
+      "start": 115540,
+      "end": 116156,
+      "confidence": 0.35474,
+      "speaker": null
+    },
+    {
+      "text": "don't",
+      "start": 116268,
+      "end": 116636,
+      "confidence": 0.99099,
+      "speaker": null
+    },
+    {
+      "text": "ask",
+      "start": 116668,
+      "end": 117004,
+      "confidence": 0.81747,
+      "speaker": null
+    },
+    {
+      "text": "why",
+      "start": 117092,
+      "end": 117720,
+      "confidence": 0.98659,
+      "speaker": null
+    },
+    {
+      "text": "show",
+      "start": 118260,
+      "end": 118668,
+      "confidence": 0.99984,
+      "speaker": null
+    },
+    {
+      "text": "me",
+      "start": 118724,
+      "end": 119228,
+      "confidence": 0.99991,
+      "speaker": null
+    },
+    {
+      "text": "the",
+      "start": 119364,
+      "end": 119756,
+      "confidence": 0.98105,
+      "speaker": null
+    },
+    {
+      "text": "way",
+      "start": 119828,
+      "end": 120300,
+      "confidence": 0.99887,
+      "speaker": null
+    },
+    {
+      "text": "to",
+      "start": 120420,
+      "end": 120796,
+      "confidence": 0.70496,
+      "speaker": null
+    },
+    {
+      "text": "the",
+      "start": 120868,
+      "end": 121196,
+      "confidence": 0.99936,
+      "speaker": null
+    },
+    {
+      "text": "next",
+      "start": 121268,
+      "end": 121788,
+      "confidence": 0.98061,
+      "speaker": null
+    },
+    {
+      "text": "little",
+      "start": 121924,
+      "end": 122460,
+      "confidence": 0.99961,
+      "speaker": null
+    },
+    {
+      "text": "girl",
+      "start": 122580,
+      "end": 123240,
+      "confidence": 0.99552,
+      "speaker": null
+    },
+    {
+      "text": "oh",
+      "start": 123940,
+      "end": 124556,
+      "confidence": 0.45727,
+      "speaker": null
+    },
+    {
+      "text": "don't",
+      "start": 124668,
+      "end": 125084,
+      "confidence": 0.99879,
+      "speaker": null
+    },
+    {
+      "text": "ask",
+      "start": 125132,
+      "end": 125436,
+      "confidence": 0.99971,
+      "speaker": null
+    },
+    {
+      "text": "why",
+      "start": 125508,
+      "end": 126120,
+      "confidence": 0.954,
+      "speaker": null
+    },
+    {
+      "text": "don't",
+      "start": 127440,
+      "end": 127864,
+      "confidence": 0.26708,
+      "speaker": null
+    },
+    {
+      "text": "ask",
+      "start": 127912,
+      "end": 128168,
+      "confidence": 0.61623,
+      "speaker": null
+    },
+    {
+      "text": "why",
+      "start": 128224,
+      "end": 128820,
+      "confidence": 0.91001,
+      "speaker": null
+    },
+    {
+      "text": "oh",
+      "start": 129520,
+      "end": 130136,
+      "confidence": 0.33759,
+      "speaker": null
+    },
+    {
+      "text": "if",
+      "start": 130248,
+      "end": 130760,
+      "confidence": 0.99085,
+      "speaker": null
+    },
+    {
+      "text": "we",
+      "start": 130880,
+      "end": 131208,
+      "confidence": 0.99929,
+      "speaker": null
+    },
+    {
+      "text": "don't",
+      "start": 131264,
+      "end": 131592,
+      "confidence": 0.91768,
+      "speaker": null
+    },
+    {
+      "text": "find",
+      "start": 131656,
+      "end": 132168,
+      "confidence": 0.99765,
+      "speaker": null
+    },
+    {
+      "text": "the",
+      "start": 132304,
+      "end": 132648,
+      "confidence": 0.99871,
+      "speaker": null
+    },
+    {
+      "text": "next",
+      "start": 132704,
+      "end": 133016,
+      "confidence": 0.99966,
+      "speaker": null
+    },
+    {
+      "text": "little",
+      "start": 133088,
+      "end": 133560,
+      "confidence": 0.99969,
+      "speaker": null
+    },
+    {
+      "text": "girl",
+      "start": 133680,
+      "end": 134340,
+      "confidence": 0.99965,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 134640,
+      "end": 135096,
+      "confidence": 0.99937,
+      "speaker": null
+    },
+    {
+      "text": "tell",
+      "start": 135168,
+      "end": 135496,
+      "confidence": 0.99961,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 135568,
+      "end": 135848,
+      "confidence": 0.9998,
+      "speaker": null
+    },
+    {
+      "text": "we",
+      "start": 135904,
+      "end": 136168,
+      "confidence": 0.99963,
+      "speaker": null
+    },
+    {
+      "text": "must",
+      "start": 136224,
+      "end": 136488,
+      "confidence": 0.99996,
+      "speaker": null
+    },
+    {
+      "text": "die",
+      "start": 136544,
+      "end": 137336,
+      "confidence": 0.98723,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 137528,
+      "end": 137928,
+      "confidence": 0.99906,
+      "speaker": null
+    },
+    {
+      "text": "tell",
+      "start": 137984,
+      "end": 138248,
+      "confidence": 0.99979,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 138304,
+      "end": 138616,
+      "confidence": 0.99965,
+      "speaker": null
+    },
+    {
+      "text": "we",
+      "start": 138688,
+      "end": 138920,
+      "confidence": 0.99963,
+      "speaker": null
+    },
+    {
+      "text": "must",
+      "start": 138960,
+      "end": 139256,
+      "confidence": 0.99996,
+      "speaker": null
+    },
+    {
+      "text": "die",
+      "start": 139328,
+      "end": 140088,
+      "confidence": 0.99528,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 140264,
+      "end": 140648,
+      "confidence": 0.99848,
+      "speaker": null
+    },
+    {
+      "text": "tell",
+      "start": 140704,
+      "end": 140968,
+      "confidence": 0.99968,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 141024,
+      "end": 141576,
+      "confidence": 0.99977,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 141728,
+      "end": 142088,
+      "confidence": 0.9979,
+      "speaker": null
+    },
+    {
+      "text": "tell",
+      "start": 142144,
+      "end": 142408,
+      "confidence": 0.99962,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 142464,
+      "end": 142968,
+      "confidence": 0.9998,
+      "speaker": null
+    },
+    {
+      "text": "I",
+      "start": 143104,
+      "end": 143496,
+      "confidence": 0.99718,
+      "speaker": null
+    },
+    {
+      "text": "tell",
+      "start": 143568,
+      "end": 143800,
+      "confidence": 0.9993,
+      "speaker": null
+    },
+    {
+      "text": "you",
+      "start": 143840,
+      "end": 144136,
+      "confidence": 0.99959,
+      "speaker": null
+    },
+    {
+      "text": "we",
+      "start": 144208,
+      "end": 144440,
+      "confidence": 0.99954,
+      "speaker": null
+    },
+    {
+      "text": "must",
+      "start": 144480,
+      "end": 144776,
+      "confidence": 0.99988,
+      "speaker": null
+    },
+    {
+      "text": "die",
+      "start": 144848,
+      "end": 145580,
+      "confidence": 0.99025,
+      "speaker": null
+    },
+    {
+      "text": "Are.",
+      "start": 192416,
+      "end": 192640,
+      "confidence": 0.59277,
+      "speaker": null
+    }
+  ]
 }

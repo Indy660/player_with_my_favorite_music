@@ -376,7 +376,12 @@ const handleKeyDown = (event: KeyboardEvent): void => {
       <transition name="slide-song-text">
         <!--        -->
         <SongText
-          v-show="isShowSongText && (currentSongText.length || currentSongTextWithTimecodes.length)"
+          v-show="
+            isShowSongText &&
+            (currentSongText.length ||
+              currentSongTextWithTimecodes.length ||
+              currentSongTextWithTimecodesAssemblyAi.length)
+          "
           :current-time="currentTime"
           :song-text="currentSongText"
           :song-text-with-timecodes="currentSongTextWithTimecodes"
@@ -388,7 +393,11 @@ const handleKeyDown = (event: KeyboardEvent): void => {
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
       <MainInfoBand
         :song-name="currentSong.songName"
-        :has-text="!!currentSongText.length || !!currentSongTextWithTimecodes.length"
+        :has-text="
+          !!currentSongText.length ||
+          !!currentSongTextWithTimecodes.length ||
+          !!currentSongTextWithTimecodesAssemblyAi.length
+        "
         :is-favorite-song="favoriteSongs.includes(currentSong.songName)"
         @show-text-song="handlerShowSongTextBtn"
         @add-favorite="handleAddFavoriteSongBtn"

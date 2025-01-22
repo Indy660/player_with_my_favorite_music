@@ -91,14 +91,14 @@ const indexPlayingPartTimeCode = computed(() => {
   return 0
 })
 
-const songTextWithTimecodesAndSymbolsAssemblyAi = computed<SongTextWithTimeCodeAssemblyAi[]>(() => {
+const songTextWithTimecodesAssemblyAiNewLines = computed<SongTextWithTimeCodeAssemblyAi[]>(() => {
   const result: SongTextWithTimeCodeAssemblyAi[] = []
   props.songTextWithTimecodesAssemblyAi.forEach((item, index) => {
     if (
       props.songTextWithTimecodesAssemblyAi?.[index + 1]?.end &&
       Number(
         props.songTextWithTimecodesAssemblyAi[index + 1].start -
-        props.songTextWithTimecodesAssemblyAi[index].end
+          props.songTextWithTimecodesAssemblyAi[index].end
       ) > 5
     ) {
       result.push(item)
@@ -115,18 +115,17 @@ const songTextWithTimecodesAndSymbolsAssemblyAi = computed<SongTextWithTimeCodeA
   })
 
   return result
-  // return props.songTextWithTimecodesAssemblyAi
 })
 
-type songTextWithTimecodesAndSymbolsAssemblyAiLines = SongTextWithTimeCode & { index: number }
+type SongTextWithTimecodesAndSymbolsAssemblyAiLines = SongTextWithTimeCode & { index: number }
 
 const songTextWithTimecodesAndSymbolsAssemblyAiLines = computed<
-  [songTextWithTimecodesAndSymbolsAssemblyAiLines[]]
+  [SongTextWithTimecodesAndSymbolsAssemblyAiLines[]]
 >(() => {
   const timeToNextLine = 0.1
-  return songTextWithTimecodesAndSymbolsAssemblyAi.value.reduce(
+  return songTextWithTimecodesAssemblyAiNewLines.value.reduce(
     (acc, curr, index) => {
-      let lastElement = acc[acc.length - 1]
+      let lastElement: SongTextWithTimecodesAndSymbolsAssemblyAiLines[] = acc[acc.length - 1]
       if (curr.start - lastElement[lastElement.length - 1]?.end > timeToNextLine) {
         acc.push([])
         lastElement = acc[acc.length - 1]
@@ -150,13 +149,13 @@ const indexPlayingPartTimeCodeAssemblyAi = computed(() => {
     // если текущее время выходит за длину текста
     if (
       props.currentTime >=
-      songTextWithTimecodesAndSymbolsAssemblyAi.value[
-        songTextWithTimecodesAndSymbolsAssemblyAi.value.length - 1
+      songTextWithTimecodesAssemblyAiNewLines.value[
+        songTextWithTimecodesAssemblyAiNewLines.value.length - 1
       ].start
     ) {
-      return songTextWithTimecodesAndSymbolsAssemblyAi.value.length - 1
+      return songTextWithTimecodesAssemblyAiNewLines.value.length - 1
     }
-    const index = songTextWithTimecodesAndSymbolsAssemblyAi.value?.findIndex(
+    const index = songTextWithTimecodesAssemblyAiNewLines.value?.findIndex(
       (partSong, index, array) => {
         return (
           props.currentTime >= partSong.start - 1 && props.currentTime < array?.[index + 1]?.start
@@ -223,8 +222,6 @@ function btnHandler(option: TabsOption): void {
       </div>
       <span v-show="idTabSelected === 2" class="raw" v-html="songText" />
       <div v-show="idTabSelected === 3" class="text-with-timestamps">
-        {{ currentTime }}
-        {{ indexPlayingPartTimeCodeAssemblyAi }}
         <span> 0.3 or less confidence word marked with *</span>
         <br />
         <br />
