@@ -1,6 +1,6 @@
 import musicList from '../static_data/music_list.json'
 interface MusicList {
-  songName: Required<string>
+  songName: string
   sort?: number
   bestParties?: BestParties[]
   notAggressive?: boolean

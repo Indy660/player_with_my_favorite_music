@@ -21,11 +21,15 @@ const TABS_OPTION: TabsOption[] = [
   { label: 'Top', id: 2, url: 'top' },
   { label: 'Top Shorts', id: 4, url: 'shorts' },
   { label: 'Not aggressive', id: 3, url: 'not_aggressive' },
-  { label: 'Favorite', id: 5, url: 'favorite' }
+  { label: 'Favorite', id: 5, url: 'favorite' },
+  // { label: 'Ai', id: 6, url: 'ai' }
 ]
 const favoriteSongs = ref<string[]>([])
 const totalNumbSongs = ref(0)
 const isRandomTracks = ref(false)
+
+// import SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI from '@/static_data/songs_text_with_timecodes_assembly_ai.json'
+
 
 export function tracksApi() {
   const defaultTrackList = ref<TrackList[]>(MUSIC_LIST)
@@ -33,6 +37,10 @@ export function tracksApi() {
   const notAggressiveTrackList = ref<NotAggressiveTrackList[]>(
     MUSIC_LIST.filter(isNotAggressiveTrackList)
   )
+  // const aiTrackList = ref(
+  //   MUSIC_LIST.filter(item => SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI[item.songName]?.length)
+  // )
+  // console.log(aiTrackList)
   // const topTrackList = ref<TopTrackList[]>(MUSIC_LIST.filter((item) => item.sort) as TopTrackList[])
   // const notAggressiveTrackList = ref<NotAggressiveTrackList[]>(
   //   MUSIC_LIST.filter((item) => item.notAggressive) as NotAggressiveTrackList[]
@@ -107,6 +115,8 @@ export function tracksApi() {
         return sortingTopTrackList.value
       case 5:
         return tracksByTabForFavorite.value
+      // case 6:
+      //   return aiTrackList.value
       default:
         return []
     }
@@ -118,7 +128,7 @@ export function tracksApi() {
   const TabsOptionRender = computed<TabsOption[]>(() => {
     return tracksByTabForFavorite.value.length
       ? TABS_OPTION
-      : TABS_OPTION.slice(0, TABS_OPTION.length - 1)
+      : TABS_OPTION.filter((tab) => tab.id !== 5)
   })
 
   const bestParties = computed<BestParties[] | []>(() => {

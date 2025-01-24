@@ -332,7 +332,7 @@ const currentSongTextWithTimecodesAssemblyAi = computed<SongTextWithTimeCodeAsse
   ]
   if (song) {
     return song.map((item) => {
-      return { ...item, start: (item.start / 1000).toFixed(2), end: (item.end / 1000).toFixed(2) }
+      return { ...item, start: Number((item.start / 1000).toFixed(2)), end: Number((item.end / 1000).toFixed(2)) }
     })
   }
   return []
