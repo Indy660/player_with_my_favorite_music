@@ -29,7 +29,6 @@ const isRandomTracks = ref(false)
 
 export function tracksApi() {
   const defaultTrackList = ref<TrackList[]>(MUSIC_LIST)
-  // TODO: можно ли как-то без as и is
   const topTrackList = ref<TopTrackList[]>(MUSIC_LIST.filter(isTopTrackList))
   const notAggressiveTrackList = ref<NotAggressiveTrackList[]>(
     MUSIC_LIST.filter(isNotAggressiveTrackList)
@@ -49,7 +48,7 @@ export function tracksApi() {
   const pathToCurrentFile = computed(() => {
     const basePath: string = import.meta.env.BASE_URL
     return currentTracksList.value[currentTrackIndex.value]
-      ? `${basePath}music/${currentSong.value.songName}`
+      ? `${basePath}music/${currentSong.value}`
       : ``
   })
 
@@ -124,7 +123,7 @@ export function tracksApi() {
 
   const bestParties = computed<BestParties[] | []>(() => {
     return tabSelected.value === 4
-      ? sortingTopTrackList.value[currentTrackIndex.value]?.bestParties || [{ start: 0, end: 30 }]
+      ? sortingTopTrackList.value[currentTrackIndex.value].bestParties || [{ start: 0, end: 30 }]
       : []
   })
 
@@ -136,8 +135,8 @@ export function tracksApi() {
     return currentTracks.value.map((item) => item.songName)
   })
 
-  const currentSong = computed<TrackList>(() => {
-    return currentTracks.value[currentTrackIndex.value]
+  const currentSong = computed(() => {
+    return currentTracksList.value[currentTrackIndex.value]
   })
 
   function getRandomTracks(): TrackList[] {
@@ -183,15 +182,14 @@ export function tracksApi() {
   }
 
   function handleAddFavoriteSongBtn(): void {
-    const song: TrackList = currentSong.value
-    const findingSongIndex = favoriteSongs.value.findIndex((item) => item === song.songName)
+    const findingSongIndex = favoriteSongs.value.findIndex((item) => item === currentSong.value)
     if (findingSongIndex >= 0) {
       favoriteSongs.value.splice(findingSongIndex, 1)
       if (!favoriteSongs.value.length) {
         tabSelected.value = 1
       }
     } else {
-      favoriteSongs.value.push(song.songName)
+      favoriteSongs.value.push(currentSong.value)
     }
     setFavoriteSongsFromLocalStorage()
   }

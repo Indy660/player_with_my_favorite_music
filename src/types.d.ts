@@ -1,5 +1,5 @@
 interface TrackList {
-  songName: Required<string>
+  songName: string
   sort?: number
   bestParties?: BestParties[]
   notAggressive?: boolean
@@ -15,11 +15,13 @@ interface TabsOption {
   url: string
 }
 
+type SongsText = {
+  [key: string]: string
+}
 type SongTextWithTimeCode = {
   seconds: number
   lyrics: string
 }
-
 type SongTextWithTimeCodeAssemblyAi = {
   text: string
   start: number

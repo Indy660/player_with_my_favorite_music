@@ -315,19 +315,20 @@ function repeatModeChange(): void {
   isRepeatMode.value = !isRepeatMode.value
 }
 
-type SongsText = {
-  [key: string]: string
-}
-type SongsTextWithTimeCode = {
+type SongsTextWithTimeCodes = {
   [key: string]: SongTextWithTimeCode[]
 }
-const currentSongText = computed(() => (SONGS_TEXT as SongsText)[currentSong.value.songName] || '')
+type SongTextWithTimeCodesAssemblyAi = {
+  [key: string]: SongTextWithTimeCodeAssemblyAi[]
+}
+
+const currentSongText = computed(() => (SONGS_TEXT as SongsText)[currentSong.value] || '')
 const currentSongTextWithTimecodes = computed<SongTextWithTimeCode[]>(
-  () => (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCode)[currentSong.value.songName] || []
+  () => (SONGS_TEXT_WITH_TIMECODES as SongsTextWithTimeCodes)[currentSong.value] || []
 )
-const currentSongTextWithTimecodesAssemblyAi = computed(() => {
-  const song = (SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI as SongTextWithTimeCodeAssemblyAi[])[
-    currentSong.value.songName
+const currentSongTextWithTimecodesAssemblyAi = computed<SongTextWithTimeCodeAssemblyAi[]>(() => {
+  const song = (SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI as SongTextWithTimeCodesAssemblyAi)[
+    currentSong.value
   ]
   if (song) {
     return song.map((item) => {
@@ -392,13 +393,13 @@ const handleKeyDown = (event: KeyboardEvent): void => {
       </transition>
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
       <MainInfoBand
-        :song-name="currentSong.songName"
+        :song-name="currentSong"
         :has-text="
           !!currentSongText.length ||
           !!currentSongTextWithTimecodes.length ||
           !!currentSongTextWithTimecodesAssemblyAi.length
         "
-        :is-favorite-song="favoriteSongs.includes(currentSong.songName)"
+        :is-favorite-song="favoriteSongs.includes(currentSong)"
         @show-text-song="handlerShowSongTextBtn"
         @add-favorite="handleAddFavoriteSongBtn"
       />
