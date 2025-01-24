@@ -10,11 +10,11 @@ This is a lightweight web-based music player built with Vue 3, Composition API, 
 
 ## Key Features
 
-•   **Local Music Library:** Plays music files directly from the `/public/music` directory.
-•   **Lyrics Support:** Automatically searches for and displays lyrics for each song, if a corresponding lyrics file exists.
-•   **Modern Tech Stack:** Built with Vue 3 Composition API, TypeScript, and Vite for optimal performance and developer experience.
-•   **Easy Setup:** Simple steps to fork and customize the player with your own music library.
-•   **GitHub Pages Deployment:** Automated deployment to GitHub Pages on each push to the `master` branch.
+*    **Local Music Library:** Plays music files directly from the `/public/music` directory.
+*    **Lyrics Support:** Automatically searches for and displays lyrics for each song, if a corresponding lyrics file exists.
+*    **Modern Tech Stack:** Built with Vue 3 Composition API, TypeScript, and Vite for optimal performance and developer experience.
+*    **Easy Setup:** Simple steps to fork and customize the player with your own music library.
+*    **GitHub Pages Deployment:** Automated deployment to GitHub Pages on each push to the `master` branch.
 
 ## Getting Started
 
@@ -40,8 +40,8 @@ To contribute or develop locally:
 
 ## Technologies Used
 
-•   **Frontend:** Vue 3 with Composition API, TypeScript
-•   **Build Tool:** Vite
+*    **Frontend:** Vue 3 with Composition API, TypeScript
+*   **Build Tool:** Vite
 
 ## Contributing
 
