@@ -23,6 +23,8 @@ To use this music player with your own music:
 1.  **Fork the project** to your GitHub account.
 2.  **Add your music files** (MP3 format) to the `/public/music` folder. Follow the naming convention: `{artist} - {song_name}.mp3` (e.g., `Artist Name - Song Title.mp3`).
 3.  **Run the `write_lyric.js` script** to automatically generate the `/src/assets/music_list.json` file and link the lyrics if they exist (or create lyrics files).
+  *   If you want third tab of the player that uses AssemblyAI to generate lyrics from audio files before runs script:
+  *   create a `.env` file in the root directory of the project and add `ASSEMBLYAI_API_KEY`(e.g., `ASSEMBLYAI_API_KEY=your_api_key_here`).
 4.  **If you're deploying to GitHub Pages:**
   *   Go to your repository's **Settings** -> **Environments** -> **New environment**.
   *   Set the environment name to `gh-pages`.
