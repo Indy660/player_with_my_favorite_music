@@ -88,13 +88,17 @@ function onIconAddFavoriteClick(): void {
   <div class="main-info">
     <img :src="getLogoImage" class="album-image" alt="" />
     <div class="main-panel">
-      <button class="heart" :class="iconHeartClass" @click.stop="onIconAddFavoriteClick">
-        <i class="fa-solid fa-heart" />
-      </button>
       <div class="artist-info">
         <div class="band">{{ getInfoBand.bandName }}</div>
         <div class="song">{{ getInfoBand.songName }}</div>
       </div>
+      <div class="slot-wrapper">
+        <slot />
+      </div>
+
+      <button class="heart" :class="iconHeartClass" @click.stop="onIconAddFavoriteClick">
+        <i class="fa-solid fa-heart" />
+      </button>
       <button class="show-text" :class="iconShowTextClass" @click.stop="onIconShowTextClick">
         <i class="fa-solid fa-text-height" />
       </button>
@@ -119,16 +123,30 @@ function onIconAddFavoriteClick(): void {
 
   .main-panel {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     width: 100%;
-    .artist-info .band {
-      margin-bottom: 10px;
+    .artist-info {
+      width: 45%;
+      text-align: left;
+      .band {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 10px;
+      }
+
+      .song {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: calc(var(--main-font-size) + 2px);
+        font-weight: 600;
+      }
     }
 
-    .artist-info .song {
-      font-size: calc(var(--main-font-size) + 2px);
-      font-weight: 600;
+    .slot-wrapper {
+      width: 40%;
     }
 
     .heart.active {

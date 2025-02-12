@@ -332,7 +332,11 @@ const currentSongTextWithTimecodesAssemblyAi = computed<SongTextWithTimeCodeAsse
   ]
   if (song) {
     return song.map((item) => {
-      return { ...item, start: Number((item.start / 1000).toFixed(2)), end: Number((item.end / 1000).toFixed(2)) }
+      return {
+        ...item,
+        start: Number((item.start / 1000).toFixed(2)),
+        end: Number((item.end / 1000).toFixed(2))
+      }
     })
   }
   return []
@@ -402,14 +406,15 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         :is-favorite-song="favoriteSongs.includes(currentSong)"
         @show-text-song="handlerShowSongTextBtn"
         @add-favorite="handleAddFavoriteSongBtn"
-      />
-      <VolumeControl
-        ref="main_control_ref"
-        class="main_control_ref"
-        :volume="volume"
-        @click.stop
-        @volume-change="setVolume"
-      />
+      >
+        <VolumeControl
+          class="main_control_ref"
+          :volume="volume"
+          @click.stop
+          @volume-change="setVolume"
+        />
+      </MainInfoBand>
+
       <ProgressControl
         :best-parties="bestParties"
         :current-time="currentTime"
@@ -454,16 +459,21 @@ const handleKeyDown = (event: KeyboardEvent): void => {
 /*  }*/
 /*}*/
 * {
+  --main-font-size: 24px;
+  --max-container-width: 1000px;
+  --active-color-btn: 240, 100%;
+  --hover-color-btn: 60, 100%;
   transition: all 0.3s linear;
   font-size: var(--main-font-size);
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   margin: 0;
   font-weight: 500;
-  --main-font-size: 24px;
-  --max-container-width: 1000px;
-  --active-color-btn: 240, 100%;
-  --hover-color-btn: 60, 100%;
+  @media screen {
+    @media (max-width: 743px) {
+      --main-font-size: 16px;
+    }
+  }
 }
 main {
   width: 100vw;
