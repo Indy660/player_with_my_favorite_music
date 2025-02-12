@@ -87,6 +87,7 @@ function onIconAddFavoriteClick(): void {
 <template>
   <div class="main-info">
     <img :src="getLogoImage" class="album-image" alt="" />
+    <!--    <svg clip-path=""></svg>-->
     <div class="main-panel">
       <div class="artist-info">
         <div class="band">{{ getInfoBand.bandName }}</div>
@@ -115,10 +116,12 @@ function onIconAddFavoriteClick(): void {
     max-width: 60vw;
     width: 100%;
     height: 100%;
+    /*filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);*/
     /*color: green;*/
     /*background-image: v-bind('getLogoImage') ;*/
     /*background-size: contain;*/
     /*color: var(--main-color);*/
+    /*background-color: var(--main-bg-color);*/
   }
 
   .main-panel {

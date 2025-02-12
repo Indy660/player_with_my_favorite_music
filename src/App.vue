@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { computed, onBeforeMount, ref, watchEffect, watch, onMounted } from 'vue'
-import { tracksApi } from './composable/tracks'
-import TrackList from './components/TrackList.vue'
-import PageTabs from './components/PageTabs.vue'
-import MainInfoBand from './components/MainInfoBand.vue'
-import VolumeControl from './components/VolumeControl.vue'
-import ProgressControl from './components/ProgressControl.vue'
-import MainControl from './components/MainControl.vue'
-import OtherControl from './components/OtherControl.vue'
-import SongText from './components/SongText.vue'
-import SONGS_TEXT from './static_data/songs_text.json'
-import SONGS_TEXT_WITH_TIMECODES from './static_data/songs_text_with_timecodes.json'
-import SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI from './static_data/songs_text_with_timecodes_assembly_ai.json'
+import { tracksApi } from '@/composable/tracks'
+import TrackList from '@/components/TrackList.vue'
+import PageTabs from '@/components/PageTabs.vue'
+import MainInfoBand from '@/components/MainInfoBand.vue'
+import VolumeControl from '@/components/VolumeControl.vue'
+import ProgressControl from '@/components/ProgressControl.vue'
+import MainControl from '@/components/MainControl.vue'
+import OtherControl from '@/components/OtherControl.vue'
+import SongText from '@/components/SongText.vue'
+import SONGS_TEXT from '@/static_data/songs_text.json'
+import SONGS_TEXT_WITH_TIMECODES from '@/static_data/songs_text_with_timecodes.json'
+import SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI from '@/static_data/songs_text_with_timecodes_assembly_ai.json'
 
 interface CustomAudioElement extends HTMLAudioElement {
   currentRange: number
@@ -35,22 +35,6 @@ const {
   handleAddFavoriteSongBtn
 } = tracksApi()
 onBeforeMount(async () => {
-  // старый способ импорта музыки прямо из папки
-  // const music = import.meta.glob('@assets/music/*.mp3')
-  // for (const path in music) {
-  //   const songPath = (await music[path]()).default
-  //   defaultTrackList.value.push(songPath)
-  //   TOP_MUSIC.forEach((item) => {
-  //     if (songPath.includes(item.songName)) topTrackList.value.push({ ...item, path: songPath })
-  //   })
-  //   // TOP_MUSIC.forEach((item) => {
-  //   //   if (songPath.includes(item)) topTrackList.value.push(songPath)
-  //   // })
-  //   NOT_AGGRESSIVE_MUSIC.forEach((item) => {
-  //     if (songPath.includes(item)) notAggressiveTrackList.value.push(songPath)
-  //   })
-  // }
-
   initChangeColorScheme()
   type Action = () => void
   type ActionHandler = [MediaSessionAction, Action]
@@ -271,17 +255,20 @@ watchEffect(async () => {
 })
 const distanceBetweenComponents = ref('500px')
 onMounted(() => {
-  const main_control_ref = document.querySelector('.main_control_ref') as HTMLElement
+  const progressControlDiv = document.querySelector('.progress_control_ref') as HTMLElement
   const containerDiv = document.querySelector('.container') as HTMLElement
-  // todo: через реф main_control_ref не видит, подобрал по классу
-  // const main_control_ref = ref(null)
-  // const rect1 = main_control_ref?.value?.$el?.getBoundingClientRect()
-  const rect1: DOMRect = main_control_ref.getBoundingClientRect()
+  const rect1: DOMRect = progressControlDiv.getBoundingClientRect()
   const rect2: DOMRect = containerDiv?.getBoundingClientRect()
-  distanceBetweenComponents.value = `${Math.abs(rect1.top - rect2.top) + 25}px`
+  distanceBetweenComponents.value = `${Math.abs(rect1.top - rect2.top - 10)}px`
   audioPlayer.value!.volume = 0.8
   document.addEventListener('keydown', handleKeyDown)
 })
+
+// TODO: возникает баг при перемотке назад на песню, не перематывается:
+//  Clayman (#tab=shorts&track=16)
+// Are You Dead Yet (#tab=shorts&track=10)
+// Nothing Left (#tab=shorts&track=3)
+// In The Constellation Of The Bl... (#tab=shorts&track=31)
 function previousTrackHandler(): void {
   if (audioPlayer.value!.currentTime <= 20 || tabSelected.value === 4) previousTrack()
   else {
@@ -379,7 +366,6 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         />
       </transition>
       <transition name="slide-song-text">
-        <!--        -->
         <SongText
           v-show="
             isShowSongText &&
@@ -407,15 +393,10 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         @show-text-song="handlerShowSongTextBtn"
         @add-favorite="handleAddFavoriteSongBtn"
       >
-        <VolumeControl
-          class="main_control_ref"
-          :volume="volume"
-          @click.stop
-          @volume-change="setVolume"
-        />
+        <VolumeControl :volume="volume" @click.stop @volume-change="setVolume" />
       </MainInfoBand>
-
       <ProgressControl
+        class="progress_control_ref"
         :best-parties="bestParties"
         :current-time="currentTime"
         :total-time="totalTime"
