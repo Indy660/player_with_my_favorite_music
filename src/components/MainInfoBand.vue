@@ -5,6 +5,7 @@ interface Props {
   songName: string
   hasText: boolean
   isFavoriteSong: boolean
+  isDarkTheme: boolean
 }
 
 const props = defineProps<Props>()
@@ -13,7 +14,6 @@ const emit = defineEmits(['show-text-song', 'add-favorite'])
 const imagePaths = ref<Record<string, string>>({})
 
 onBeforeMount(async () => {
-  // :TODO any - хз как исправить
   interface ImagesObject {
     [key: string]: () => Promise<any>
   }
@@ -27,6 +27,10 @@ onBeforeMount(async () => {
 const fullSongName = computed(() => {
   const indexSlice: number | undefined = props.songName?.lastIndexOf('.')
   return (props.songName && props.songName.substring(0, indexSlice)) || ''
+})
+
+const isInvertColorImage = computed(() => {
+  return props.isDarkTheme && imagePaths.value.default_logo === getLogoImage.value
 })
 
 interface GetInfoBand {
@@ -72,7 +76,6 @@ const iconShowTextClass = computed(() => {
 })
 
 const iconHeartClass = computed(() => {
-  // return props.hasText ? '' : 'disabled'
   return props.isFavoriteSong ? 'active' : ''
 })
 function onIconShowTextClick(): void {
@@ -86,8 +89,12 @@ function onIconAddFavoriteClick(): void {
 
 <template>
   <div class="main-info">
-    <img :src="getLogoImage" class="album-image" alt="" />
-    <!--    <svg clip-path=""></svg>-->
+    <img
+      :src="getLogoImage"
+      :class="{ 'invert-color': isInvertColorImage }"
+      class="album-image"
+      alt=""
+    />
     <div class="main-panel">
       <div class="artist-info">
         <div class="band">{{ getInfoBand.bandName }}</div>
@@ -116,12 +123,11 @@ function onIconAddFavoriteClick(): void {
     max-width: 60vw;
     width: 100%;
     height: 100%;
-    /*filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);*/
-    /*color: green;*/
-    /*background-image: v-bind('getLogoImage') ;*/
-    /*background-size: contain;*/
-    /*color: var(--main-color);*/
-    /*background-color: var(--main-bg-color);*/
+    border-radius: 50%;
+  }
+  /*TODO: поправить */
+  .album-image.invert-color {
+    filter: invert(1);
   }
 
   .main-panel {

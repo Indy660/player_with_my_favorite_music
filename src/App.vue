@@ -390,6 +390,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
           !!currentSongTextWithTimecodesAssemblyAi.length
         "
         :is-favorite-song="favoriteSongs.includes(currentSong)"
+        :is-dark-theme="isDarkTheme"
         @show-text-song="handlerShowSongTextBtn"
         @add-favorite="handleAddFavoriteSongBtn"
       >
