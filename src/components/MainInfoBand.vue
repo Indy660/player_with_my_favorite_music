@@ -48,9 +48,6 @@ const getInfoBand = computed<GetInfoBand>(() => {
 const getLogoImage = computed(() => {
   const { bandName } = getInfoBand.value
   return imagePaths.value[bandName] || imagePaths.value.default_logo
-  // TODO: как сделать так, чтобы свг в default_logo заработало? Не работает require в css?
-  // const path = imagePaths.value[bandName] || imagePaths.value.default_logo
-  // return `url(${path})`
 })
 function setMetadata(): void {
   if ('mediaSession' in navigator && getLogoImage.value) {
@@ -117,17 +114,16 @@ function onIconAddFavoriteClick(): void {
 <style scoped>
 .main-info {
   .album-image {
-    background-color: white;
     aspect-ratio: 1 / 1;
     max-height: 60vh;
     max-width: 60vw;
     width: 100%;
     height: 100%;
-    border-radius: 50%;
-  }
-  /*TODO: поправить */
-  .album-image.invert-color {
-    filter: invert(1);
+    transition: none;
+
+    &.invert-color {
+      filter: invert(1);
+    }
   }
 
   .main-panel {
