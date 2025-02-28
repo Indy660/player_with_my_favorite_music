@@ -11,7 +11,7 @@ const props = defineProps<Props>()
 const emit = defineEmits(['time-change', 'time-change-line'])
 
 const convertToValue = computed(() => {
-  return (props.currentTime / props.totalTime) * 100
+  return (props.currentTime / props.totalTime) * 1000
 })
 
 const convertCurrentTime = computed(() => {
@@ -59,29 +59,31 @@ function timeHandlerEmit(e: MouseEvent): void {
 
 function timeHandler(event: Event): void {
   const target = event.target as HTMLInputElement
-  emit('time-change', (Number(target.value) / 100) * (props.totalTime || 0))
+  emit('time-change', (Number(target.value) / 1000) * (props.totalTime || 0))
 }
 </script>
 
 <template>
   <div class="progress-control">
-    <input type="range" min="0" max="100" :value="convertToValue" step="1" @input="timeHandler" />
+    <div class="input-wrapper">
+      <input type="range" min="0" max="1000" :value="convertToValue" step="1" @input="timeHandler" />
+      <template v-if="bestParties.length">
+        <div class="line">
+          <div
+            v-for="(party, key) in convertBestPartiesInPercentage"
+            :key="key"
+            :style="{ left: party.left, right: party.right }"
+            class="best-section"
+            @click.stop="timeHandlerEmit"
+          ></div>
+        </div>
+      </template>
+    </div>
     <div class="time-display">
       <span>{{ convertCurrentTime }}</span>
       <span>{{ convertCurrentTimeSeconds }}</span>
       <span>{{ convertTotalTime }}</span>
     </div>
-    <template v-if="bestParties.length">
-      <div class="line">
-        <div
-          v-for="(party, key) in convertBestPartiesInPercentage"
-          :key="key"
-          :style="{ left: party.left, right: party.right }"
-          class="best-section"
-          @click.stop="timeHandlerEmit"
-        ></div>
-      </div>
-    </template>
   </div>
 </template>
 
@@ -96,18 +98,29 @@ function timeHandler(event: Event): void {
   color: var(--main-color);
 }
 
-.line {
-  margin-top: 5px;
-  position: relative;
-  width: 100%;
-  height: 2px;
-  background-color: var(--main-bg-color-secondary);
+.input-wrapper input[type="range"]::-webkit-slider-runnable-track {
+  background: transparent
 }
-.best-section {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  background-color: blue;
-  cursor: pointer;
+
+.input-wrapper input[type="range"]::-moz-range-track {
+  background: transparent;
+}
+
+.input-wrapper {
+  position: relative;
+  .line {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    top: 17px;
+  }
+
+  .best-section {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-color: blue;
+    cursor: pointer;
+  }
 }
 </style>
