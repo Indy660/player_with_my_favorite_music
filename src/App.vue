@@ -356,15 +356,6 @@ const handleKeyDown = (event: KeyboardEvent): void => {
 <template>
   <main :class="[isDarkTheme ? 'dark' : 'light']" @click.stop="closeAllBars">
     <div class="container">
-      <transition name="slide-track-list">
-        <TrackList
-          v-show="isShowTrackList"
-          :current-track-index="currentTrackIndex"
-          :current-tracks="currentTracksList"
-          class="top_bar"
-          @select-track-from-list="handlerSelectTrack"
-        />
-      </transition>
       <transition name="slide-song-text">
         <SongText
           v-show="
@@ -379,6 +370,15 @@ const handleKeyDown = (event: KeyboardEvent): void => {
           :song-text-with-timecodes-assembly-ai="currentSongTextWithTimecodesAssemblyAi"
           class="top_bar"
           @time-change="handlerTimeChange"
+        />
+      </transition>
+      <transition name="slide-track-list">
+        <TrackList
+          v-show="isShowTrackList"
+          :current-track-index="currentTrackIndex"
+          :current-tracks="currentTracksList"
+          class="top_bar"
+          @select-track-from-list="handlerSelectTrack"
         />
       </transition>
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
@@ -445,7 +445,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
   --max-container-width: 1000px;
   --active-color-btn: 240, 100%;
   --hover-color-btn: 60, 100%;
-  transition: all 0.3s linear;
+  transition: all 0.1s linear;
   font-size: var(--main-font-size);
   font-family: Arial, sans-serif;
   box-sizing: border-box;

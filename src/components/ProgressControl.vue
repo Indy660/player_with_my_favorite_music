@@ -97,30 +97,44 @@ function timeHandler(event: Event): void {
   font-size: 12px;
   color: var(--main-color);
 }
+/*
+input[type="range"]::-webkit-slider-thumb {
+  border: 2px solid red;
+  background: var(--main-color);
+}
+*/
 
+
+/*  TODO: подумать как исправить, хочу изменить стиль ползунка, но надо учесть что цвет после проигрыша тоже должен быть свой */
 .input-wrapper input[type="range"]::-webkit-slider-runnable-track {
-  background: transparent
+ background: transparent;
+ //background: var(--main-color);
+  //opacity: 0.3;
 }
 
 .input-wrapper input[type="range"]::-moz-range-track {
-  background: transparent;
+ //background: transparent;
 }
 
 .input-wrapper {
-  position: relative;
-  .line {
-    position: absolute;
-    width: 100%;
-    height: 5px;
-    top: 17px;
-  }
+ position: relative;
+ .line {
+   position: absolute;
+   width: 100%;
+   height: 5px;
+   /*  TODO: подумать как исправить */
+   top: 17px;
+   @media (max-width: 743px) {
+     top: 9px;
+   }
+ }
 
-  .best-section {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    background-color: blue;
-    cursor: pointer;
-  }
+ .best-section {
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   background-color:  hsl(var(--active-color-btn), var(--color-lightness));
+   cursor: pointer;
+ }
 }
 </style>
