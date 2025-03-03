@@ -31,8 +31,7 @@ interface BestPartiesPosition {
   right: string
 }
 const convertBestPartiesInPercentage = computed<BestPartiesPosition[]>(() => {
-  const oneSecondSongInPercent: number = Number((100 / props.totalTime).toFixed(2))
-  // TODO: хз как defineProps в props.bestParties проверить типы
+  const oneSecondSongInPercent: number = Number((100 / props.totalTime).toFixed(4))
   return props.bestParties.map((item) => ({
     left: `${item.start * oneSecondSongInPercent}%`,
     right: `${100 - item.end * oneSecondSongInPercent}%`
@@ -119,10 +118,10 @@ input[type="range"]::-webkit-slider-thumb {
 .input-wrapper {
  position: relative;
  .line {
+   width: calc(100% - 16px);
+   left: 16px;
    position: absolute;
-   width: 100%;
    height: 5px;
-   /*  TODO: подумать как исправить */
    top: 17px;
    @media (max-width: 743px) {
      top: 9px;
