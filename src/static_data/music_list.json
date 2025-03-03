@@ -471,6 +471,16 @@
   {
     "songName": "What Mad Universe - the world of leviathan.mp3",
     "notAggressive": true,
+    "bestParties": [
+      {
+        "start": 105,
+        "end": 170
+      },
+      {
+        "start": 277,
+        "end": 360
+      }
+    ],
     "sort": 172
   },
   {
