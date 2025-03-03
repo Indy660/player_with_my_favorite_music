@@ -301,7 +301,8 @@ They died from the cold within
 They died from the cold within
 They died from the cold within
 They didn't die from the cold without but
-They died from the cold withinAnd I just can't stop denying that our brothers
+They died from the cold within
+And I just can't stop denying that our brothers
 Are in miserable pain
 And I just can't stop denying that our brothers
 Are in miserable pain
