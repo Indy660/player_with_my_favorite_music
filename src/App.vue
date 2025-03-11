@@ -354,7 +354,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
 </script>
 
 <template>
-  <main :class="[isDarkTheme ? 'dark' : 'light']" @click.stop="closeAllBars">
+  <main :class="[isDarkTheme ? 'dark' : 'light']" @click="closeAllBars">
     <div class="container">
       <transition name="slide-song-text">
         <SongText

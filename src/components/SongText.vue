@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, watch, ref, watchEffect} from 'vue'
+import { computed, watch, ref, watchEffect } from 'vue'
 
 interface Props {
   songText: string
@@ -23,7 +23,7 @@ const tabsOption = computed<TabsOption[]>(() => {
       id: 1,
       available: Boolean(props.songTextWithTimecodes.length)
     },
-    {label: 'Raw', id: 2, available: Boolean(props.songText.length)},
+    { label: 'Raw', id: 2, available: Boolean(props.songText.length) },
     {
       label: 'Assembly AI',
       id: 3,
@@ -93,26 +93,29 @@ const indexPlayingPartTimeCode = computed(() => {
   return 0
 })
 
-type SongTextWithTimecodesAndSymbolsAssemblyAiLines = SongTextWithTimeCodeAssemblyAi & { index: number }
+type SongTextWithTimecodesAndSymbolsAssemblyAiLines = SongTextWithTimeCodeAssemblyAi & {
+  index: number
+}
 
- // TODO: типизировать
+// TODO: типизировать
 const songTextWithTimecodesAndSymbolsAssemblyAiLines = computed<
   [[SongTextWithTimecodesAndSymbolsAssemblyAiLines[]]]
 >(() => {
   const timeToNewParagraph = 2
   let paragraph: SongTextWithTimecodesAndSymbolsAssemblyAiLines[] = []
-  return props.songTextWithTimecodesAssemblyAi.reduce(
-    (acc, currentWord, index) => {
-      const nextWord = props.songTextWithTimecodesAssemblyAi[index + 1]
-      currentWord.index = index
-      paragraph.push(currentWord)
-      if (nextWord?.start - currentWord?.end > timeToNewParagraph || !nextWord?.start) {
-        const totalTime = currentWord.end - paragraph[0].start
-        const sumTimeWordsInParagraph = paragraph.reduce(
-          (acc, curr) => acc + curr.end - curr.start, 0
-        )
-        const averagePauseBetweenWords = (totalTime - sumTimeWordsInParagraph) / paragraph.length
-        const paragraphWithRows: [SongTextWithTimecodesAndSymbolsAssemblyAiLines[]] = paragraph.reduce(
+  return props.songTextWithTimecodesAssemblyAi.reduce((acc, currentWord, index) => {
+    const nextWord = props.songTextWithTimecodesAssemblyAi[index + 1]
+    currentWord.index = index
+    paragraph.push(currentWord)
+    if (nextWord?.start - currentWord?.end > timeToNewParagraph || !nextWord?.start) {
+      const totalTime = currentWord.end - paragraph[0].start
+      const sumTimeWordsInParagraph = paragraph.reduce(
+        (acc, curr) => acc + curr.end - curr.start,
+        0
+      )
+      const averagePauseBetweenWords = (totalTime - sumTimeWordsInParagraph) / paragraph.length
+      const paragraphWithRows: [SongTextWithTimecodesAndSymbolsAssemblyAiLines[]] =
+        paragraph.reduce(
           (acc, curr) => {
             let lastElement: SongTextWithTimecodesAndSymbolsAssemblyAiLines[] = acc[acc.length - 1]
             if (curr.start - lastElement[lastElement.length - 1]?.end > averagePauseBetweenWords) {
@@ -128,11 +131,11 @@ const songTextWithTimecodesAndSymbolsAssemblyAiLines = computed<
           },
           [[]]
         )
-        acc.push(paragraphWithRows)
-        paragraph = []
-      }
-      return acc
-    }, [])
+      acc.push(paragraphWithRows)
+      paragraph = []
+    }
+    return acc
+  }, [])
 })
 
 const indexPlayingPartTimeCodeAssemblyAi = computed(() => {
@@ -140,19 +143,15 @@ const indexPlayingPartTimeCodeAssemblyAi = computed(() => {
     // если текущее время выходит за длину текста
     if (
       props.currentTime >=
-      props.songTextWithTimecodesAssemblyAi[
-      props.songTextWithTimecodesAssemblyAi.length - 1
-        ].start
+      props.songTextWithTimecodesAssemblyAi[props.songTextWithTimecodesAssemblyAi.length - 1].start
     ) {
       return props.songTextWithTimecodesAssemblyAi.length - 1
     }
-    const index = props.songTextWithTimecodesAssemblyAi?.findIndex(
-      (partSong, index, array) => {
-        return (
-          props.currentTime >= partSong.start - 1 && props.currentTime < array?.[index + 1]?.start
-        )
-      }
-    )
+    const index = props.songTextWithTimecodesAssemblyAi?.findIndex((partSong, index, array) => {
+      return (
+        props.currentTime >= partSong.start - 1 && props.currentTime < array?.[index + 1]?.start
+      )
+    })
     return index > 0 ? index : 0
   }
   return 0
@@ -183,12 +182,12 @@ watch(
 
 function scrollToTimeCode() {
   const selectedSongText = document.querySelector('.song-text .selected')
-  selectedSongText?.scrollIntoView({behavior: 'smooth', block: 'center'})
+  selectedSongText?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 function scrollToTop() {
   const songTextBlock = document.querySelector('.song-text .raw')
-  songTextBlock?.scrollIntoView({behavior: 'smooth', block: 'start'})
+  songTextBlock?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 function btnHandler(option: TabsOption): void {
@@ -220,23 +219,23 @@ function btnHandler(option: TabsOption): void {
           v-html="`\n${partSong.seconds} ${partSong.lyrics}\n`"
         />
       </div>
-      <span v-show="idTabSelected === 2" class="raw" v-html="songText"/>
+      <span v-show="idTabSelected === 2" class="raw" v-html="songText" />
       <div v-show="idTabSelected === 3" class="text-with-timestamps">
         <span> 0.3 or less confidence word marked with *</span>
-        <br/>
+        <br />
         <div v-for="(paragraph, key) in songTextWithTimecodesAndSymbolsAssemblyAiLines" :key="key">
-          <br/>
+          <br />
           <div v-for="(rowWords, key2) in paragraph" :key="key2">
-          <span
-            v-for="(word, key3) in rowWords"
-            :key="key3"
-            :class="{
-              selected: word.index === indexPlayingPartTimeCodeAssemblyAi
-            }"
-            @click="goToText(word.start)"
-          >
-            {{ word.text }}
-          </span>
+            <span
+              v-for="(word, key3) in rowWords"
+              :key="key3"
+              :class="{
+                selected: word.index === indexPlayingPartTimeCodeAssemblyAi
+              }"
+              @click="goToText(word.start)"
+            >
+              {{ word.text }}
+            </span>
           </div>
         </div>
       </div>

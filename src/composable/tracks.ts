@@ -21,7 +21,7 @@ const TABS_OPTION: TabsOption[] = [
   { label: 'Top', id: 2, url: 'top' },
   { label: 'Top Shorts', id: 4, url: 'shorts' },
   { label: 'Not aggressive', id: 3, url: 'not_aggressive' },
-  { label: 'Favorite', id: 5, url: 'favorite' },
+  { label: 'Favorite', id: 5, url: 'favorite' }
   // { label: 'Ai', id: 6, url: 'ai' }
 ]
 const favoriteSongs = ref<string[]>([])
@@ -29,7 +29,6 @@ const totalNumbSongs = ref(0)
 const isRandomTracks = ref(false)
 
 // import SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI from '@/static_data/songs_text_with_timecodes_assembly_ai.json'
-
 
 export function tracksApi() {
   const defaultTrackList = ref<TrackList[]>(MUSIC_LIST)

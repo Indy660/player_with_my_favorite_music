@@ -30,7 +30,7 @@ function nextButtonHandler(): void {
     <button class="player-button" @click.stop="previousButtonHandler">
       <i class="fas fa-step-backward"></i>
     </button>
-    <button @keyup.space.prevent class="player-button" @click.stop="playerButtonHandler">
+    <button class="player-button" @keyup.space.prevent @click.stop="playerButtonHandler">
       <span v-html="iconPlayerButton"></span>
     </button>
     <button class="player-button" @click.stop="nextButtonHandler">
