@@ -106,10 +106,6 @@ function updateColorScheme(): void {
   localStorage.setItem('dark-color-scheme', JSON.stringify(isDarkTheme.value))
 }
 
-function handlerChangeThemeBtn(): void {
-  isDarkTheme.value = !isDarkTheme.value
-}
-
 const audioPlayer = ref<CustomAudioElement | null>(null)
 
 const currentTime = ref(0)
@@ -218,10 +214,13 @@ async function changeVolumeSlowly(isDecrease: boolean = true): Promise<void> {
 async function shortTracksObserver(time: number): Promise<void> {
   // console.log('shortTracksObserver')
   // audioPlayer.value!.volume = 0.6
+  console.log(time)
   for (let i = 0; i < bestParties.value.length; i++) {
     const currentBestParty = bestParties.value[i]
+    console.log(currentBestParty)
     // TODO: проблема при переключении, звук уходит со временем на 100%
-    if (time <= currentBestParty.start && !isVolumeChanging.value) {
+    // if (time <= currentBestParty.start && !isVolumeChanging.value) {
+    if (time <= currentBestParty.start) {
       console.log('start')
       // audioPlayer.value!.volume = 0.6
       audioPlayer.value!.currentTime = currentBestParty.start
@@ -233,8 +232,8 @@ async function shortTracksObserver(time: number): Promise<void> {
       // TODO: второе условие как хак
       if (
         time >= currentBestParty.end - 3 &&
-        time <= currentBestParty.end - 2 &&
-        !isVolumeChanging.value
+        time <= currentBestParty.end - 2
+        // && !isVolumeChanging.value
       ) {
         console.log('end')
         // audioPlayer.value!.volume = 0.8
@@ -244,12 +243,12 @@ async function shortTracksObserver(time: number): Promise<void> {
     }
   }
   // TODO: вызывается при переключении дважды
-  console.log('nextTrack')
+  console.log('nextTrack shortTracksObserver')
   handlerEnded()
 }
 
 watchEffect(async () => {
-  if (tabSelected.value === 4 && isPlaying.value && currentTrackIndex) {
+  if (tabSelected.value === 4 && isPlaying.value) {
     await shortTracksObserver(currentTime.value)
   }
 })
@@ -277,10 +276,6 @@ function previousTrackHandler(): void {
 }
 
 const isShowTrackList = ref(false)
-function handlerShowListBtn(): void {
-  isShowTrackList.value = !isShowTrackList.value
-}
-
 const isShowSongText = ref(false)
 function handlerShowSongTextBtn(): void {
   isShowSongText.value = !isShowSongText.value
@@ -298,9 +293,6 @@ function handlerSelectTrack(trackIndex: number): void {
 }
 
 const isRepeatMode = ref(false)
-function repeatModeChange(): void {
-  isRepeatMode.value = !isRepeatMode.value
-}
 
 type SongsTextWithTimeCodes = {
   [key: string]: SongTextWithTimeCode[]
@@ -411,13 +403,10 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         @play-pause="togglePlayPause"
       />
       <OtherControl
+        v-model:is-repeat-mode="isRepeatMode"
+        v-model:is-dark-theme="isDarkTheme"
+        v-model:is-show-track-list="isShowTrackList"
         :current-numb-song="currentTrackIndex + 1"
-        :is-show-track-list="isShowTrackList"
-        :is-repeat-mode="isRepeatMode"
-        :is-dark-theme="isDarkTheme"
-        @repeat-mode-click="repeatModeChange"
-        @show-list-click="handlerShowListBtn"
-        @change-theme="handlerChangeThemeBtn"
       />
       <audio
         ref="audioPlayer"

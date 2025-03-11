@@ -10,20 +10,20 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits(['show-list-click', 'repeat-mode-click', 'change-theme'])
+const emit = defineEmits(['update:isShowTrackList', 'update:isRepeatMode', 'update:isDarkTheme'])
 
 const { totalNumbSongs, isRandomTracks, handlerRandomBtn } = tracksApi()
 function iconClickRandomHandler(): void {
   handlerRandomBtn()
 }
 function iconClickRepeatModeHandler(): void {
-  emit('repeat-mode-click')
+  emit('update:isRepeatMode', !props.isRepeatMode)
 }
 function iconClickShowListHandler(): void {
-  emit('show-list-click')
+  emit('update:isShowTrackList', !props.isShowTrackList)
 }
 function iconClickChangeThemeHandler(): void {
-  emit('change-theme')
+  emit('update:isDarkTheme', !props.isDarkTheme)
 }
 
 const iconToggle = computed(() => {
