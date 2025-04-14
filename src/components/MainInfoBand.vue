@@ -9,7 +9,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits(['show-text-song', 'add-favorite'])
+// const emit = defineEmits(['show-text-song', 'add-favorite'])
 
 const imagePaths = ref<Record<string, string>>({})
 
@@ -68,20 +68,20 @@ watchEffect(() => {
     setMetadata()
   }
 })
-const iconShowTextClass = computed(() => {
-  return props.hasText ? '' : 'disabled'
-})
-
-const iconHeartClass = computed(() => {
-  return props.isFavoriteSong ? 'active' : ''
-})
-function onIconShowTextClick(): void {
-  props.hasText && emit('show-text-song')
-}
-
-function onIconAddFavoriteClick(): void {
-  emit('add-favorite')
-}
+// const iconShowTextClass = computed(() => {
+//   return props.hasText ? '' : 'disabled'
+// })
+//
+// const iconHeartClass = computed(() => {
+//   return props.isFavoriteSong ? 'active' : ''
+// })
+// function onIconShowTextClick(): void {
+//   props.hasText && emit('show-text-song')
+// }
+//
+// function onIconAddFavoriteClick(): void {
+//   emit('add-favorite')
+// }
 </script>
 
 <template>
@@ -101,12 +101,12 @@ function onIconAddFavoriteClick(): void {
         <slot />
       </div>
 
-      <button class="heart" :class="iconHeartClass" @click.stop="onIconAddFavoriteClick">
-        <i class="fa-solid fa-heart" />
-      </button>
-      <button class="show-text" :class="iconShowTextClass" @click.stop="onIconShowTextClick">
-        <i class="fa-solid fa-text-height" />
-      </button>
+<!--      <button class="heart" :class="iconHeartClass" @click.stop="onIconAddFavoriteClick">-->
+<!--        <i class="fa-solid fa-heart" />-->
+<!--      </button>-->
+<!--      <button class="show-text" :class="iconShowTextClass" @click.stop="onIconShowTextClick">-->
+<!--        <i class="fa-solid fa-text-height" />-->
+<!--      </button>-->
     </div>
   </div>
 </template>
@@ -114,12 +114,14 @@ function onIconAddFavoriteClick(): void {
 <style scoped>
 .main-info {
   .album-image {
+    border-radius: 5px;
     aspect-ratio: 1 / 1;
     max-height: 60vh;
     max-width: 60vw;
     width: 100%;
     height: 100%;
     transition: none;
+    margin: 20px 0;
 
     &.invert-color {
       filter: invert(1);
@@ -131,14 +133,17 @@ function onIconAddFavoriteClick(): void {
     align-items: flex-end;
     justify-content: space-between;
     width: 100%;
+    margin-bottom: 20px;
     .artist-info {
       width: 45%;
       text-align: left;
+      margin: 10px 0;
       .band {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         margin-bottom: 10px;
+
       }
 
       .song {
@@ -146,6 +151,7 @@ function onIconAddFavoriteClick(): void {
         overflow: hidden;
         text-overflow: ellipsis;
         font-size: calc(var(--main-font-size) + 2px);
+
         font-weight: 600;
       }
     }

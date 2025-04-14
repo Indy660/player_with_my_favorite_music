@@ -263,6 +263,7 @@ onMounted(() => {
   document.addEventListener('keydown', handleKeyDown)
 })
 
+
 // TODO: возникает баг при перемотке назад на песню, не перематывается:
 //  Clayman (#tab=shorts&track=16)
 // Are You Dead Yet (#tab=shorts&track=10)
@@ -430,10 +431,10 @@ const handleKeyDown = (event: KeyboardEvent): void => {
 /*  }*/
 /*}*/
 * {
-  --main-font-size: 24px;
+  --main-font-size: 18px;
   --max-container-width: 1000px;
-  --active-color-btn: 240, 100%;
-  --hover-color-btn: 60, 100%;
+  //--active-color-btn: 240, 100%;
+  //--hover-color-btn: 60, 100%;
   transition: all 0.1s linear;
   font-size: var(--main-font-size);
   font-family: Arial, sans-serif;
@@ -462,6 +463,8 @@ main.light {
   --main-bg-color: #ffffffff;
   --main-bg-color-secondary: rgba(210, 211, 223, 0.39);
   --color-lightness: 60%;
+  --player-button-color: #606060;
+  --player-button-hover: #000000;
 }
 
 main.dark {
@@ -469,7 +472,10 @@ main.dark {
   --main-bg-color: #000000ff;
   --main-bg-color-secondary: rgb(48, 49, 53);
   --color-lightness: 40%;
+  --player-button-color: #bdbdbd;
+  --player-button-hover: #ffffff;
 }
+
 
 .container {
   display: flex;
@@ -479,16 +485,17 @@ main.dark {
   text-align: center;
   border: 1px solid;
   border-radius: 5px;
-  padding: 20px;
+  padding: 60px;
   background-color: var(--main-bg-color);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: relative;
-  overflow: hidden;
+  max-height: 100vh;
 }
+
 @media screen and (min-width: 1200px) {
   .container {
     width: 75vw;
+    max-height: 100vh;
     max-width: var(--max-container-width);
+
   }
 }
 
@@ -498,7 +505,8 @@ main.dark {
   }
   .container {
     width: 100vw;
-    padding: 3vw;
+    max-height: 100vh;
+    padding: 0 3vw 3vw 3vw;
   }
 }
 
@@ -511,6 +519,7 @@ main.dark {
 .container > * {
   margin-bottom: 10px;
   width: 100%;
+
 }
 
 .top_bar {
@@ -547,11 +556,7 @@ button {
 }
 
 button:hover {
-  opacity: 1;
-  border: 1px solid currentcolor;
-  /*todo: хреново на ховере выглядит при темной темы*/
-  background-color: hsl(var(--hover-color-btn), var(--color-lightness));
-  transform: scale(1.1);
+
 }
 
 button.active {
@@ -579,10 +584,12 @@ button.disabled {
   border-radius: initial;
   width: unset;
   height: unset;
+  transition: background-color 0.3s ease;
 }
 
 .tabs button.active {
   background-color: var(--main-bg-color);
+  //background-color: #282828;
   border: 1px solid var(--main-color);
 }
 

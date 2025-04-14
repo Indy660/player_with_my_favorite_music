@@ -264,6 +264,7 @@ function btnHandler(option: TabsOption): void {
   background-color: var(--main-bg-color);
 }
 
+
 .song-text {
   height: 100%;
   overflow-y: auto;
@@ -281,4 +282,5 @@ function btnHandler(option: TabsOption): void {
 .text-with-timestamps span.selected {
   opacity: 1;
 }
+
 </style>

@@ -93,8 +93,13 @@ function timeHandler(event: Event): void {
 .time-display {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 10px;
   color: var(--main-color);
+  margin-top: 10px;
+}
+
+.time-display > span {
+  font-size: 14px;
 }
 /*
 input[type="range"]::-webkit-slider-thumb {
