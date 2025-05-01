@@ -385,8 +385,9 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         :is-favorite-song="favoriteSongs.includes(currentSong)"
         :is-dark-theme="isDarkTheme"
         @show-text-song="handlerShowSongTextBtn"
-        @add-favorite="handleAddFavoriteSongBtn"
+
       >
+<!--        @add-favorite="handleAddFavoriteSongBtn"-->
         <VolumeControl :volume="volume" @click.stop @volume-change="setVolume" />
       </MainInfoBand>
       <ProgressControl
@@ -398,10 +399,20 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         @time-change="handlerTimeChange"
       />
       <MainControl
+          :is-favorite-song="favoriteSongs.includes(currentSong)"
+          :has-text="
+          !!currentSongText.length ||
+          !!currentSongTextWithTimecodes.length ||
+          !!currentSongTextWithTimecodesAssemblyAi.length
+        "
+          @show-text-song="handlerShowSongTextBtn"
+
         :is-playing="isPlaying"
         @previous="previousTrackHandler"
         @next="nextTrack"
         @play-pause="togglePlayPause"
+
+        @add-favorite="handleAddFavoriteSongBtn"
       />
       <OtherControl
         v-model:is-repeat-mode="isRepeatMode"
@@ -473,7 +484,7 @@ main.dark {
   --main-bg-color-secondary: rgb(48, 49, 53);
   --color-lightness: 40%;
   --player-button-color: #bdbdbd;
-  --player-button-hover: #ffffff;
+  --player-button-hover: #ffffff; /* Цвет при наведении в темной теме */
 }
 
 

@@ -71,14 +71,14 @@ watchEffect(() => {
 // const iconShowTextClass = computed(() => {
 //   return props.hasText ? '' : 'disabled'
 // })
-//
+
 // const iconHeartClass = computed(() => {
 //   return props.isFavoriteSong ? 'active' : ''
 // })
 // function onIconShowTextClick(): void {
 //   props.hasText && emit('show-text-song')
 // }
-//
+
 // function onIconAddFavoriteClick(): void {
 //   emit('add-favorite')
 // }
@@ -160,9 +160,7 @@ watchEffect(() => {
       width: 40%;
     }
 
-    .heart.active {
-      color: #de0a26;
-    }
+
 
     button {
       font-size: 20px;

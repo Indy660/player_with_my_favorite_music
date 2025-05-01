@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import {computed, watchEffect} from 'vue'
 
 interface Props {
   isPlaying: boolean
+
+  isFavoriteSong: boolean
+  hasText: boolean
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits(['previous', 'play-pause', 'next'])
+const emit = defineEmits(['previous', 'play-pause', 'next', 'add-favorite', 'show-text-song'])
 
 function previousButtonHandler(): void {
   emit('previous')
@@ -27,23 +30,22 @@ function nextButtonHandler(): void {
 
 
 // -----------начинаю ломать отсюда
-//
-// const emit = defineEmits(['show-text-song', 'add-favorite'])
-
-const iconShowTextClass = computed(() => {
-  return props.hasText ? '' : 'disabled'
-})
 
 const iconHeartClass = computed(() => {
   return props.isFavoriteSong ? 'active' : ''
 })
-function onIconShowTextClick(): void {
-  props.hasText && emit('show-text-song')
-}
-
+const iconShowTextClass = computed(() => {
+  return props.hasText ? '' : 'disabled'
+})
 function onIconAddFavoriteClick(): void {
   emit('add-favorite')
 }
+function onIconShowTextClick(): void {
+  props.hasText && emit('show-text-song')
+}
+watchEffect(() => {
+  console.log('isFavoriteSong', props.isFavoriteSong, '=> class:', iconHeartClass.value)
+})
 </script>
 
 <template>
@@ -96,5 +98,10 @@ function onIconAddFavoriteClick(): void {
   font-size: 32px;
 }
 
-
+.heart.active {
+  color: #de0a26;
+}
+.heart > i {
+  color: inherit;
+}
 </style>
