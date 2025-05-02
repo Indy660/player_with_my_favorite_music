@@ -65,7 +65,14 @@ function timeHandler(event: Event): void {
 <template>
   <div class="progress-control">
     <div class="input-wrapper">
-      <input type="range" min="0" max="1000" :value="convertToValue" step="1" @input="timeHandler" />
+      <input
+        type="range"
+        min="0"
+        max="1000"
+        :value="convertToValue"
+        step="1"
+        @input="timeHandler"
+      />
       <template v-if="bestParties.length">
         <div class="line">
           <div
@@ -103,37 +110,35 @@ input[type="range"]::-webkit-slider-thumb {
 }
 */
 
-
 /*  TODO: подумать как исправить, хочу изменить стиль ползунка, но надо учесть что цвет после проигрыша тоже должен быть свой */
-.input-wrapper input[type="range"]::-webkit-slider-runnable-track {
- background: transparent;
- //background: var(--main-color);
+.input-wrapper input[type='range']::-webkit-slider-runnable-track {
+  background: transparent;
+  //background: var(--main-color);
   //opacity: 0.3;
 }
 
-.input-wrapper input[type="range"]::-moz-range-track {
- //background: transparent;
+.input-wrapper input[type='range']::-moz-range-track {
+  //background: transparent;
 }
 
 .input-wrapper {
- position: relative;
- .line {
-   width: calc(100% - 16px);
-   left: 16px;
-   position: absolute;
-   height: 5px;
-   top: 17px;
-   @media (max-width: 743px) {
-     top: 9px;
-   }
- }
+  position: relative;
+  font-size: 0;
+  margin: 20px 0;
+  .line {
+    width: calc(100% - 16px);
+    left: 16px;
+    position: absolute;
+    height: 5px;
+    top: 0;
+  }
 
- .best-section {
-   position: absolute;
-   top: 0;
-   bottom: 0;
-   background-color:  hsl(var(--active-color-btn), var(--color-lightness));
-   cursor: pointer;
- }
+  .best-section {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-color: hsl(var(--active-color-btn), var(--color-lightness));
+    cursor: pointer;
+  }
 }
 </style>
