@@ -32,7 +32,7 @@ const {
   currentSong,
   currentTracksList,
   favoriteSongs,
-  handleAddFavoriteSongBtn,
+  handleAddFavoriteSongBtn
 } = tracksApi()
 onBeforeMount(async () => {
   initChangeColorScheme()
@@ -86,6 +86,7 @@ onBeforeMount(async () => {
 })
 
 const isDarkTheme = ref(false)
+
 function initChangeColorScheme(): void {
   const theme =
     (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ||
@@ -155,6 +156,7 @@ function setVolume(value: number): void {
 }
 
 const totalTime = ref(0)
+
 function setTotalTime(event: Event): void {
   const target = event.target as HTMLAudioElement
   totalTime.value = target.duration
@@ -174,6 +176,7 @@ function playTrack(): void {
 }
 
 const isPlaying = ref(false)
+
 function togglePlayPause(): void {
   isPlaying.value = !isPlaying.value
   if (isPlaying.value) {
@@ -186,10 +189,12 @@ function togglePlayPause(): void {
 
 // for 1 loop
 const isVolumeChanging = ref(false)
+
 async function changeVolumeSlowly(isDecrease: boolean = true): Promise<void> {
   isVolumeChanging.value = true
   let steps: number = 20
   const stepValue: number = 0.01
+
   async function changeVolume(isDecrease: boolean): Promise<string> {
     return await new Promise((resolve) => {
       const intervalId = setInterval(() => {
@@ -208,40 +213,32 @@ async function changeVolumeSlowly(isDecrease: boolean = true): Promise<void> {
       }, 100)
     })
   }
+
   await changeVolume(isDecrease)
 }
 
 function updateBestPartInHash(index) {
-  const currentHash = window.location.hash.slice(1); // Убираем # в начале
-  const hashParams = new URLSearchParams(currentHash);
+  const currentHash = window.location.hash.slice(1)
+  const hashParams = new URLSearchParams(currentHash)
 
-  // Проверяем, есть ли bestPart и совпадает ли значение
   if (hashParams.has('bestPart') && hashParams.get('bestPart') === String(index)) {
-    return; // Не обновляем, если значение то же
+    return
   }
 
-  // Обновляем или добавляем параметр
-  hashParams.set('bestPart', index);
+  hashParams.set('bestPart', index)
 
-  // Формируем новый hash (без ?)
-  const newHash = hashParams.toString();
-  console.log('newHash',newHash)
+  const newHash = hashParams.toString()
 
-  // Обновляем URL без перезагрузки
-  window.history.pushState({}, '', `${window.location.pathname}#${newHash}`);
-
+  window.history.pushState({}, '', `${window.location.pathname}#${newHash}`)
 }
-
 
 async function shortTracksObserver(time: number): Promise<void> {
   // console.log('shortTracksObserver')
   // audioPlayer.value!.volume = 0.6
 
-  console.log('timetimetime', time)
-
   for (let i = 0; i < bestParties.value.length; i++) {
     const currentBestParty = bestParties.value[i]
-    console.log('currentBestParty',currentBestParty)
+    console.log('currentBestParty', currentBestParty)
     // TODO: проблема при переключении, звук уходит со временем на 100%
     // if (time <= currentBestParty.start && !isVolumeChanging.value) {
     if (time <= currentBestParty.start) {
@@ -273,7 +270,6 @@ async function shortTracksObserver(time: number): Promise<void> {
   handlerEnded()
 }
 
-
 watchEffect(async () => {
   if (tabSelected.value === 4 && isPlaying.value) {
     await shortTracksObserver(currentTime.value)
@@ -282,22 +278,21 @@ watchEffect(async () => {
 const distanceBetweenComponents = ref('500px')
 
 function readBestPartInHash() {
-  const hash = window.location.hash.substring(1); // убираем #
-  const params = new URLSearchParams(hash);
-  const bestPart = params.get('bestPart'); // читаем именно из hash
+  const hash = window.location.hash.substring(1)
+  const params = new URLSearchParams(hash)
+  const bestPart = params.get('bestPart')
 
-  console.log('bestPart from hash:', bestPart);
+  console.log('bestPart from hash:', bestPart)
 
   if (bestPart !== null) {
-    const index = parseInt(bestPart);
+    const index = parseInt(bestPart)
     if (!isNaN(index)) {
-      const moment = bestParties.value[index];
-      console.log('Jumping to best moment from URL param:', moment);
-      audioPlayer.value!.currentTime = moment.start;
+      const moment = bestParties.value[index]
+      console.log('Jumping to best moment from URL param:', moment)
+      audioPlayer.value!.currentTime = moment.start
     }
   }
 }
-
 
 onMounted(() => {
   const progressControlDiv = document.querySelector('.progress_control_ref') as HTMLElement
@@ -309,7 +304,6 @@ onMounted(() => {
   document.addEventListener('keydown', handleKeyDown)
 
   readBestPartInHash()
-
 })
 
 // TODO: возникает баг при перемотке назад на песню, не перематывается:
@@ -326,6 +320,7 @@ function previousTrackHandler(): void {
 
 const isShowTrackList = ref(false)
 const isShowSongText = ref(false)
+
 function handlerShowSongTextBtn(): void {
   isShowSongText.value = !isShowSongText.value
 }
@@ -373,6 +368,7 @@ const currentSongTextWithTimecodesAssemblyAi = computed<SongTextWithTimeCodeAsse
 interface KeyboardEvent {
   key: string
 }
+
 const handleKeyDown = (event: KeyboardEvent): void => {
   switch (event.key) {
     case ' ':
@@ -460,14 +456,14 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         <VolumeControl :volume="volume" @click.stop @volume-change="setVolume" />
       </MainInfoBand>
 
-            <ProgressControl
-              class="progress_control_ref"
-              :best-parties="bestParties"
-              :current-time="currentTime"
-              :total-time="totalTime"
-              @click.stop
-              @time-change="handlerTimeChange"
-            />
+      <ProgressControl
+        class="progress_control_ref"
+        :best-parties="bestParties"
+        :current-time="currentTime"
+        :total-time="totalTime"
+        @click.stop
+        @time-change="handlerTimeChange"
+      />
       <MainControl
         :is-favorite-song="favoriteSongs.includes(currentSong)"
         :has-text="
@@ -489,7 +485,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         :current-numb-song="currentTrackIndex + 1"
       />
 
-        <audio
+      <audio
         ref="audioPlayer"
         :src="pathToCurrentFile"
         preload="metadata"
@@ -527,6 +523,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
     }
   }
 }
+
 main {
   width: 100vw;
   height: 100vh;
@@ -573,6 +570,7 @@ main.dark {
   * {
     --main-font-size: 20px;
   }
+
   .container {
     width: 75vw;
     max-height: 100vh;
@@ -584,6 +582,7 @@ main.dark {
   * {
     --main-font-size: 20px;
   }
+
   .container {
     width: 100vw;
     max-height: 100vh;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, ref, watch, watchEffect} from 'vue'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 
 interface Props {
   currentTime: number
@@ -30,6 +30,7 @@ interface BestPartiesPosition {
   left: string
   right: string
 }
+
 const convertBestPartiesInPercentage = computed<BestPartiesPosition[]>(() => {
   const oneSecondSongInPercent: number = Number((100 / props.totalTime).toFixed(4))
   return props.bestParties.map((item) => ({
@@ -48,18 +49,18 @@ function formatTime(timeInSeconds: number): string {
   return `${minutes}:${String(seconds).padStart(2, '0')}`
 }
 
-
 const bestPartIndex = ref(null)
 const bestPartTime = computed(() => {
-    if (
-        bestPartIndex.value !== null &&
-        bestPartIndex.value >= 0 &&
-        bestPartIndex.value < props.bestParties.length
-    ) {
-        return props.bestParties[bestPartIndex.value].start
-    }
-    return null
+  if (
+    bestPartIndex.value !== null &&
+    bestPartIndex.value >= 0 &&
+    bestPartIndex.value < props.bestParties.length
+  ) {
+    return props.bestParties[bestPartIndex.value].start
+  }
+  return null
 })
+
 function timeHandlerEmit(e: MouseEvent): void {
   const parentLine: Element = <HTMLElement>(<HTMLElement>e.target).parentNode || null
   const clientWidth: number = parentLine?.clientWidth || 0
@@ -68,13 +69,10 @@ function timeHandlerEmit(e: MouseEvent): void {
   emit('time-change', (x / clientWidth) * props.totalTime)
 }
 
-
 function timeHandler(event: Event): void {
   const target = event.target as HTMLInputElement
   emit('time-change', (Number(target.value) / 1000) * (props.totalTime || 0))
 }
-
-
 </script>
 
 <template>
@@ -112,6 +110,7 @@ function timeHandler(event: Event): void {
 .progress-control {
   width: 100%;
 }
+
 .time-display {
   display: flex;
   justify-content: space-between;
@@ -123,6 +122,7 @@ function timeHandler(event: Event): void {
 .time-display > span {
   font-size: 14px;
 }
+
 /*
 input[type="range"]::-webkit-slider-thumb {
   border: 2px solid red;
@@ -145,6 +145,7 @@ input[type="range"]::-webkit-slider-thumb {
   position: relative;
   font-size: 0;
   margin: 20px 0;
+
   .line {
     width: calc(100% - 16px);
     left: 16px;
@@ -162,4 +163,3 @@ input[type="range"]::-webkit-slider-thumb {
   }
 }
 </style>
-

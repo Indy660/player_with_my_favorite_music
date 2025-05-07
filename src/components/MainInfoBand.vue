@@ -116,10 +116,9 @@ watchEffect(() => {
   .album-image {
     border-radius: 5px;
     aspect-ratio: 1 / 1;
-    max-height: 60vh;
-    max-width: 60vw;
-    width: 100%;
-    height: 100%;
+    width: min(60vw, 600px);
+    height: min(60vw, 600px);
+    object-fit: cover;
     transition: none;
     margin: 20px 0;
 
