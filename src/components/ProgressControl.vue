@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import {computed, onMounted, ref, watch, watchEffect} from 'vue'
 
 interface Props {
   currentTime: number
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits(['time-change', 'time-change-line'])
+const emit = defineEmits(['time-change', 'time-change-line', 'best-moment-change'])
 
 const convertToValue = computed(() => {
   return (props.currentTime / props.totalTime) * 1000
@@ -48,6 +48,18 @@ function formatTime(timeInSeconds: number): string {
   return `${minutes}:${String(seconds).padStart(2, '0')}`
 }
 
+
+const bestPartIndex = ref(null)
+const bestPartTime = computed(() => {
+    if (
+        bestPartIndex.value !== null &&
+        bestPartIndex.value >= 0 &&
+        bestPartIndex.value < props.bestParties.length
+    ) {
+        return props.bestParties[bestPartIndex.value].start
+    }
+    return null
+})
 function timeHandlerEmit(e: MouseEvent): void {
   const parentLine: Element = <HTMLElement>(<HTMLElement>e.target).parentNode || null
   const clientWidth: number = parentLine?.clientWidth || 0
@@ -56,10 +68,13 @@ function timeHandlerEmit(e: MouseEvent): void {
   emit('time-change', (x / clientWidth) * props.totalTime)
 }
 
+
 function timeHandler(event: Event): void {
   const target = event.target as HTMLInputElement
   emit('time-change', (Number(target.value) / 1000) * (props.totalTime || 0))
 }
+
+
 </script>
 
 <template>
@@ -80,7 +95,7 @@ function timeHandler(event: Event): void {
             :key="key"
             :style="{ left: party.left, right: party.right }"
             class="best-section"
-            @click.stop="timeHandlerEmit"
+            @click.stop="(e) => timeHandlerEmit(e)"
           ></div>
         </div>
       </template>
@@ -147,3 +162,4 @@ input[type="range"]::-webkit-slider-thumb {
   }
 }
 </style>
+

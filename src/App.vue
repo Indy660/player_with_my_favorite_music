@@ -32,7 +32,7 @@ const {
   currentSong,
   currentTracksList,
   favoriteSongs,
-  handleAddFavoriteSongBtn
+  handleAddFavoriteSongBtn,
 } = tracksApi()
 onBeforeMount(async () => {
   initChangeColorScheme()
@@ -211,16 +211,41 @@ async function changeVolumeSlowly(isDecrease: boolean = true): Promise<void> {
   await changeVolume(isDecrease)
 }
 
+function updateBestPartInHash(index) {
+  const currentHash = window.location.hash.slice(1); // Убираем # в начале
+  const hashParams = new URLSearchParams(currentHash);
+
+  // Проверяем, есть ли bestPart и совпадает ли значение
+  if (hashParams.has('bestPart') && hashParams.get('bestPart') === String(index)) {
+    return; // Не обновляем, если значение то же
+  }
+
+  // Обновляем или добавляем параметр
+  hashParams.set('bestPart', index);
+
+  // Формируем новый hash (без ?)
+  const newHash = hashParams.toString();
+  console.log('newHash',newHash)
+
+  // Обновляем URL без перезагрузки
+  window.history.pushState({}, '', `${window.location.pathname}#${newHash}`);
+
+}
+
+
 async function shortTracksObserver(time: number): Promise<void> {
   // console.log('shortTracksObserver')
   // audioPlayer.value!.volume = 0.6
-  console.log(time)
+
+  console.log('timetimetime', time)
+
   for (let i = 0; i < bestParties.value.length; i++) {
     const currentBestParty = bestParties.value[i]
-    console.log(currentBestParty)
+    console.log('currentBestParty',currentBestParty)
     // TODO: проблема при переключении, звук уходит со временем на 100%
     // if (time <= currentBestParty.start && !isVolumeChanging.value) {
     if (time <= currentBestParty.start) {
+      updateBestPartInHash(i)
       console.log('start')
       // audioPlayer.value!.volume = 0.6
       audioPlayer.value!.currentTime = currentBestParty.start
@@ -228,6 +253,7 @@ async function shortTracksObserver(time: number): Promise<void> {
       // await changeVolumeSlowly(false)
       return
     } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
+      updateBestPartInHash(i)
       console.log('continue')
       // TODO: второе условие как хак
       if (
@@ -247,12 +273,32 @@ async function shortTracksObserver(time: number): Promise<void> {
   handlerEnded()
 }
 
+
 watchEffect(async () => {
   if (tabSelected.value === 4 && isPlaying.value) {
     await shortTracksObserver(currentTime.value)
   }
 })
 const distanceBetweenComponents = ref('500px')
+
+function readBestPartInHash() {
+  const hash = window.location.hash.substring(1); // убираем #
+  const params = new URLSearchParams(hash);
+  const bestPart = params.get('bestPart'); // читаем именно из hash
+
+  console.log('bestPart from hash:', bestPart);
+
+  if (bestPart !== null) {
+    const index = parseInt(bestPart);
+    if (!isNaN(index)) {
+      const moment = bestParties.value[index];
+      console.log('Jumping to best moment from URL param:', moment);
+      audioPlayer.value!.currentTime = moment.start;
+    }
+  }
+}
+
+
 onMounted(() => {
   const progressControlDiv = document.querySelector('.progress_control_ref') as HTMLElement
   const containerDiv = document.querySelector('.container') as HTMLElement
@@ -261,8 +307,10 @@ onMounted(() => {
   distanceBetweenComponents.value = `${Math.abs(rect1.top - rect2.top - 10)}px`
   audioPlayer.value!.volume = 0.8
   document.addEventListener('keydown', handleKeyDown)
-})
 
+  readBestPartInHash()
+
+})
 
 // TODO: возникает баг при перемотке назад на песню, не перематывается:
 //  Clayman (#tab=shorts&track=16)
@@ -344,6 +392,28 @@ const handleKeyDown = (event: KeyboardEvent): void => {
       break
   }
 }
+
+// onMounted(() => {
+//   watch(
+//       () => bestMomentIndex.value,
+//       (newIndex) => {
+//         if (newIndex !== null && audioPlayer.value) {
+//           // Если audio уже готов, перематываем
+//           if (audioPlayer.value.readyState >= 2) {
+//             audioPlayer.value.currentTime = newIndex
+//           } else {
+//             // Ждём загрузки и потом перематываем
+//             const onCanPlay = () => {
+//               audioPlayer.value!.currentTime = newIndex
+//               audioPlayer.value!.removeEventListener('canplay', onCanPlay)
+//             }
+//             audioPlayer.value.addEventListener('canplay', onCanPlay)
+//           }
+//         }
+//       },
+//       { immediate: true }
+//   )
+// })
 </script>
 
 <template>
@@ -385,33 +455,31 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         :is-favorite-song="favoriteSongs.includes(currentSong)"
         :is-dark-theme="isDarkTheme"
         @show-text-song="handlerShowSongTextBtn"
-
       >
-<!--        @add-favorite="handleAddFavoriteSongBtn"-->
+        <!--        @add-favorite="handleAddFavoriteSongBtn"-->
         <VolumeControl :volume="volume" @click.stop @volume-change="setVolume" />
       </MainInfoBand>
-      <ProgressControl
-        class="progress_control_ref"
-        :best-parties="bestParties"
-        :current-time="currentTime"
-        :total-time="totalTime"
-        @click.stop
-        @time-change="handlerTimeChange"
-      />
+
+            <ProgressControl
+              class="progress_control_ref"
+              :best-parties="bestParties"
+              :current-time="currentTime"
+              :total-time="totalTime"
+              @click.stop
+              @time-change="handlerTimeChange"
+            />
       <MainControl
-          :is-favorite-song="favoriteSongs.includes(currentSong)"
-          :has-text="
+        :is-favorite-song="favoriteSongs.includes(currentSong)"
+        :has-text="
           !!currentSongText.length ||
           !!currentSongTextWithTimecodes.length ||
           !!currentSongTextWithTimecodesAssemblyAi.length
         "
-          @show-text-song="handlerShowSongTextBtn"
-
         :is-playing="isPlaying"
+        @show-text-song="handlerShowSongTextBtn"
         @previous="previousTrackHandler"
         @next="nextTrack"
         @play-pause="togglePlayPause"
-
         @add-favorite="handleAddFavoriteSongBtn"
       />
       <OtherControl
@@ -420,7 +488,8 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         v-model:is-show-track-list="isShowTrackList"
         :current-numb-song="currentTrackIndex + 1"
       />
-      <audio
+
+        <audio
         ref="audioPlayer"
         :src="pathToCurrentFile"
         preload="metadata"
@@ -444,7 +513,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
 * {
   --main-font-size: 18px;
   --max-container-width: 1000px;
-  //--active-color-btn: 240, 100%;
+  --active-color-btn: 240, 100%;
   //--hover-color-btn: 60, 100%;
   transition: all 0.1s linear;
   font-size: var(--main-font-size);
@@ -487,7 +556,6 @@ main.dark {
   --player-button-hover: #ffffff; /* Цвет при наведении в темной теме */
 }
 
-
 .container {
   display: flex;
   flex-direction: column;
@@ -501,16 +569,18 @@ main.dark {
   max-height: 100vh;
 }
 
-@media screen and (min-width: 1200px) {
+@media (min-width: 600px) and (max-width: 1200px) {
+  * {
+    --main-font-size: 20px;
+  }
   .container {
     width: 75vw;
     max-height: 100vh;
     max-width: var(--max-container-width);
-
   }
 }
 
-@media screen and (max-width: 600px) {
+@media (min-width: 400px) and (max-width: 600px) {
   * {
     --main-font-size: 20px;
   }
@@ -530,7 +600,6 @@ main.dark {
 .container > * {
   margin-bottom: 10px;
   width: 100%;
-
 }
 
 .top_bar {
@@ -567,7 +636,6 @@ button {
 }
 
 button:hover {
-
 }
 
 button.active {

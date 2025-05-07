@@ -1,5 +1,5 @@
 import { MUSIC_LIST } from '@/const/music_list'
-import { computed, onBeforeMount, ref, watchEffect } from 'vue'
+import {computed, onBeforeMount, onMounted, ref, watch, watchEffect} from 'vue'
 
 interface TopTrackList extends TrackList {
   sort: number
@@ -27,6 +27,7 @@ const TABS_OPTION: TabsOption[] = [
 const favoriteSongs = ref<string[]>([])
 const totalNumbSongs = ref(0)
 const isRandomTracks = ref(false)
+
 
 // import SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI from '@/static_data/songs_text_with_timecodes_assembly_ai.json'
 
@@ -74,17 +75,16 @@ export function tracksApi() {
     tabSelected.value = option.id
     totalNumbSongs.value = currentTracks.value.length
   }
-
   function setTabAndIndex(query: string): void {
-    const queryParts: Array<string> = query.split('&')
-    if (queryParts.length === 2) {
-      const tabUrl = queryParts[0].split('=')[1]
-      const trackIndex = parseInt(queryParts[1].split('=')[1])
-      const selectedTab: TabsOption | undefined = TABS_OPTION.find((tab) => tab.url === tabUrl)
-      if (selectedTab) {
-        tabSelected.value = selectedTab.id
-        currentTrackIndex.value = !isNaN(trackIndex) ? trackIndex : 0
-      }
+    const queryParts = new URLSearchParams(query.replace(/^#/, ''))
+    const tabUrl = queryParts.get('tab')
+    const trackIndex = parseInt(queryParts.get('track') || '0')
+
+    const selectedTab = TABS_OPTION.find(tab => tab.url === tabUrl)
+    if (selectedTab) {
+      tabSelected.value = selectedTab.id
+      currentTrackIndex.value = !isNaN(trackIndex) ? trackIndex : 0
+
     }
   }
   const updateValuesFromUrl = (): void => {
@@ -92,16 +92,35 @@ export function tracksApi() {
     urlFromStorage && setTabAndIndex(urlFromStorage)
   }
   updateValuesFromUrl()
-  watchEffect(() => {
-    const currentTab: TabsOption | undefined = TABS_OPTION.find(
-      (tab) => tab.id === tabSelected.value
-    )
-    const tabUrl: string = currentTab ? currentTab.url : ''
-    const trackUrl: string = currentTrackIndex.value.toString()
-    const params: string = `${import.meta.env.BASE_URL}#tab=${tabUrl}&track=${trackUrl}`
-    window.history.pushState({}, '', params)
-  })
 
+
+    watchEffect(() => {
+        const currentTab = TABS_OPTION.find(tab => tab.id === tabSelected.value)
+        const tabUrl = currentTab ? currentTab.url : ''
+        const trackUrl = currentTrackIndex.value.toString()
+      console.log('tabUrl', tabUrl, 'trackUrl',trackUrl)
+
+        const currentHash = window.location.hash.slice(1)
+        const hashParams = new URLSearchParams(currentHash)
+
+        const previousTab = hashParams.get('tab')
+        const previousTrack = hashParams.get('track')
+
+        // Обновляем tab и track
+        hashParams.set('tab', tabUrl)
+        hashParams.set('track', trackUrl)
+
+        const hasTabChanged = previousTab !== tabUrl
+        const hasTrackChanged = previousTrack !== trackUrl
+
+        // Если вышли из вкладки short или переключили трек — удаляем bestPart
+        if (tabSelected.value !== 4 || hasTrackChanged || hasTabChanged) {
+            hashParams.delete('bestPart')
+        }
+
+        const newHash = hashParams.toString()
+        window.history.pushState({}, '', `${window.location.pathname}#${newHash}`)
+    })
   const tracksByTab = computed<TrackList[]>(() => {
     switch (tabSelected.value) {
       case 1:
@@ -155,6 +174,7 @@ export function tracksApi() {
   }
 
   function nextTrack(): void {
+
     console.log('nextTrack')
     currentTrackIndex.value =
       currentTrackIndex.value >= currentTracks.value.length - 1 ? 0 : currentTrackIndex.value + 1
@@ -222,6 +242,6 @@ export function tracksApi() {
     currentSong,
     handleAddFavoriteSongBtn,
     favoriteSongs,
-    TabsOptionRender
+    TabsOptionRender,
   }
 }

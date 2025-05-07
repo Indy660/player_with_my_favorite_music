@@ -111,7 +111,7 @@ watchEffect(() => {
   </div>
 </template>
 
-<style scoped>
+<style >
 .main-info {
   .album-image {
     border-radius: 5px;
