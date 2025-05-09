@@ -100,7 +100,6 @@ export function tracksApi() {
     const currentTab = TABS_OPTION.find((tab) => tab.id === tabSelected.value)
     const tabUrl = currentTab ? currentTab.url : ''
     const trackUrl = currentTrackIndex.value.toString()
-    console.log('tabUrl', tabUrl, 'trackUrl', trackUrl)
 
     const currentHash = window.location.hash.slice(1)
     const hashParams = new URLSearchParams(currentHash)

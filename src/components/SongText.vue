@@ -254,6 +254,8 @@ function btnHandler(option: TabsOption): void {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: absolute;
+  left: 0;
 }
 
 .tabs {

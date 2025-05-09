@@ -79,7 +79,7 @@ watchEffect(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 60px 0;
+  margin: 30px 0;
 }
 .player-button {
   font-size: 32px;
@@ -104,4 +104,11 @@ watchEffect(() => {
 .heart > i {
   color: inherit;
 }
+@media (min-width: 400px) and (max-width: 1200px) {
+
+  .main-control {
+    margin: 10px 0;
+  }
+}
+
 </style>

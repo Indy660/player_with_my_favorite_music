@@ -217,7 +217,7 @@ async function changeVolumeSlowly(isDecrease: boolean = true): Promise<void> {
   await changeVolume(isDecrease)
 }
 
-function updateBestPartInHash(index) {
+function updateBestPartInHash(index: number) {
   const currentHash = window.location.hash.slice(1)
   const hashParams = new URLSearchParams(currentHash)
 
@@ -225,7 +225,7 @@ function updateBestPartInHash(index) {
     return
   }
 
-  hashParams.set('bestPart', index)
+  hashParams.set('bestPart', String(index))
 
   const newHash = hashParams.toString()
 
@@ -388,28 +388,6 @@ const handleKeyDown = (event: KeyboardEvent): void => {
       break
   }
 }
-
-// onMounted(() => {
-//   watch(
-//       () => bestMomentIndex.value,
-//       (newIndex) => {
-//         if (newIndex !== null && audioPlayer.value) {
-//           // Если audio уже готов, перематываем
-//           if (audioPlayer.value.readyState >= 2) {
-//             audioPlayer.value.currentTime = newIndex
-//           } else {
-//             // Ждём загрузки и потом перематываем
-//             const onCanPlay = () => {
-//               audioPlayer.value!.currentTime = newIndex
-//               audioPlayer.value!.removeEventListener('canplay', onCanPlay)
-//             }
-//             audioPlayer.value.addEventListener('canplay', onCanPlay)
-//           }
-//         }
-//       },
-//       { immediate: true }
-//   )
-// })
 </script>
 
 <template>
@@ -561,32 +539,37 @@ main.dark {
   text-align: center;
   border: 1px solid;
   border-radius: 5px;
-  padding: 60px;
+  padding: 0 60px;
   background-color: var(--main-bg-color);
+  max-width: var(--max-container-width);
   max-height: 100vh;
+  position: absolute;
 }
 
-@media (min-width: 600px) and (max-width: 1200px) {
-  * {
-    --main-font-size: 20px;
-  }
 
-  .container {
-    width: 75vw;
-    max-height: 100vh;
-    max-width: var(--max-container-width);
+
+@media screen and (max-width: 1200px) {
+
+
+  .sidebar {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
-@media (min-width: 400px) and (max-width: 600px) {
+@media screen and (max-width: 600px) {
   * {
     --main-font-size: 20px;
   }
 
   .container {
     width: 100vw;
-    max-height: 100vh;
-    padding: 0 3vw 3vw 3vw;
+    padding: 0;
+  }
+
+  .main-control {
+    margin: 10px 0;
   }
 }
 
@@ -599,6 +582,14 @@ main.dark {
 .container > * {
   margin-bottom: 10px;
   width: 100%;
+}
+
+.main-control {
+  margin: 10px 0;
+}
+
+.tabs button {
+  font-size: 16px;
 }
 
 .top_bar {
