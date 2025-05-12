@@ -9,7 +9,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits(['show-text-song', 'add-favorite'])
 
 const imagePaths = ref<Record<string, string>>({})
 
@@ -17,6 +16,7 @@ onBeforeMount(async () => {
   interface ImagesObject {
     [key: string]: () => Promise<any>
   }
+
   const images: ImagesObject = import.meta.glob('@assets/images/*')
   for (const path in images) {
     const imageName: string = path.replace(/^.*\/(.*)\.\w+$/, '$1')
@@ -37,6 +37,7 @@ interface GetInfoBand {
   bandName: string
   songName: string
 }
+
 const getInfoBand = computed<GetInfoBand>(() => {
   const [bandName, songName] = fullSongName.value.split(' - ')
   return {
@@ -49,6 +50,7 @@ const getLogoImage = computed(() => {
   const { bandName } = getInfoBand.value
   return imagePaths.value[bandName] || imagePaths.value.default_logo
 })
+
 function setMetadata(): void {
   if ('mediaSession' in navigator && getLogoImage.value) {
     const imageSizes: string[] = ['96x96', '128x128', '192x192', '256x256', '384x384', '512x512']
@@ -63,25 +65,12 @@ function setMetadata(): void {
     })
   }
 }
+
 watchEffect(() => {
   if (getInfoBand.value && getLogoImage.value) {
     setMetadata()
   }
 })
-const iconShowTextClass = computed(() => {
-  return props.hasText ? '' : 'disabled'
-})
-
-const iconHeartClass = computed(() => {
-  return props.isFavoriteSong ? 'active' : ''
-})
-function onIconShowTextClick(): void {
-  props.hasText && emit('show-text-song')
-}
-
-function onIconAddFavoriteClick(): void {
-  emit('add-favorite')
-}
 </script>
 
 <template>
@@ -100,26 +89,20 @@ function onIconAddFavoriteClick(): void {
       <div class="slot-wrapper">
         <slot />
       </div>
-
-      <button class="heart" :class="iconHeartClass" @click.stop="onIconAddFavoriteClick">
-        <i class="fa-solid fa-heart" />
-      </button>
-      <button class="show-text" :class="iconShowTextClass" @click.stop="onIconShowTextClick">
-        <i class="fa-solid fa-text-height" />
-      </button>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style>
 .main-info {
   .album-image {
+    border-radius: 5px;
     aspect-ratio: 1 / 1;
-    max-height: 60vh;
-    max-width: 60vw;
-    width: 100%;
-    height: 100%;
+    width: min(40vw, 400px);
+    height: min(40vw, 400px);
+    object-fit: cover;
     transition: none;
+    margin: 20px 0;
 
     &.invert-color {
       filter: invert(1);
@@ -131,9 +114,13 @@ function onIconAddFavoriteClick(): void {
     align-items: flex-end;
     justify-content: space-between;
     width: 100%;
+    margin-bottom: 20px;
+
     .artist-info {
       width: 45%;
       text-align: left;
+      margin: 10px 0;
+
       .band {
         white-space: nowrap;
         overflow: hidden;
@@ -146,6 +133,7 @@ function onIconAddFavoriteClick(): void {
         overflow: hidden;
         text-overflow: ellipsis;
         font-size: calc(var(--main-font-size) + 2px);
+
         font-weight: 600;
       }
     }
@@ -154,13 +142,34 @@ function onIconAddFavoriteClick(): void {
       width: 40%;
     }
 
-    .heart.active {
-      color: #de0a26;
-    }
-
     button {
       font-size: 20px;
     }
   }
 }
+
+@media screen and (max-width: 400px) {
+
+  .main-info {
+    .album-image {
+      width: min(60vw, 600px);
+      height: min(60vw, 600px);
+      margin: 20px 0;
+
+    }
+  }
+}
+@media (min-width: 400px) and (max-width: 600px) {
+
+  .main-info {
+    .album-image {
+      width: min(50vw, 500px);
+      height: min(50vw, 500px);
+      margin: 20px 0;
+
+    }
+  }
+}
+
+
 </style>

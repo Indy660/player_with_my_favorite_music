@@ -65,6 +65,7 @@ const iconBar = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--main-color);
+  color: #a2a2a2;
+  margin: 20px 0;
 }
 </style>

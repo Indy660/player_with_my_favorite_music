@@ -28,3 +28,7 @@ function btnHandler(option: TabsOption): void {
     </button>
   </div>
 </template>
+
+<style scoped>
+
+</style>

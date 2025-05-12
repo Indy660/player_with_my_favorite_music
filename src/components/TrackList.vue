@@ -64,6 +64,7 @@ li {
 li.selected {
   color: hsl(var(--active-color-btn), var(--color-lightness));
 }
+
 li:hover {
   background-color: var(--main-bg-color-secondary);
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 
 interface Props {
   currentTime: number
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits(['time-change', 'time-change-line'])
+const emit = defineEmits(['time-change', 'time-change-line', 'best-moment-change'])
 
 const convertToValue = computed(() => {
   return (props.currentTime / props.totalTime) * 1000
@@ -30,6 +30,7 @@ interface BestPartiesPosition {
   left: string
   right: string
 }
+
 const convertBestPartiesInPercentage = computed<BestPartiesPosition[]>(() => {
   const oneSecondSongInPercent: number = Number((100 / props.totalTime).toFixed(4))
   return props.bestParties.map((item) => ({
@@ -47,6 +48,18 @@ function formatTime(timeInSeconds: number): string {
   const seconds: number = Math.floor(timeInSeconds % 60)
   return `${minutes}:${String(seconds).padStart(2, '0')}`
 }
+
+const bestPartIndex = ref(null)
+const bestPartTime = computed(() => {
+  if (
+    bestPartIndex.value !== null &&
+    bestPartIndex.value >= 0 &&
+    bestPartIndex.value < props.bestParties.length
+  ) {
+    return props.bestParties[bestPartIndex.value].start
+  }
+  return null
+})
 
 function timeHandlerEmit(e: MouseEvent): void {
   const parentLine: Element = <HTMLElement>(<HTMLElement>e.target).parentNode || null
@@ -80,7 +93,7 @@ function timeHandler(event: Event): void {
             :key="key"
             :style="{ left: party.left, right: party.right }"
             class="best-section"
-            @click.stop="timeHandlerEmit"
+            @click.stop="(e) => timeHandlerEmit(e)"
           ></div>
         </div>
       </template>
@@ -97,12 +110,19 @@ function timeHandler(event: Event): void {
 .progress-control {
   width: 100%;
 }
+
 .time-display {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 10px;
   color: var(--main-color);
+  margin-top: 10px;
 }
+
+.time-display > span {
+  font-size: 14px;
+}
+
 /*
 input[type="range"]::-webkit-slider-thumb {
   border: 2px solid red;
@@ -125,6 +145,7 @@ input[type="range"]::-webkit-slider-thumb {
   position: relative;
   font-size: 0;
   margin: 20px 0;
+
   .line {
     width: calc(100% - 16px);
     left: 16px;

@@ -86,6 +86,7 @@ onBeforeMount(async () => {
 })
 
 const isDarkTheme = ref(false)
+
 function initChangeColorScheme(): void {
   const theme =
     (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ||
@@ -155,6 +156,7 @@ function setVolume(value: number): void {
 }
 
 const totalTime = ref(0)
+
 function setTotalTime(event: Event): void {
   const target = event.target as HTMLAudioElement
   totalTime.value = target.duration
@@ -174,6 +176,7 @@ function playTrack(): void {
 }
 
 const isPlaying = ref(false)
+
 function togglePlayPause(): void {
   isPlaying.value = !isPlaying.value
   if (isPlaying.value) {
@@ -186,10 +189,12 @@ function togglePlayPause(): void {
 
 // for 1 loop
 const isVolumeChanging = ref(false)
+
 async function changeVolumeSlowly(isDecrease: boolean = true): Promise<void> {
   isVolumeChanging.value = true
   let steps: number = 20
   const stepValue: number = 0.01
+
   async function changeVolume(isDecrease: boolean): Promise<string> {
     return await new Promise((resolve) => {
       const intervalId = setInterval(() => {
@@ -208,19 +213,36 @@ async function changeVolumeSlowly(isDecrease: boolean = true): Promise<void> {
       }, 100)
     })
   }
+
   await changeVolume(isDecrease)
+}
+
+function updateBestPartInHash(index: number) {
+  const currentHash = window.location.hash.slice(1)
+  const hashParams = new URLSearchParams(currentHash)
+
+  if (hashParams.has('bestPart') && hashParams.get('bestPart') === String(index)) {
+    return
+  }
+
+  hashParams.set('bestPart', String(index))
+
+  const newHash = hashParams.toString()
+
+  window.history.pushState({}, '', `${window.location.pathname}#${newHash}`)
 }
 
 async function shortTracksObserver(time: number): Promise<void> {
   // console.log('shortTracksObserver')
   // audioPlayer.value!.volume = 0.6
-  console.log(time)
+
   for (let i = 0; i < bestParties.value.length; i++) {
     const currentBestParty = bestParties.value[i]
-    console.log(currentBestParty)
+    console.log('currentBestParty', currentBestParty)
     // TODO: проблема при переключении, звук уходит со временем на 100%
     // if (time <= currentBestParty.start && !isVolumeChanging.value) {
     if (time <= currentBestParty.start) {
+      updateBestPartInHash(i)
       console.log('start')
       // audioPlayer.value!.volume = 0.6
       audioPlayer.value!.currentTime = currentBestParty.start
@@ -228,6 +250,7 @@ async function shortTracksObserver(time: number): Promise<void> {
       // await changeVolumeSlowly(false)
       return
     } else if (time >= currentBestParty.start && time <= currentBestParty.end) {
+      updateBestPartInHash(i)
       console.log('continue')
       // TODO: второе условие как хак
       if (
@@ -253,6 +276,24 @@ watchEffect(async () => {
   }
 })
 const distanceBetweenComponents = ref('500px')
+
+function readBestPartInHash() {
+  const hash = window.location.hash.substring(1)
+  const params = new URLSearchParams(hash)
+  const bestPart = params.get('bestPart')
+
+  console.log('bestPart from hash:', bestPart)
+
+  if (bestPart !== null) {
+    const index = parseInt(bestPart)
+    if (!isNaN(index)) {
+      const moment = bestParties.value[index]
+      console.log('Jumping to best moment from URL param:', moment)
+      audioPlayer.value!.currentTime = moment.start
+    }
+  }
+}
+
 onMounted(() => {
   const progressControlDiv = document.querySelector('.progress_control_ref') as HTMLElement
   const containerDiv = document.querySelector('.container') as HTMLElement
@@ -261,6 +302,8 @@ onMounted(() => {
   distanceBetweenComponents.value = `${Math.abs(rect1.top - rect2.top - 10)}px`
   audioPlayer.value!.volume = 0.8
   document.addEventListener('keydown', handleKeyDown)
+
+  readBestPartInHash()
 })
 
 // TODO: возникает баг при перемотке назад на песню, не перематывается:
@@ -277,6 +320,7 @@ function previousTrackHandler(): void {
 
 const isShowTrackList = ref(false)
 const isShowSongText = ref(false)
+
 function handlerShowSongTextBtn(): void {
   isShowSongText.value = !isShowSongText.value
 }
@@ -324,6 +368,7 @@ const currentSongTextWithTimecodesAssemblyAi = computed<SongTextWithTimeCodeAsse
 interface KeyboardEvent {
   key: string
 }
+
 const handleKeyDown = (event: KeyboardEvent): void => {
   switch (event.key) {
     case ' ':
@@ -384,10 +429,11 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         :is-favorite-song="favoriteSongs.includes(currentSong)"
         :is-dark-theme="isDarkTheme"
         @show-text-song="handlerShowSongTextBtn"
-        @add-favorite="handleAddFavoriteSongBtn"
       >
+
         <VolumeControl :volume="volume" @click.stop @volume-change="setVolume" />
       </MainInfoBand>
+
       <ProgressControl
         class="progress_control_ref"
         :best-parties="bestParties"
@@ -397,10 +443,18 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         @time-change="handlerTimeChange"
       />
       <MainControl
+        :is-favorite-song="favoriteSongs.includes(currentSong)"
+        :has-text="
+          !!currentSongText.length ||
+          !!currentSongTextWithTimecodes.length ||
+          !!currentSongTextWithTimecodesAssemblyAi.length
+        "
         :is-playing="isPlaying"
+        @show-text-song="handlerShowSongTextBtn"
         @previous="previousTrackHandler"
         @next="nextTrack"
         @play-pause="togglePlayPause"
+        @add-favorite="handleAddFavoriteSongBtn"
       />
       <OtherControl
         v-model:is-repeat-mode="isRepeatMode"
@@ -408,6 +462,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         v-model:is-show-track-list="isShowTrackList"
         :current-numb-song="currentTrackIndex + 1"
       />
+
       <audio
         ref="audioPlayer"
         :src="pathToCurrentFile"
@@ -430,10 +485,10 @@ const handleKeyDown = (event: KeyboardEvent): void => {
 /*  }*/
 /*}*/
 * {
-  --main-font-size: 24px;
+  --main-font-size: 18px;
   --max-container-width: 1000px;
   --active-color-btn: 240, 100%;
-  --hover-color-btn: 60, 100%;
+  //--hover-color-btn: 60, 100%;
   transition: all 0.1s linear;
   font-size: var(--main-font-size);
   font-family: Arial, sans-serif;
@@ -446,6 +501,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
     }
   }
 }
+
 main {
   width: 100vw;
   height: 100vh;
@@ -462,6 +518,8 @@ main.light {
   --main-bg-color: #ffffffff;
   --main-bg-color-secondary: rgba(210, 211, 223, 0.39);
   --color-lightness: 60%;
+  --player-button-color: #606060;
+  --player-button-hover: #000000;
 }
 
 main.dark {
@@ -469,6 +527,8 @@ main.dark {
   --main-bg-color: #000000ff;
   --main-bg-color-secondary: rgb(48, 49, 53);
   --color-lightness: 40%;
+  --player-button-color: #bdbdbd;
+  --player-button-hover: #ffffff; /* Цвет при наведении в темной теме */
 }
 
 .container {
@@ -479,16 +539,22 @@ main.dark {
   text-align: center;
   border: 1px solid;
   border-radius: 5px;
-  padding: 20px;
+  padding: 0 60px;
   background-color: var(--main-bg-color);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: relative;
-  overflow: hidden;
+  max-width: var(--max-container-width);
+  max-height: 100vh;
+  position: absolute;
 }
-@media screen and (min-width: 1200px) {
-  .container {
-    width: 75vw;
-    max-width: var(--max-container-width);
+
+
+
+@media screen and (max-width: 1200px) {
+
+
+  .sidebar {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
@@ -496,9 +562,14 @@ main.dark {
   * {
     --main-font-size: 20px;
   }
+
   .container {
     width: 100vw;
-    padding: 3vw;
+    padding: 0;
+  }
+
+  .main-control {
+    margin: 10px 0;
   }
 }
 
@@ -511,6 +582,14 @@ main.dark {
 .container > * {
   margin-bottom: 10px;
   width: 100%;
+}
+
+.main-control {
+  margin: 10px 0;
+}
+
+.tabs button {
+  font-size: 16px;
 }
 
 .top_bar {
@@ -547,11 +626,6 @@ button {
 }
 
 button:hover {
-  opacity: 1;
-  border: 1px solid currentcolor;
-  /*todo: хреново на ховере выглядит при темной темы*/
-  background-color: hsl(var(--hover-color-btn), var(--color-lightness));
-  transform: scale(1.1);
 }
 
 button.active {
@@ -579,10 +653,12 @@ button.disabled {
   border-radius: initial;
   width: unset;
   height: unset;
+  transition: background-color 0.3s ease;
 }
 
 .tabs button.active {
   background-color: var(--main-bg-color);
+  //background-color: #282828;
   border: 1px solid var(--main-color);
 }
 

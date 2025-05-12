@@ -65,7 +65,8 @@ function onIconVolumeClick(): void {
   padding: 0;
 }
 
-.volume-control .margin {
+
+.volume-cont.player-buttonrol .margin {
   margin-right: 0.2vw;
 }
 </style>

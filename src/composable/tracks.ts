@@ -1,13 +1,15 @@
 import { MUSIC_LIST } from '@/const/music_list'
-import { computed, onBeforeMount, ref, watchEffect } from 'vue'
+import { computed, onBeforeMount, onMounted, ref, watch, watchEffect } from 'vue'
 
 interface TopTrackList extends TrackList {
   sort: number
   bestParties: BestParties[]
 }
+
 interface NotAggressiveTrackList extends TrackList {
   notAggressive: boolean
 }
+
 function isTopTrackList(item: TrackList): item is TopTrackList {
   return typeof item.sort === 'number' && item.bestParties !== undefined
 }
@@ -64,6 +66,7 @@ export function tracksApi() {
   })
 
   const tabSelected = ref(1)
+
   function changeTab(option: TabsOption): void {
     if (
       !(tabSelected.value === 4 && option.id === 2) &&
@@ -76,32 +79,48 @@ export function tracksApi() {
   }
 
   function setTabAndIndex(query: string): void {
-    const queryParts: Array<string> = query.split('&')
-    if (queryParts.length === 2) {
-      const tabUrl = queryParts[0].split('=')[1]
-      const trackIndex = parseInt(queryParts[1].split('=')[1])
-      const selectedTab: TabsOption | undefined = TABS_OPTION.find((tab) => tab.url === tabUrl)
-      if (selectedTab) {
-        tabSelected.value = selectedTab.id
-        currentTrackIndex.value = !isNaN(trackIndex) ? trackIndex : 0
-      }
+    const queryParts = new URLSearchParams(query.replace(/^#/, ''))
+    const tabUrl = queryParts.get('tab')
+    const trackIndex = parseInt(queryParts.get('track') || '0')
+
+    const selectedTab = TABS_OPTION.find((tab) => tab.url === tabUrl)
+    if (selectedTab) {
+      tabSelected.value = selectedTab.id
+      currentTrackIndex.value = !isNaN(trackIndex) ? trackIndex : 0
     }
   }
+
   const updateValuesFromUrl = (): void => {
     const urlFromStorage = window.location.hash
     urlFromStorage && setTabAndIndex(urlFromStorage)
   }
   updateValuesFromUrl()
-  watchEffect(() => {
-    const currentTab: TabsOption | undefined = TABS_OPTION.find(
-      (tab) => tab.id === tabSelected.value
-    )
-    const tabUrl: string = currentTab ? currentTab.url : ''
-    const trackUrl: string = currentTrackIndex.value.toString()
-    const params: string = `${import.meta.env.BASE_URL}#tab=${tabUrl}&track=${trackUrl}`
-    window.history.pushState({}, '', params)
-  })
 
+  watchEffect(() => {
+    const currentTab = TABS_OPTION.find((tab) => tab.id === tabSelected.value)
+    const tabUrl = currentTab ? currentTab.url : ''
+    const trackUrl = currentTrackIndex.value.toString()
+
+    const currentHash = window.location.hash.slice(1)
+    const hashParams = new URLSearchParams(currentHash)
+
+    const previousTab = hashParams.get('tab')
+    const previousTrack = hashParams.get('track')
+
+    hashParams.set('tab', tabUrl)
+    hashParams.set('track', trackUrl)
+
+    const hasTabChanged = previousTab !== tabUrl
+    const hasTrackChanged = previousTrack !== trackUrl
+
+    // Если вышли из вкладки short или переключили трек — удаляем bestPart
+    if (tabSelected.value !== 4 || hasTrackChanged || hasTabChanged) {
+      hashParams.delete('bestPart')
+    }
+
+    const newHash = hashParams.toString()
+    window.history.pushState({}, '', `${window.location.pathname}#${newHash}`)
+  })
   const tracksByTab = computed<TrackList[]>(() => {
     switch (tabSelected.value) {
       case 1:

@@ -3,6 +3,7 @@ import path from 'node:path'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 import dotenv from 'dotenv'
+
 dotenv.config()
 
 import { AssemblyAI } from 'assemblyai'
@@ -163,7 +164,50 @@ async function checkAndUpdateMusicList(fileName, musicListPath, musicList) {
     // console.log(`Песня "${fileName}" уже существует в списке.`)
   }
 }
+async function downloadBandLogo(bandName) {
+  try {
+    const normalizedBandName = bandName.replace(/\s+/g, '-')
+    // console.log('normalizedBandName', normalizedBandName)
+    const geniusUrl = `https://genius.com/artists/${normalizedBandName}`
 
+    const imageDir = 'src/assets/images'
+    const imagePath = path.join(imageDir, `${bandName}.jpg`)
+
+    if (fs.existsSync(imagePath)) {
+      console.log(`Изображение для "${bandName}" уже существует. Пропускаем загрузку.`)
+      return
+    }
+
+    const { data } = await axios.get(geniusUrl, {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      }
+    })
+
+    const $ = cheerio.load(data)
+    const imageUrl = $('meta[property="og:image"]').attr('content')
+
+    if (!imageUrl) {
+      throw new Error('Не удалось найти логотип через og:image')
+    }
+
+    // console.log('imageUrl:', imageUrl)
+
+    const imageResponse = await axios.get(imageUrl, {
+      responseType: 'arraybuffer'
+    })
+
+    if (!fs.existsSync(imageDir)) {
+      fs.mkdirSync(imageDir, { recursive: true })
+    }
+
+    fs.writeFileSync(imagePath, imageResponse.data)
+    console.log(`Изображение для "${bandName}" успешно сохранено: ${imagePath}`)
+  } catch (error) {
+    console.error(`Ошибка при обработке "${bandName}":`, error.message)
+  }
+}
 // Основная логика обработки файлов
 async function processMusicFiles() {
   try {
@@ -188,23 +232,27 @@ async function processMusicFiles() {
     await Promise.all(
       files.map(async (file) => {
         if (path.extname(file) === '.mp3') {
-          const fileNameWithoutExtension = path.basename(file, '.mp3').replace(/-/g, ' ')
+          const fileNameWithoutExtension = path.basename(file, '.mp3')
+          const fileNameWithoutExtensionWithSpace = fileNameWithoutExtension.replace(/-/g, ' ')
+          const bandName = fileNameWithoutExtension.split('-')[0].trim() // Предположим, что первая часть — имя группы
+
           await checkAndUpdateMusicList(file, musicListPath, musicList)
-          await fetchLyricsAndSave(fileNameWithoutExtension, file, lyricsData, outputFilePath)
+          await fetchLyricsAndSave(fileNameWithoutExtensionWithSpace, file, lyricsData, outputFilePath)
           await fetchLyricsAndSaveTimecodes(
-            fileNameWithoutExtension,
+            fileNameWithoutExtensionWithSpace,
             file,
             lyricsDataTimecodes,
             outputFilePathTimecodes
           )
           if (process.env.ASSEMBLYAI_API_KEY) {
             await fetchLyricsAndSaveTimecodesAssemblyAI(
-              fileNameWithoutExtension,
+              fileNameWithoutExtensionWithSpace,
               file,
               lyricsDataTimecodesAssemblyAI,
               outputFilePathTimecodesAssemblyAI
             )
           }
+          await downloadBandLogo(bandName)
         }
       })
     )
@@ -215,3 +263,6 @@ async function processMusicFiles() {
 
 // Запуск обработки файлов
 processMusicFiles()
+
+
+
