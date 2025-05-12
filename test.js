@@ -1,8 +1,8 @@
-// const axios = require('axios')
-// const cheerio = require('cheerio')
-// const fs = require('fs')
-// const path = require('path')
-
+// // const axios = require('axios')
+// // const cheerio = require('cheerio')
+// // const fs = require('fs')
+// // const path = require('path')
+ 
 import fs from 'node:fs'
 import path from 'node:path'
 import axios from 'axios'
@@ -10,18 +10,18 @@ import * as cheerio from 'cheerio'
 
 async function downloadBandLogo(bandName) {
   try {
-    const normalizedBandName = bandName.toLowerCase().replace(/\s+/g, '-')
+    const normalizedBandName = bandName.replace(/\s+/g, '-')
+    console.log('normalizedBandName', normalizedBandName)
     const geniusUrl = `https://genius.com/artists/${normalizedBandName}`
-    // Проверяем, существует ли уже файл
+
     const imageDir = 'src/assets/images'
-    const imagePath = path.join(imageDir, `${bandName}.jpg`) // Предполагаем jpg, но можно изменить
+    const imagePath = path.join(imageDir, `${bandName}.jpg`)
 
     if (fs.existsSync(imagePath)) {
       console.log(`Изображение для "${bandName}" уже существует. Пропускаем загрузку.`)
       return
     }
 
-    // Получаем HTML страницы
     const { data } = await axios.get(geniusUrl, {
       headers: {
         'User-Agent':
@@ -29,40 +29,23 @@ async function downloadBandLogo(bandName) {
       }
     })
 
-    // Парсим HTML
     const $ = cheerio.load(data)
-    // console.log($, $?.innerText)
-    // Находим элемент с изображением
-    const miniCard = $('mini-song-card').first()
-    if (!miniCard.length) {
-      throw new Error('Не найден элемент mini-song-card')
+    const imageUrl = $('meta[property="og:image"]').attr('content')
+
+    if (!imageUrl) {
+      throw new Error('Не удалось найти логотип через og:image')
     }
 
-    const thumbnailDiv = miniCard.find('.mini_card-thumbnail').first()
-    if (!thumbnailDiv.length) {
-      throw new Error('Не найден элемент с классом mini_card-thumbnail')
-    }
+    console.log('imageUrl:', imageUrl)
 
-    // Извлекаем URL изображения из style атрибута
-    const style = thumbnailDiv.attr('style')
-    const imageUrlMatch = style.match(/url\(["']?(.*?)["']?\)/)
-    if (!imageUrlMatch) {
-      throw new Error('Не удалось извлечь URL изображения из style атрибута')
-    }
-    console.log(imageUrl)
-    const imageUrl = imageUrlMatch[1]
-
-    // Скачиваем изображение
     const imageResponse = await axios.get(imageUrl, {
       responseType: 'arraybuffer'
     })
 
-    // Создаем директорию, если её нет
     if (!fs.existsSync(imageDir)) {
       fs.mkdirSync(imageDir, { recursive: true })
     }
 
-    // Сохраняем изображение
     fs.writeFileSync(imagePath, imageResponse.data)
     console.log(`Изображение для "${bandName}" успешно сохранено: ${imagePath}`)
   } catch (error) {
@@ -72,5 +55,6 @@ async function downloadBandLogo(bandName) {
 
 // Пример использования
 const songName = 'Nirvana - Smells Like Teen Spirit'
-const bandName = songName.split('-')[0].trim() // Извлекаем название группы
+const bandName = songName.split('-')[0].trim()
+console.log('bandName', bandName)
 downloadBandLogo(bandName)

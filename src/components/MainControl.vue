@@ -27,10 +27,6 @@ function nextButtonHandler(): void {
   emit('next')
 }
 
-
-
-// -----------начинаю ломать отсюда
-
 const iconHeartClass = computed(() => {
   return props.isFavoriteSong ? 'active' : ''
 })
@@ -61,10 +57,6 @@ watchEffect(() => {
     <button class="player-button" @keyup.space.prevent @click.stop="playerButtonHandler">
       <span v-html="iconPlayerButton"></span>
     </button>
-<!--    <button class="player-button" @keyup.space.prevent @click.stop="playerButtonHandler">-->
-<!--      <i v-if="props.isPlaying" class="fas fa-pause"></i>-->
-<!--      <i v-else class="fas fa-play"></i>-->
-<!--    </button>-->
     <button class="player-button" @click.stop="nextButtonHandler">
       <i class="fas fa-step-forward"></i>
     </button>

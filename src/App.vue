@@ -430,7 +430,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         :is-dark-theme="isDarkTheme"
         @show-text-song="handlerShowSongTextBtn"
       >
-        <!--        @add-favorite="handleAddFavoriteSongBtn"-->
+
         <VolumeControl :volume="volume" @click.stop @volume-change="setVolume" />
       </MainInfoBand>
 
