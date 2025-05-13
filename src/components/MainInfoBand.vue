@@ -71,6 +71,10 @@ watchEffect(() => {
     setMetadata()
   }
 })
+
+function isScrollingText(text: string): boolean {
+  return text.length > 20 // можно подстроить под нужную длину
+}
 </script>
 
 <template>
@@ -83,8 +87,35 @@ watchEffect(() => {
     />
     <div class="main-panel">
       <div class="artist-info">
-        <div class="band">{{ getInfoBand.bandName }}</div>
-        <div class="song">{{ getInfoBand.songName }}</div>
+        <div class="band-wrapper">
+          <div
+            class="band"
+            :class="{ scrolling: isScrollingText(getInfoBand.bandName) }"
+          >
+            <template v-if="isScrollingText(getInfoBand.bandName)">
+              <span>{{ getInfoBand.bandName }}&nbsp;&nbsp;&nbsp;</span>
+              <span>{{ getInfoBand.bandName }}&nbsp;&nbsp;&nbsp;</span>
+            </template>
+            <template v-else>
+              <span>{{ getInfoBand.bandName }}</span>
+            </template>
+          </div>
+        </div>
+
+        <div class="song-wrapper">
+          <div
+            class="song"
+            :class="{ scrolling: isScrollingText(getInfoBand.songName) }"
+          >
+            <template v-if="isScrollingText(getInfoBand.songName)">
+              <span>{{ getInfoBand.songName }}&nbsp;&nbsp;&nbsp;</span>
+              <span>{{ getInfoBand.songName }}&nbsp;&nbsp;&nbsp;</span>
+            </template>
+            <template v-else>
+              <span>{{ getInfoBand.songName }}</span>
+            </template>
+          </div>
+        </div>
       </div>
       <div class="slot-wrapper">
         <slot />
@@ -94,6 +125,34 @@ watchEffect(() => {
 </template>
 
 <style>
+.band-wrapper,
+.song-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.band,
+.song {
+  display: inline-flex;
+  white-space: nowrap;
+  font-size: calc(var(--main-font-size) + 2px);
+}
+
+.band.scrolling,
+.song.scrolling {
+  animation: scrollLoop 10s linear infinite;
+}
+
+@keyframes scrollLoop {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .main-info {
   .album-image {
     border-radius: 5px;
@@ -126,15 +185,10 @@ watchEffect(() => {
         overflow: hidden;
         text-overflow: ellipsis;
         margin-bottom: 10px;
+
       }
-
-      .song {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: calc(var(--main-font-size) + 2px);
-
-        font-weight: 600;
+      .band > span {
+        font-weight: bold;
       }
     }
 
@@ -149,27 +203,22 @@ watchEffect(() => {
 }
 
 @media screen and (max-width: 400px) {
-
   .main-info {
     .album-image {
       width: min(60vw, 600px);
       height: min(60vw, 600px);
       margin: 20px 0;
-
     }
   }
 }
-@media (min-width: 400px) and (max-width: 600px) {
 
+@media (min-width: 400px) and (max-width: 600px) {
   .main-info {
     .album-image {
       width: min(50vw, 500px);
       height: min(50vw, 500px);
       margin: 20px 0;
-
     }
   }
 }
-
-
 </style>

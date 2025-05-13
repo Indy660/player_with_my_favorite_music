@@ -541,7 +541,9 @@ main.dark {
   border-radius: 5px;
   padding: 0 60px;
   background-color: var(--main-bg-color);
-  max-width: var(--max-container-width);
+  width: 100%;
+  max-width: 600px;
+  overflow-x: hidden;
   max-height: 100vh;
   position: absolute;
 }
@@ -565,7 +567,7 @@ main.dark {
 
   .container {
     width: 100vw;
-    padding: 0;
+    padding: 0 10px;
   }
 
   .main-control {
