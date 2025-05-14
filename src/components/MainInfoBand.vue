@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, computed, watchEffect } from 'vue'
+import { ref, onBeforeMount, computed, watchEffect, onMounted, nextTick, watch } from "vue";
 
 interface Props {
   songName: string
@@ -72,9 +72,42 @@ watchEffect(() => {
   }
 })
 
-function isScrollingText(text: string): boolean {
-  return text.length > 20 // можно подстроить под нужную длину
+const songEl = ref<HTMLElement | null>(null)
+const bandEl = ref<HTMLElement | null>(null)
+const artistInfoEl = ref<HTMLElement | null>(null)
+const shouldScrollSong = ref(false)
+const shouldScrollBand = ref(false)
+
+function getTextWidth(text: string, font: string): number {
+  const canvas = document.createElement('canvas')
+  const context = canvas.getContext('2d') as CanvasRenderingContext2D
+  context.font = font
+  return context.measureText(text).width
 }
+
+function updateScrollState() {
+  nextTick(() => {
+    const containerWidth = artistInfoEl.value?.offsetWidth || 0
+
+    if (songEl.value) {
+      const fontSize = 'bold 20px Rubik'
+      const songTextWidth = getTextWidth(getInfoBand.value.songName, fontSize)
+      shouldScrollSong.value = songTextWidth > containerWidth
+    }
+    if (bandEl.value) {
+      const fontSize = 'bold 20px Rubik'
+      const bandTextWidth = getTextWidth(getInfoBand.value.bandName, fontSize)
+      shouldScrollBand.value = bandTextWidth > containerWidth
+    }
+  })
+}
+
+
+onMounted(updateScrollState)
+
+watch(() => getInfoBand.value.songName, () => {
+  updateScrollState()
+})
 </script>
 
 <template>
@@ -86,13 +119,14 @@ function isScrollingText(text: string): boolean {
       alt=""
     />
     <div class="main-panel">
-      <div class="artist-info">
+      <div class="artist-info" ref="artistInfoEl">
         <div class="band-wrapper">
           <div
             class="band"
-            :class="{ scrolling: isScrollingText(getInfoBand.bandName) }"
+            :class="{ scrolling: shouldScrollBand }"
+            ref="bandEl"
           >
-            <template v-if="isScrollingText(getInfoBand.bandName)">
+            <template v-if="shouldScrollBand">
               <span>{{ getInfoBand.bandName }}&nbsp;&nbsp;&nbsp;</span>
               <span>{{ getInfoBand.bandName }}&nbsp;&nbsp;&nbsp;</span>
             </template>
@@ -105,9 +139,10 @@ function isScrollingText(text: string): boolean {
         <div class="song-wrapper">
           <div
             class="song"
-            :class="{ scrolling: isScrollingText(getInfoBand.songName) }"
+            :class="{ scrolling: shouldScrollSong }"
+            ref="songEl"
           >
-            <template v-if="isScrollingText(getInfoBand.songName)">
+            <template v-if="shouldScrollSong">
               <span>{{ getInfoBand.songName }}&nbsp;&nbsp;&nbsp;</span>
               <span>{{ getInfoBand.songName }}&nbsp;&nbsp;&nbsp;</span>
             </template>
@@ -136,7 +171,7 @@ function isScrollingText(text: string): boolean {
 .song {
   display: inline-flex;
   white-space: nowrap;
-  font-size: calc(var(--main-font-size) + 2px);
+  font: bold 20px Rubik;
 }
 
 .band.scrolling,
