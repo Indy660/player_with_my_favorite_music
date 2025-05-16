@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, computed, watchEffect } from 'vue'
+import { ref, onBeforeMount, computed, watchEffect, onMounted, nextTick, watch } from "vue";
 
 interface Props {
   songName: string
@@ -71,6 +71,45 @@ watchEffect(() => {
     setMetadata()
   }
 })
+
+function getTextWidth(text: string, font: string): number {
+  const canvas = document.createElement('canvas')
+  const context = canvas.getContext('2d') as CanvasRenderingContext2D
+  context.font = font
+  console.log('context.measureText(text).width', context.measureText(text).width)
+  return context.measureText(text).width
+}
+
+const artistInfoEl = ref<HTMLElement | null>(null)
+const containerWidth = ref(0)
+
+const font = '18px Arial,sans-serif'
+
+onMounted(() => {
+  const updateWidth = () => {
+    if (artistInfoEl.value) {
+      containerWidth.value = artistInfoEl.value.offsetWidth
+    }
+  }
+  updateWidth()
+
+  const resizeObserver = new ResizeObserver(updateWidth)
+  if (artistInfoEl.value) {
+    resizeObserver.observe(artistInfoEl.value)
+  }
+})
+
+function createScrollChecker(textSource: () => string) {
+  return computed(() => {
+    const text = textSource()
+    const textWidth = getTextWidth(text, font)
+    return textWidth > containerWidth.value
+  })
+}
+
+const shouldScrollSong = createScrollChecker(() => getInfoBand.value.songName)
+const shouldScrollBand = createScrollChecker(() => getInfoBand.value.bandName)
+
 </script>
 
 <template>
@@ -82,9 +121,30 @@ watchEffect(() => {
       alt=""
     />
     <div class="main-panel">
-      <div class="artist-info">
-        <div class="band">{{ getInfoBand.bandName }}</div>
-        <div class="song">{{ getInfoBand.songName }}</div>
+      <div class="artist-info" ref="artistInfoEl">
+        <div class="band-wrapper">
+          <div class="band" :class="{ scrolling: shouldScrollBand }">
+            <template v-if="shouldScrollBand">
+              <span>{{ getInfoBand.bandName }}&nbsp;&nbsp;&nbsp;</span>
+              <span>{{ getInfoBand.bandName }}&nbsp;&nbsp;&nbsp;</span>
+            </template>
+            <template v-else>
+              <span>{{ getInfoBand.bandName }}</span>
+            </template>
+          </div>
+        </div>
+
+        <div class="song-wrapper">
+          <div class="song" :class="{ scrolling: shouldScrollSong }">
+            <template v-if="shouldScrollSong">
+              <span>{{ getInfoBand.songName }}&nbsp;&nbsp;&nbsp;</span>
+              <span>{{ getInfoBand.songName }}&nbsp;&nbsp;&nbsp;</span>
+            </template>
+            <template v-else>
+              <span>{{ getInfoBand.songName }}</span>
+            </template>
+          </div>
+        </div>
       </div>
       <div class="slot-wrapper">
         <slot />
@@ -94,6 +154,34 @@ watchEffect(() => {
 </template>
 
 <style>
+.band-wrapper,
+.song-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.band,
+.song {
+  display: inline-flex;
+  white-space: nowrap;
+  font: bold 20px Rubik;
+}
+
+.band.scrolling,
+.song.scrolling {
+  animation: scrollLoop 10s linear infinite;
+}
+
+@keyframes scrollLoop {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .main-info {
   .album-image {
     border-radius: 5px;
@@ -117,7 +205,7 @@ watchEffect(() => {
     margin-bottom: 20px;
 
     .artist-info {
-      width: 45%;
+      width: 55%;
       text-align: left;
       margin: 10px 0;
 
@@ -126,15 +214,10 @@ watchEffect(() => {
         overflow: hidden;
         text-overflow: ellipsis;
         margin-bottom: 10px;
+
       }
-
-      .song {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: calc(var(--main-font-size) + 2px);
-
-        font-weight: 600;
+      .band > span {
+        font-weight: bold;
       }
     }
 
@@ -149,27 +232,22 @@ watchEffect(() => {
 }
 
 @media screen and (max-width: 400px) {
-
   .main-info {
     .album-image {
       width: min(60vw, 600px);
       height: min(60vw, 600px);
       margin: 20px 0;
-
     }
   }
 }
-@media (min-width: 400px) and (max-width: 600px) {
 
+@media (min-width: 400px) and (max-width: 600px) {
   .main-info {
     .album-image {
       width: min(50vw, 500px);
       height: min(50vw, 500px);
       margin: 20px 0;
-
     }
   }
 }
-
-
 </style>
