@@ -282,13 +282,11 @@ function readBestPartInHash() {
   const params = new URLSearchParams(hash)
   const bestPart = params.get('bestPart')
 
-  console.log('bestPart from hash:', bestPart)
 
   if (bestPart !== null) {
     const index = parseInt(bestPart)
     if (!isNaN(index)) {
       const moment = bestParties.value[index]
-      console.log('Jumping to best moment from URL param:', moment)
       audioPlayer.value!.currentTime = moment.start
     }
   }

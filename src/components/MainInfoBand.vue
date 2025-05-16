@@ -72,42 +72,44 @@ watchEffect(() => {
   }
 })
 
-const songEl = ref<HTMLElement | null>(null)
-const bandEl = ref<HTMLElement | null>(null)
-const artistInfoEl = ref<HTMLElement | null>(null)
-const shouldScrollSong = ref(false)
-const shouldScrollBand = ref(false)
-
 function getTextWidth(text: string, font: string): number {
   const canvas = document.createElement('canvas')
   const context = canvas.getContext('2d') as CanvasRenderingContext2D
   context.font = font
+  console.log('context.measureText(text).width', context.measureText(text).width)
   return context.measureText(text).width
 }
 
-function updateScrollState() {
-  nextTick(() => {
-    const containerWidth = artistInfoEl.value?.offsetWidth || 0
+const artistInfoEl = ref<HTMLElement | null>(null)
+const containerWidth = ref(0)
 
-    if (songEl.value) {
-      const fontSize = 'bold 20px Rubik'
-      const songTextWidth = getTextWidth(getInfoBand.value.songName, fontSize)
-      shouldScrollSong.value = songTextWidth > containerWidth
+const font = '18px Arial,sans-serif'
+
+onMounted(() => {
+  const updateWidth = () => {
+    if (artistInfoEl.value) {
+      containerWidth.value = artistInfoEl.value.offsetWidth
     }
-    if (bandEl.value) {
-      const fontSize = 'bold 20px Rubik'
-      const bandTextWidth = getTextWidth(getInfoBand.value.bandName, fontSize)
-      shouldScrollBand.value = bandTextWidth > containerWidth
-    }
+  }
+  updateWidth()
+
+  const resizeObserver = new ResizeObserver(updateWidth)
+  if (artistInfoEl.value) {
+    resizeObserver.observe(artistInfoEl.value)
+  }
+})
+
+function createScrollChecker(textSource: () => string) {
+  return computed(() => {
+    const text = textSource()
+    const textWidth = getTextWidth(text, font)
+    return textWidth > containerWidth.value
   })
 }
 
+const shouldScrollSong = createScrollChecker(() => getInfoBand.value.songName)
+const shouldScrollBand = createScrollChecker(() => getInfoBand.value.bandName)
 
-onMounted(updateScrollState)
-
-watch(() => getInfoBand.value.songName, () => {
-  updateScrollState()
-})
 </script>
 
 <template>
@@ -121,11 +123,7 @@ watch(() => getInfoBand.value.songName, () => {
     <div class="main-panel">
       <div class="artist-info" ref="artistInfoEl">
         <div class="band-wrapper">
-          <div
-            class="band"
-            :class="{ scrolling: shouldScrollBand }"
-            ref="bandEl"
-          >
+          <div class="band" :class="{ scrolling: shouldScrollBand }">
             <template v-if="shouldScrollBand">
               <span>{{ getInfoBand.bandName }}&nbsp;&nbsp;&nbsp;</span>
               <span>{{ getInfoBand.bandName }}&nbsp;&nbsp;&nbsp;</span>
@@ -137,11 +135,7 @@ watch(() => getInfoBand.value.songName, () => {
         </div>
 
         <div class="song-wrapper">
-          <div
-            class="song"
-            :class="{ scrolling: shouldScrollSong }"
-            ref="songEl"
-          >
+          <div class="song" :class="{ scrolling: shouldScrollSong }">
             <template v-if="shouldScrollSong">
               <span>{{ getInfoBand.songName }}&nbsp;&nbsp;&nbsp;</span>
               <span>{{ getInfoBand.songName }}&nbsp;&nbsp;&nbsp;</span>
@@ -211,7 +205,7 @@ watch(() => getInfoBand.value.songName, () => {
     margin-bottom: 20px;
 
     .artist-info {
-      width: 45%;
+      width: 55%;
       text-align: left;
       margin: 10px 0;
 
