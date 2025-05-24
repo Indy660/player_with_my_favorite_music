@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, computed, watchEffect, onMounted, nextTick, watch } from "vue";
+import { ref, onBeforeMount, computed, watchEffect, onMounted, onUnmounted, watch } from "vue";
+import { useAdaptive } from '@/composable/useAdaptive.ts'
 
 interface Props {
   songName: string
@@ -76,40 +77,43 @@ function getTextWidth(text: string, font: string): number {
   const canvas = document.createElement('canvas')
   const context = canvas.getContext('2d') as CanvasRenderingContext2D
   context.font = font
-  console.log('context.measureText(text).width', context.measureText(text).width)
   return context.measureText(text).width
 }
 
 const artistInfoEl = ref<HTMLElement | null>(null)
 const containerWidth = ref(0)
 
-const font = '18px Arial,sans-serif'
+const { widthWindow } = useAdaptive()
 
-onMounted(() => {
-  const updateWidth = () => {
-    if (artistInfoEl.value) {
-      containerWidth.value = artistInfoEl.value.offsetWidth
-    }
+const font = computed(() => {
+  if (widthWindow.value < 400) {
+    return '15px Arial,sans-serif'
   }
-  updateWidth()
-
-  const resizeObserver = new ResizeObserver(updateWidth)
+  if (widthWindow.value < 600) {
+    return '20px Arial,sans-serif'
+  }
+  if (widthWindow.value < 743) {
+    return '16px Arial,sans-serif'
+  }
+  return '18px Arial,sans-serif'
+})
+const updateWidth = () => {
   if (artistInfoEl.value) {
-    resizeObserver.observe(artistInfoEl.value)
+    containerWidth.value = artistInfoEl.value.clientWidth
   }
+}
+onMounted(() => {
+  updateWidth()
 })
 
-function createScrollChecker(textSource: () => string) {
-  return computed(() => {
-    const text = textSource()
-    const textWidth = getTextWidth(text, font)
-    return textWidth > containerWidth.value
-  })
-}
+watch(widthWindow, updateWidth)
+const shouldScrollSong = computed(() => {
+  return getTextWidth(getInfoBand.value.songName, '500 ' + font.value) > containerWidth.value
+})
 
-const shouldScrollSong = createScrollChecker(() => getInfoBand.value.songName)
-const shouldScrollBand = createScrollChecker(() => getInfoBand.value.bandName)
-
+const shouldScrollBand = computed(() => {
+  return getTextWidth(getInfoBand.value.bandName, 'bold ' + font.value) > containerWidth.value
+})
 </script>
 
 <template>
@@ -121,7 +125,7 @@ const shouldScrollBand = createScrollChecker(() => getInfoBand.value.bandName)
       alt=""
     />
     <div class="main-panel">
-      <div class="artist-info" ref="artistInfoEl">
+      <div ref="artistInfoEl" class="artist-info">
         <div class="band-wrapper">
           <div class="band" :class="{ scrolling: shouldScrollBand }">
             <template v-if="shouldScrollBand">
@@ -214,7 +218,6 @@ const shouldScrollBand = createScrollChecker(() => getInfoBand.value.bandName)
         overflow: hidden;
         text-overflow: ellipsis;
         margin-bottom: 10px;
-
       }
       .band > span {
         font-weight: bold;
