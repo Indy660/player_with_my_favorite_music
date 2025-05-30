@@ -282,13 +282,11 @@ function readBestPartInHash() {
   const params = new URLSearchParams(hash)
   const bestPart = params.get('bestPart')
 
-  console.log('bestPart from hash:', bestPart)
 
   if (bestPart !== null) {
     const index = parseInt(bestPart)
     if (!isNaN(index)) {
       const moment = bestParties.value[index]
-      console.log('Jumping to best moment from URL param:', moment)
       audioPlayer.value!.currentTime = moment.start
     }
   }
@@ -541,8 +539,10 @@ main.dark {
   border-radius: 5px;
   padding: 0 60px;
   background-color: var(--main-bg-color);
-  max-width: var(--max-container-width);
-  max-height: 100vh;
+  width: 100%;
+  max-width: 600px;
+  overflow-x: hidden;
+  max-height: 100%;
   position: absolute;
 }
 
@@ -565,7 +565,7 @@ main.dark {
 
   .container {
     width: 100vw;
-    padding: 0;
+    padding: 0 10px;
   }
 
   .main-control {
