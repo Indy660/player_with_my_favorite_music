@@ -542,7 +542,7 @@ main.dark {
   width: 100%;
   max-width: 600px;
   overflow-x: hidden;
-  max-height: 100vh;
+  max-height: 100%;
   position: absolute;
 }
 
