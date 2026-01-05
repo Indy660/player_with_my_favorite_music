@@ -25,6 +25,7 @@
     "axios": "^1.6.8",
     "cheerio": "^1.0.0",
     "dotenv": "^16.4.7",
+    "node-telegram-bot-api": "^0.66.0",
     "fs": "^0.0.1-security",
     "openai": "^4.79.1",
     "path": "^0.12.7",
