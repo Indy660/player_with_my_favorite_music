@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
+import Sidebar from './Sidebar.vue'
 
 interface Props {
   currentTracks: string[]
@@ -34,33 +35,35 @@ function selectTrackFromList(trackIndex: number): void {
 </script>
 
 <template>
-  <ul class="sidebar tracks" @click.stop>
-    <li
-      v-for="(track, index) in currentTracksWithCorrectNames"
-      :key="index"
-      :class="{ selected: index === currentTrackIndex }"
-      @click.stop="selectTrackFromList(index)"
-    >
-      {{ index + 1 }}. {{ track }}
-    </li>
-  </ul>
+  <Sidebar title="Track List">
+    <ul class="tracks">
+      <li
+        v-for="(track, index) in currentTracksWithCorrectNames"
+        :key="index"
+        :class="{ selected: index === currentTrackIndex }"
+        @click.stop="selectTrackFromList(index)"
+      >
+        {{ index + 1 }}. {{ track }}
+      </li>
+    </ul>
+  </Sidebar>
 </template>
 
 <style scoped>
-.sidebar {
-  background-color: var(--main-bg-color);
-  width: 100%;
-  overflow-y: auto;
+.tracks {
   list-style-type: none;
   margin: 0;
   padding: 10px 5px;
-  text-align: start;
 }
+
 li {
   color: var(--main-color);
   margin-bottom: 5px;
   cursor: pointer;
+  padding: 5px;
+  border-radius: 3px;
 }
+
 li.selected {
   color: hsl(var(--active-color-btn), var(--color-lightness));
 }

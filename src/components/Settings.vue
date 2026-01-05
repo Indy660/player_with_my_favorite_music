@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { tracksApi } from '@/composable/tracks'
+import Sidebar from './Sidebar.vue'
 
 interface Props {
   isRepeatMode: boolean
@@ -32,51 +33,36 @@ const themeIcon = computed(() => {
 </script>
 
 <template>
-  <div class="sidebar settings" @click.stop>
-    <h3 class="settings-title">Настройки</h3>
-    <div class="settings-item">
-      <button :class="{ active: isRandomTracks }" @click.stop="handleRandomClick">
-        <i class="fas fa-shuffle"></i>
-      </button>
-      <span class="settings-label">Случайный порядок</span>
+  <Sidebar title="Settings">
+    <div class="settings">
+      <div class="settings-item">
+        <button :class="{ active: isRandomTracks }" @click.stop="handleRandomClick">
+          <i class="fas fa-shuffle"></i>
+        </button>
+        <span class="settings-label">Shuffle</span>
+      </div>
+      <div class="settings-item">
+        <button :class="{ active: isRepeatMode }" @click.stop="handleRepeatClick">
+          <i class="fas fa-repeat"></i>
+        </button>
+        <span class="settings-label">Repeat Current Song</span>
+      </div>
+      <div class="settings-item">
+        <button @click.stop="handleThemeClick">
+          <span v-html="themeIcon"></span>
+        </button>
+        <span class="settings-label">{{ isDarkTheme ? 'Dark Theme' : 'Light Theme' }}</span>
+      </div>
     </div>
-    <div class="settings-item">
-      <button :class="{ active: isRepeatMode }" @click.stop="handleRepeatClick">
-        <i class="fas fa-repeat"></i>
-      </button>
-      <span class="settings-label">Повторять текущую песню</span>
-    </div>
-    <div class="settings-item">
-      <button @click.stop="handleThemeClick">
-        <span v-html="themeIcon"></span>
-      </button>
-      <span class="settings-label">{{ isDarkTheme ? 'Темная тема' : 'Светлая тема' }}</span>
-    </div>
-  </div>
+  </Sidebar>
 </template>
 
 <style scoped>
-.sidebar {
-  background-color: var(--main-bg-color);
-  width: 100%;
-  overflow-y: auto;
-  list-style-type: none;
-  margin: 0;
-  padding: 10px 5px;
-  text-align: start;
-}
-
 .settings {
   display: flex;
   flex-direction: column;
   gap: 15px;
-}
-
-.settings-title {
-  color: var(--main-color);
-  font-size: calc(var(--main-font-size) + 2px);
-  margin: 10px 0;
-  text-align: center;
+  padding: 10px 5px;
 }
 
 .settings-item {

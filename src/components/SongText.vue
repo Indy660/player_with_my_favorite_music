@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, watch, ref, watchEffect } from 'vue'
+import Sidebar from './Sidebar.vue'
 
 interface Props {
   songText: string
@@ -196,7 +197,7 @@ function btnHandler(option: TabsOption): void {
 </script>
 
 <template>
-  <div class="sidebar" @click.stop>
+  <Sidebar title="Song Lyrics" :show-title="false">
     <div class="tabs">
       <button
         v-for="option in tabsOption"
@@ -240,24 +241,10 @@ function btnHandler(option: TabsOption): void {
         </div>
       </div>
     </div>
-  </div>
+  </Sidebar>
 </template>
 
 <style scoped>
-.sidebar {
-  background-color: var(--main-bg-color);
-  width: 100%;
-  list-style-type: none;
-  margin: 0;
-  padding: 0 5px 10px;
-  text-align: start;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  left: 0;
-}
-
 .tabs {
   border-bottom: 1px solid;
   border-bottom-color: var(--main-color);
@@ -266,13 +253,13 @@ function btnHandler(option: TabsOption): void {
   background-color: var(--main-bg-color);
 }
 
-
 .song-text {
   height: 100%;
   overflow-y: auto;
+  padding: 0 5px 10px;
 }
 
-.sidebar span {
+.song-text span {
   white-space: break-spaces;
 }
 
@@ -284,5 +271,4 @@ function btnHandler(option: TabsOption): void {
 .text-with-timestamps span.selected {
   opacity: 1;
 }
-
 </style>
