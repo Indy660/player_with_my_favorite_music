@@ -9,7 +9,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits(['update:isRepeatMode', 'update:isDarkTheme'])
+const emit = defineEmits(['update:isRepeatMode', 'update:isDarkTheme', 'open-equalizer'])
 
 const { isRandomTracks, handlerRandomBtn } = tracksApi()
 
@@ -25,6 +25,10 @@ function handleThemeClick(): void {
   emit('update:isDarkTheme', !props.isDarkTheme)
 }
 
+function handleEqualizerClick(): void {
+  emit('open-equalizer')
+}
+
 const themeIcon = computed(() => {
   return props.isDarkTheme
     ? '<i class="fa-solid fa-toggle-on"/>'
@@ -35,23 +39,29 @@ const themeIcon = computed(() => {
 <template>
   <Sidebar title="Settings">
     <div class="settings">
-      <div class="settings-item">
-        <button :class="{ active: isRandomTracks }" @click.stop="handleRandomClick">
+      <div class="settings-item" @click.stop="handleRandomClick">
+        <button :class="{ active: isRandomTracks }">
           <i class="fas fa-shuffle"></i>
         </button>
         <span class="settings-label">Shuffle</span>
       </div>
-      <div class="settings-item">
-        <button :class="{ active: isRepeatMode }" @click.stop="handleRepeatClick">
+      <div class="settings-item" @click.stop="handleRepeatClick">
+        <button :class="{ active: isRepeatMode }">
           <i class="fas fa-repeat"></i>
         </button>
         <span class="settings-label">Repeat Current Song</span>
       </div>
-      <div class="settings-item">
-        <button @click.stop="handleThemeClick">
+      <div class="settings-item" @click.stop="handleThemeClick">
+        <button>
           <span v-html="themeIcon"></span>
         </button>
         <span class="settings-label">{{ isDarkTheme ? 'Dark Theme' : 'Light Theme' }}</span>
+      </div>
+      <div class="settings-item" @click.stop="handleEqualizerClick">
+        <button>
+          <i class="fas fa-sliders"></i>
+        </button>
+        <span class="settings-label">Эквалайзер</span>
       </div>
     </div>
   </Sidebar>
@@ -72,10 +82,16 @@ const themeIcon = computed(() => {
   padding: 10px;
   border-radius: 5px;
   transition: background-color 0.2s ease;
+  cursor: pointer;
+  user-select: none;
 }
 
 .settings-item:hover {
   background-color: var(--main-bg-color-secondary);
+}
+
+.settings-item:active {
+  transform: scale(0.98);
 }
 
 .settings-label {
@@ -86,6 +102,6 @@ const themeIcon = computed(() => {
 
 .settings-item button {
   flex-shrink: 0;
+  pointer-events: none;
 }
 </style>
-

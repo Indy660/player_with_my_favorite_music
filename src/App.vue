@@ -10,6 +10,7 @@ import MainControl from '@/components/MainControl.vue'
 import OtherControl from '@/components/OtherControl.vue'
 import SongText from '@/components/SongText.vue'
 import Settings from '@/components/Settings.vue'
+import Equalizer from '@/components/Equalizer.vue'
 import SONGS_TEXT from '@/static_data/songs_text.json'
 import SONGS_TEXT_WITH_TIMECODES from '@/static_data/songs_text_with_timecodes.json'
 import SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI from '@/static_data/songs_text_with_timecodes_assembly_ai.json'
@@ -112,6 +113,28 @@ const audioPlayer = ref<CustomAudioElement | null>(null)
 
 const currentTime = ref(0)
 const volume = ref(0.8)
+
+// Web Audio API для эквалайзера
+const audioContext = ref<AudioContext | null>(null)
+const sourceNode = ref<MediaElementAudioSourceNode | null>(null)
+const equalizerFilters = ref<BiquadFilterNode[]>([])
+const isAudioContextInitialized = ref(false)
+const isEqualizerInitializing = ref(true)
+
+// Настройки эквалайзера
+const equalizerBands = ref<EqualizerBand[]>([
+  { frequency: 60, label: '60 Hz', gain: 0 },
+  { frequency: 170, label: '170 Hz', gain: 0 },
+  { frequency: 310, label: '310 Hz', gain: 0 },
+  { frequency: 600, label: '600 Hz', gain: 0 },
+  { frequency: 1000, label: '1 kHz', gain: 0 },
+  { frequency: 3000, label: '3 kHz', gain: 0 },
+  { frequency: 6000, label: '6 kHz', gain: 0 },
+  { frequency: 12000, label: '12 kHz', gain: 0 },
+  { frequency: 14000, label: '14 kHz', gain: 0 },
+  { frequency: 16000, label: '16 kHz', gain: 0 }
+])
+const equalizerPreset = ref<string>('default')
 
 function handlerCanPlay(event: Event): void {
   setTotalTime(event)
@@ -303,6 +326,16 @@ onMounted(() => {
   document.addEventListener('keydown', handleKeyDown)
 
   readBestPartInHash()
+  
+  // Загружаем настройки эквалайзера ДО инициализации Audio Context
+  loadEqualizerSettings()
+  initAudioContext()
+  
+  // Завершаем инициализацию после небольшой задержки
+  setTimeout(() => {
+    isEqualizerInitializing.value = false
+    console.log('Инициализация эквалайзера завершена')
+  }, 100)
 })
 
 // TODO: возникает баг при перемотке назад на песню, не перематывается:
@@ -320,6 +353,7 @@ function previousTrackHandler(): void {
 const isShowTrackList = ref(false)
 const isShowSongText = ref(false)
 const isShowSettings = ref(false)
+const isShowEqualizer = ref(false)
 
 function handlerShowSongTextBtn(): void {
   if (!isShowSongText.value) {
@@ -333,6 +367,7 @@ function closeAllBars(): void {
   isShowTrackList.value = false
   isShowSongText.value = false
   isShowSettings.value = false
+  isShowEqualizer.value = false
 }
 
 // Watchers для взаимного закрытия всплывашек
@@ -340,6 +375,7 @@ watch(isShowTrackList, (newVal) => {
   if (newVal) {
     isShowSongText.value = false
     isShowSettings.value = false
+    isShowEqualizer.value = false
   }
 })
 
@@ -347,6 +383,15 @@ watch(isShowSettings, (newVal) => {
   if (newVal) {
     isShowTrackList.value = false
     isShowSongText.value = false
+    isShowEqualizer.value = false
+  }
+})
+
+watch(isShowEqualizer, (newVal) => {
+  if (newVal) {
+    isShowTrackList.value = false
+    isShowSongText.value = false
+    isShowSettings.value = false
   }
 })
 
@@ -408,6 +453,153 @@ const handleKeyDown = (event: KeyboardEvent): void => {
       break
   }
 }
+
+// Инициализация Web Audio API для эквалайзера
+function initAudioContext(): void {
+  if (!audioPlayer.value || isAudioContextInitialized.value) return
+
+  try {
+    // Создаём AudioContext
+    audioContext.value = new (window.AudioContext || (window as any).webkitAudioContext)()
+
+    // Создаём source node из audio элемента
+    sourceNode.value = audioContext.value.createMediaElementSource(audioPlayer.value)
+
+    // Частоты для фильтров
+    const frequencies = [60, 170, 310, 600, 1000, 3000, 6000, 12000, 14000, 16000]
+
+    // Создаём фильтры для каждой частоты
+    frequencies.forEach((freq, index) => {
+      const filter = audioContext.value!.createBiquadFilter()
+      filter.type = 'peaking'
+      filter.frequency.value = freq
+      filter.Q.value = 1
+      // Применяем загруженные настройки вместо дефолтных
+      filter.gain.value = equalizerBands.value[index]?.gain || 0
+
+      equalizerFilters.value.push(filter)
+
+      // Подключаем фильтры последовательно
+      if (index === 0) {
+        sourceNode.value!.connect(filter)
+      } else {
+        equalizerFilters.value[index - 1].connect(filter)
+      }
+    })
+
+    // Подключаем последний фильтр к destination (динамикам)
+    equalizerFilters.value[equalizerFilters.value.length - 1].connect(
+      audioContext.value.destination
+    )
+
+    isAudioContextInitialized.value = true
+    console.log('Эквалайзер инициализирован с настройками:', equalizerBands.value)
+  } catch (error) {
+    console.error('Ошибка инициализации эквалайзера:', error)
+  }
+}
+
+// Обработчик изменения настроек эквалайзера
+function handleEqualizerUpdate(bands: EqualizerBand[]): void {
+  // Применяем к фильтрам если они инициализированы
+  if (equalizerFilters.value.length) {
+    bands.forEach((band, index) => {
+      if (equalizerFilters.value[index]) {
+        equalizerFilters.value[index].gain.value = band.gain
+      }
+    })
+  }
+
+  // Обновляем локальный state
+  equalizerBands.value = bands.map((band) => ({ ...band }))
+  
+  // Сохраняем настройки в localStorage только после завершения инициализации
+  if (!isEqualizerInitializing.value) {
+    saveEqualizerSettings()
+  }
+}
+
+// Обработчик изменения предустановки эквалайзера
+function handleEqualizerPresetUpdate(preset: string): void {
+  equalizerPreset.value = preset
+  
+  // Сохраняем только после инициализации
+  if (!isEqualizerInitializing.value) {
+    saveEqualizerSettings()
+  }
+}
+
+// Сохранение настроек эквалайзера в localStorage
+function saveEqualizerSettings(): void {
+  try {
+    const settings = {
+      bands: equalizerBands.value,
+      preset: equalizerPreset.value,
+      timestamp: Date.now() // Добавляем временную метку для отладки
+    }
+    localStorage.setItem('equalizer-settings', JSON.stringify(settings))
+    console.log('Настройки эквалайзера сохранены:', {
+      preset: settings.preset,
+      timestamp: new Date(settings.timestamp).toLocaleTimeString()
+    })
+  } catch (error) {
+    console.error('Ошибка при сохранении настроек эквалайзера:', error)
+  }
+}
+
+// Загрузка настроек эквалайзера из localStorage
+function loadEqualizerSettings(): void {
+  try {
+    const savedSettings = localStorage.getItem('equalizer-settings')
+    if (!savedSettings) {
+      console.log('Настройки эквалайзера не найдены, используются по умолчанию')
+      return
+    }
+
+    const settings = JSON.parse(savedSettings)
+    
+    // Валидация и загрузка bands
+    if (settings.bands && Array.isArray(settings.bands) && settings.bands.length === 10) {
+      // Проверяем, что каждый элемент имеет нужные поля
+      const isValid = settings.bands.every(
+        (band: any) =>
+          typeof band === 'object' &&
+          typeof band.frequency === 'number' &&
+          typeof band.label === 'string' &&
+          typeof band.gain === 'number' &&
+          band.gain >= -12 &&
+          band.gain <= 12
+      )
+
+      if (isValid) {
+        equalizerBands.value = settings.bands.map((band: EqualizerBand) => ({ ...band }))
+      } else {
+        console.warn('Некорректный формат bands в сохраненных настройках')
+      }
+    }
+
+    // Валидация и загрузка preset
+    if (settings.preset && typeof settings.preset === 'string') {
+      equalizerPreset.value = settings.preset
+    }
+
+    console.log('Настройки эквалайзера загружены:', {
+      preset: equalizerPreset.value,
+      bandsCount: equalizerBands.value.length
+    })
+  } catch (error) {
+    console.error('Ошибка при загрузке настроек эквалайзера:', error)
+    // В случае ошибки оставляем дефолтные значения
+  }
+}
+
+// Открытие эквалайзера
+function handleOpenEqualizer(): void {
+  if (!isAudioContextInitialized.value) {
+    initAudioContext()
+  }
+  isShowEqualizer.value = !isShowEqualizer.value
+}
 </script>
 
 <template>
@@ -444,6 +636,17 @@ const handleKeyDown = (event: KeyboardEvent): void => {
           v-model:is-repeat-mode="isRepeatMode"
           v-model:is-dark-theme="isDarkTheme"
           class="top_bar"
+          @open-equalizer="handleOpenEqualizer"
+        />
+      </transition>
+      <transition name="slide-equalizer">
+        <Equalizer
+          v-if="isShowEqualizer"
+          :initial-bands="equalizerBands"
+          :initial-preset="equalizerPreset"
+          class="top_bar"
+          @update:bands="handleEqualizerUpdate"
+          @update:preset="handleEqualizerPresetUpdate"
         />
       </transition>
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
@@ -730,6 +933,21 @@ button.disabled {
 
 .slide-settings-enter-to,
 .slide-settings-leave-from {
+  transform: translateY(0);
+}
+
+.slide-equalizer-enter-active,
+.slide-equalizer-leave-active {
+  transition: all 0.5s ease;
+}
+
+.slide-equalizer-enter-from,
+.slide-equalizer-leave-to {
+  transform: translateY(-100%);
+}
+
+.slide-equalizer-enter-to,
+.slide-equalizer-leave-from {
   transform: translateY(0);
 }
 </style>
