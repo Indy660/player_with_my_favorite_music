@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, computed, watchEffect, onMounted, onUnmounted, watch } from "vue";
+import { ref, onBeforeMount, computed, watchEffect, onMounted, onUnmounted, watch } from 'vue'
 import { useAdaptive } from '@/composable/useAdaptive.ts'
 
 interface Props {

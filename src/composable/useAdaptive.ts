@@ -4,7 +4,7 @@ const widthWindow = ref(0)
 export function useAdaptive() {
   function handleResize() {
     widthWindow.value = window.innerWidth
-    console.log('window.innerWidth', window.innerWidth);
+    console.log('window.innerWidth', window.innerWidth)
   }
 
   handleResize()

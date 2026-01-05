@@ -306,7 +306,6 @@ function readBestPartInHash() {
   const params = new URLSearchParams(hash)
   const bestPart = params.get('bestPart')
 
-
   if (bestPart !== null) {
     const index = parseInt(bestPart)
     if (!isNaN(index)) {
@@ -326,11 +325,11 @@ onMounted(() => {
   document.addEventListener('keydown', handleKeyDown)
 
   readBestPartInHash()
-  
+
   // Загружаем настройки эквалайзера ДО инициализации Audio Context
   loadEqualizerSettings()
   initAudioContext()
-  
+
   // Завершаем инициализацию после небольшой задержки
   setTimeout(() => {
     isEqualizerInitializing.value = false
@@ -512,7 +511,7 @@ function handleEqualizerUpdate(bands: EqualizerBand[]): void {
 
   // Обновляем локальный state
   equalizerBands.value = bands.map((band) => ({ ...band }))
-  
+
   // Сохраняем настройки в localStorage только после завершения инициализации
   if (!isEqualizerInitializing.value) {
     saveEqualizerSettings()
@@ -522,7 +521,7 @@ function handleEqualizerUpdate(bands: EqualizerBand[]): void {
 // Обработчик изменения предустановки эквалайзера
 function handleEqualizerPresetUpdate(preset: string): void {
   equalizerPreset.value = preset
-  
+
   // Сохраняем только после инициализации
   if (!isEqualizerInitializing.value) {
     saveEqualizerSettings()
@@ -557,7 +556,7 @@ function loadEqualizerSettings(): void {
     }
 
     const settings = JSON.parse(savedSettings)
-    
+
     // Валидация и загрузка bands
     if (settings.bands && Array.isArray(settings.bands) && settings.bands.length === 10) {
       // Проверяем, что каждый элемент имеет нужные поля
@@ -661,7 +660,6 @@ function handleOpenEqualizer(): void {
         :is-dark-theme="isDarkTheme"
         @show-text-song="handlerShowSongTextBtn"
       >
-
         <VolumeControl :volume="volume" @click.stop @volume-change="setVolume" />
       </MainInfoBand>
 
@@ -778,11 +776,7 @@ main.dark {
   position: absolute;
 }
 
-
-
 @media screen and (max-width: 1200px) {
-
-
   .sidebar {
     width: 100%;
     max-width: 100%;

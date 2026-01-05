@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, watchEffect} from 'vue'
+import { computed, watchEffect } from 'vue'
 
 interface Props {
   isPlaying: boolean
@@ -45,14 +45,12 @@ watchEffect(() => {
 </script>
 
 <template>
-
-
   <div class="main-control">
     <button class="heart" :class="iconHeartClass" @click.stop="onIconAddFavoriteClick">
       <i class="fa-solid fa-heart fa-1x" />
     </button>
     <button class="player-button" @click.stop="previousButtonHandler">
-      <i class="fas fa-step-backward "></i>
+      <i class="fas fa-step-backward"></i>
     </button>
     <button class="player-button" @keyup.space.prevent @click.stop="playerButtonHandler">
       <span v-html="iconPlayerButton"></span>
@@ -85,7 +83,8 @@ watchEffect(() => {
   transform: scale(1.1);
 }
 
-.player-button > svg,.player-button > span > svg,
+.player-button > svg,
+.player-button > span > svg,
 .player-button > i {
   font-size: 32px;
 }
@@ -97,10 +96,8 @@ watchEffect(() => {
   color: inherit;
 }
 @media (min-width: 400px) and (max-width: 1200px) {
-
   .main-control {
     margin: 10px 0;
   }
 }
-
 </style>

@@ -51,4 +51,3 @@ const props = withDefaults(defineProps<Props>(), {
   overflow-y: auto;
 }
 </style>
-
