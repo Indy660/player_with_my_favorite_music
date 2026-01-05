@@ -9,6 +9,7 @@ import ProgressControl from '@/components/ProgressControl.vue'
 import MainControl from '@/components/MainControl.vue'
 import OtherControl from '@/components/OtherControl.vue'
 import SongText from '@/components/SongText.vue'
+import Settings from '@/components/Settings.vue'
 import SONGS_TEXT from '@/static_data/songs_text.json'
 import SONGS_TEXT_WITH_TIMECODES from '@/static_data/songs_text_with_timecodes.json'
 import SONGS_TEXT_WITH_TIMECODES_ASSEMBLY_AI from '@/static_data/songs_text_with_timecodes_assembly_ai.json'
@@ -318,15 +319,36 @@ function previousTrackHandler(): void {
 
 const isShowTrackList = ref(false)
 const isShowSongText = ref(false)
+const isShowSettings = ref(false)
 
 function handlerShowSongTextBtn(): void {
+  if (!isShowSongText.value) {
+    isShowTrackList.value = false
+    isShowSettings.value = false
+  }
   isShowSongText.value = !isShowSongText.value
 }
 
 function closeAllBars(): void {
   isShowTrackList.value = false
   isShowSongText.value = false
+  isShowSettings.value = false
 }
+
+// Watchers для взаимного закрытия всплывашек
+watch(isShowTrackList, (newVal) => {
+  if (newVal) {
+    isShowSongText.value = false
+    isShowSettings.value = false
+  }
+})
+
+watch(isShowSettings, (newVal) => {
+  if (newVal) {
+    isShowTrackList.value = false
+    isShowSongText.value = false
+  }
+})
 
 function handlerSelectTrack(trackIndex: number): void {
   selectTrack(trackIndex)
@@ -416,6 +438,14 @@ const handleKeyDown = (event: KeyboardEvent): void => {
           @select-track-from-list="handlerSelectTrack"
         />
       </transition>
+      <transition name="slide-settings">
+        <Settings
+          v-show="isShowSettings"
+          v-model:is-repeat-mode="isRepeatMode"
+          v-model:is-dark-theme="isDarkTheme"
+          class="top_bar"
+        />
+      </transition>
       <PageTabs :tab-selected="tabSelected" @change-tab="changeTab" />
       <MainInfoBand
         :song-name="currentSong"
@@ -455,9 +485,8 @@ const handleKeyDown = (event: KeyboardEvent): void => {
         @add-favorite="handleAddFavoriteSongBtn"
       />
       <OtherControl
-        v-model:is-repeat-mode="isRepeatMode"
-        v-model:is-dark-theme="isDarkTheme"
         v-model:is-show-track-list="isShowTrackList"
+        v-model:is-show-settings="isShowSettings"
         :current-numb-song="currentTrackIndex + 1"
       />
 
@@ -486,7 +515,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
   --main-font-size: 18px;
   --max-container-width: 1000px;
   --active-color-btn: 240, 100%;
-  //--hover-color-btn: 60, 100%;
+  /* --hover-color-btn: 60, 100%; */
   transition: all 0.1s linear;
   font-size: var(--main-font-size);
   font-family: Arial, sans-serif;
@@ -625,9 +654,6 @@ button {
   justify-content: center;
 }
 
-button:hover {
-}
-
 button.active {
   color: hsl(var(--active-color-btn), var(--color-lightness));
 }
@@ -658,7 +684,7 @@ button.disabled {
 
 .tabs button.active {
   background-color: var(--main-bg-color);
-  //background-color: #282828;
+  /* background-color: #282828; */
   border: 1px solid var(--main-color);
 }
 
@@ -689,6 +715,21 @@ button.disabled {
 
 .slide-song-text-enter-to,
 .slide-song-text-leave-from {
+  transform: translateY(0);
+}
+
+.slide-settings-enter-active,
+.slide-settings-leave-active {
+  transition: all 0.5s ease;
+}
+
+.slide-settings-enter-from,
+.slide-settings-leave-to {
+  transform: translateY(-100%);
+}
+
+.slide-settings-enter-to,
+.slide-settings-leave-from {
   transform: translateY(0);
 }
 </style>
