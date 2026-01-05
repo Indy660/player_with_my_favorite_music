@@ -168,10 +168,10 @@ watch(
 </script>
 
 <template>
-  <Sidebar title="Эквалайзер">
+  <Sidebar title="Equalizer">
     <div class="equalizer">
       <div class="equalizer-presets">
-        <label class="preset-label">Предустановки:</label>
+        <label class="preset-label">Presets:</label>
         <select
           v-model="selectedPreset"
           class="preset-select"
@@ -199,7 +199,7 @@ watch(
             step="0.5"
             class="band-slider"
             orient="vertical"
-            :aria-label="`Частота ${band.label}`"
+            :aria-label="`Frequency ${band.label}`"
           />
           <div class="band-label">{{ band.label }}</div>
         </div>
@@ -207,7 +207,7 @@ watch(
       <div class="equalizer-controls">
         <button class="reset-button" @click="resetEqualizer">
           <i class="fas fa-undo"></i>
-          Сбросить
+          Reset
         </button>
       </div>
     </div>

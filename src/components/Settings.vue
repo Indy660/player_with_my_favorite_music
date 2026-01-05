@@ -61,7 +61,7 @@ const themeIcon = computed(() => {
         <button>
           <i class="fas fa-sliders"></i>
         </button>
-        <span class="settings-label">Эквалайзер</span>
+        <span class="settings-label">Equalizer</span>
       </div>
     </div>
   </Sidebar>
