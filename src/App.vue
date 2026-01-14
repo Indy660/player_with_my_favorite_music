@@ -191,9 +191,19 @@ function setTotalTime(event: Event): void {
   })
 }
 
-function playTrack(): void {
+async function playTrack(): Promise<void> {
   try {
-    audioPlayer.value!.play().then((r) => r)
+    // Инициализируем AudioContext при первом воспроизведении, если еще не инициализирован
+    if (!isAudioContextInitialized.value && audioPlayer.value) {
+      initAudioContext()
+    }
+
+    // Возобновляем AudioContext если он в suspended состоянии
+    if (audioContext.value && audioContext.value.state === 'suspended') {
+      await audioContext.value.resume()
+    }
+    
+    await audioPlayer.value!.play()
   } catch (error) {
     console.log('error', error)
   }
@@ -326,9 +336,8 @@ onMounted(() => {
 
   readBestPartInHash()
 
-  // Загружаем настройки эквалайзера ДО инициализации Audio Context
+  // Загружаем настройки эквалайзера
   loadEqualizerSettings()
-  initAudioContext()
 
   // Завершаем инициализацию после небольшой задержки
   setTimeout(() => {
@@ -462,6 +471,7 @@ function initAudioContext(): void {
     audioContext.value = new (window.AudioContext || (window as any).webkitAudioContext)()
 
     // Создаём source node из audio элемента
+    // ВАЖНО: после createMediaElementSource аудио элемент больше не может воспроизводить напрямую
     sourceNode.value = audioContext.value.createMediaElementSource(audioPlayer.value)
 
     // Частоты для фильтров
@@ -495,6 +505,11 @@ function initAudioContext(): void {
     console.log('Эквалайзер инициализирован с настройками:', equalizerBands.value)
   } catch (error) {
     console.error('Ошибка инициализации эквалайзера:', error)
+    // Если ошибка, сбрасываем флаги чтобы можно было попробовать снова
+    isAudioContextInitialized.value = false
+    audioContext.value = null
+    sourceNode.value = null
+    equalizerFilters.value = []
   }
 }
 
@@ -593,9 +608,13 @@ function loadEqualizerSettings(): void {
 }
 
 // Открытие эквалайзера
-function handleOpenEqualizer(): void {
+async function handleOpenEqualizer(): Promise<void> {
   if (!isAudioContextInitialized.value) {
     initAudioContext()
+    // Возобновляем AudioContext если он в suspended состоянии
+    if (audioContext.value && audioContext.value.state === 'suspended') {
+      await audioContext.value.resume()
+    }
   }
   isShowEqualizer.value = !isShowEqualizer.value
 }
