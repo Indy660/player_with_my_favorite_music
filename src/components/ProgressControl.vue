@@ -28,14 +28,16 @@ const convertTotalTime = computed(() => {
 
 interface BestPartiesPosition {
   left: string
-  right: string
+  width: string
 }
 
 const convertBestPartiesInPercentage = computed<BestPartiesPosition[]>(() => {
-  const oneSecondSongInPercent: number = Number((100 / props.totalTime).toFixed(4))
+  if (!props.totalTime) {
+    return []
+  }
   return props.bestParties.map((item) => ({
-    left: `${item.start * oneSecondSongInPercent}%`,
-    right: `${100 - item.end * oneSecondSongInPercent}%`
+    left: `${(item.start / props.totalTime) * 100}%`,
+    width: `${((item.end - item.start) / props.totalTime) * 100}%`
   }))
 })
 
@@ -91,7 +93,7 @@ function timeHandler(event: Event): void {
           <div
             v-for="(party, key) in convertBestPartiesInPercentage"
             :key="key"
-            :style="{ left: party.left, right: party.right }"
+            :style="{ left: party.left, width: party.width }"
             class="best-section"
             @click.stop="(e) => timeHandlerEmit(e)"
           ></div>
@@ -149,11 +151,12 @@ input[type="range"]::-webkit-slider-thumb {
   margin: 8px 0;
 
   .line {
-    width: calc(100% - 16px);
-    left: 16px;
+    width: 100%;
+    left: 0;
     position: absolute;
-    height: 5px;
-    top: 0;
+    height: 8px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .best-section {
