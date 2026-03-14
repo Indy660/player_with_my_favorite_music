@@ -6,6 +6,7 @@ interface Props {
 
   isFavoriteSong: boolean
   hasText: boolean
+  isShowSongText: boolean
 }
 
 const props = defineProps<Props>()
@@ -31,7 +32,10 @@ const iconHeartClass = computed(() => {
   return props.isFavoriteSong ? 'active' : ''
 })
 const iconShowTextClass = computed(() => {
-  return props.hasText ? '' : 'disabled'
+  return {
+    disabled: !props.hasText,
+    active: props.hasText && props.isShowSongText
+  }
 })
 function onIconAddFavoriteClick(): void {
   emit('add-favorite')

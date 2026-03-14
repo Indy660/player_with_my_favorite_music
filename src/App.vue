@@ -697,6 +697,7 @@ async function handleOpenEqualizer(): Promise<void> {
           !!currentSongTextWithTimecodes.length ||
           !!currentSongTextWithTimecodesAssemblyAi.length
         "
+        :is-show-song-text="isShowSongText"
         :is-playing="isPlaying"
         @show-text-song="handlerShowSongTextBtn"
         @previous="previousTrackHandler"
