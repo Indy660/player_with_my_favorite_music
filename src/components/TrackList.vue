@@ -53,22 +53,28 @@ function selectTrackFromList(trackIndex: number): void {
 .tracks {
   list-style-type: none;
   margin: 0;
-  padding: 10px 5px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 li {
   color: var(--main-color);
-  margin-bottom: 5px;
   cursor: pointer;
-  padding: 5px;
-  border-radius: 3px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  line-height: 1.35;
 }
 
 li.selected {
-  color: hsl(var(--active-color-btn), var(--color-lightness));
+  color: var(--player-button-hover);
+  border-color: color-mix(in srgb, var(--accent-color), transparent 56%);
+  background-color: color-mix(in srgb, var(--accent-color), transparent 86%);
 }
 
 li:hover {
-  background-color: var(--main-bg-color-secondary);
+  background-color: var(--panel-muted-bg);
 }
 </style>

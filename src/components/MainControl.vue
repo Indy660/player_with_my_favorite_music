@@ -69,18 +69,25 @@ watchEffect(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 30px 0;
+  margin: 18px 0;
+  padding: 8px 10px;
+  border-radius: 16px;
+  background: var(--panel-muted-bg);
+  border: 1px solid var(--main-border-color);
 }
 .player-button {
-  font-size: 32px;
+  font-size: 30px;
   cursor: pointer;
   color: var(--player-button-color);
-  transition: transform 0.3s;
+  min-width: 54px;
+  min-height: 54px;
+  border-radius: 14px;
 }
 
 .player-button:hover {
   color: var(--player-button-hover);
-  transform: scale(1.1);
+  transform: translateY(-1px) scale(1.04);
+  background: color-mix(in srgb, var(--accent-color), transparent 86%);
 }
 
 .player-button > svg,
@@ -95,9 +102,15 @@ watchEffect(() => {
 .heart > i {
   color: inherit;
 }
+.show-text,
+.heart {
+  border-radius: 12px;
+  min-width: 46px;
+  min-height: 46px;
+}
 @media (min-width: 400px) and (max-width: 1200px) {
   .main-control {
-    margin: 10px 0;
+    margin: 12px 0;
   }
 }
 </style>

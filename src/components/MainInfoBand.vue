@@ -169,7 +169,8 @@ const shouldScrollBand = computed(() => {
 .song {
   display: inline-flex;
   white-space: nowrap;
-  font: bold 20px Rubik;
+  font: 700 20px Inter, 'Segoe UI', Arial, sans-serif;
+  letter-spacing: 0.02em;
 }
 
 .band.scrolling,
@@ -188,13 +189,15 @@ const shouldScrollBand = computed(() => {
 
 .main-info {
   .album-image {
-    border-radius: 5px;
+    border-radius: 18px;
     aspect-ratio: 1 / 1;
     width: min(40vw, 400px);
     height: min(40vw, 400px);
     object-fit: cover;
     transition: none;
-    margin: 20px 0;
+    margin: 16px 0;
+    border: 1px solid var(--main-border-color);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32);
 
     &.invert-color {
       filter: invert(1);
@@ -206,7 +209,8 @@ const shouldScrollBand = computed(() => {
     align-items: flex-end;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
+    gap: 12px;
 
     .artist-info {
       width: 55%;
@@ -217,19 +221,26 @@ const shouldScrollBand = computed(() => {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
       }
       .band > span {
         font-weight: bold;
       }
+      .song {
+        color: color-mix(in srgb, var(--main-color), transparent 10%);
+      }
     }
 
     .slot-wrapper {
-      width: 40%;
+      width: 42%;
+      border-radius: 14px;
+      background: var(--panel-muted-bg);
+      border: 1px solid var(--main-border-color);
+      padding: 10px 8px;
     }
 
     button {
-      font-size: 20px;
+      font-size: 19px;
     }
   }
 }

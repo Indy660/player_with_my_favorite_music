@@ -32,6 +32,10 @@ const props = withDefaults(defineProps<Props>(), {
   flex-direction: column;
   position: absolute;
   left: 0;
+  border: 1px solid var(--main-border-color);
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
 }
 
 .sidebar-title {
@@ -40,9 +44,8 @@ const props = withDefaults(defineProps<Props>(), {
   margin: 0;
   padding: 15px 10px 10px;
   text-align: center;
-  border-bottom: 1px solid;
-  border-bottom-color: var(--main-color);
-  background-color: var(--main-bg-color);
+  border-bottom: 1px solid var(--main-border-color);
+  background-color: color-mix(in srgb, var(--main-bg-color), var(--panel-muted-bg) 32%);
   z-index: 2;
 }
 

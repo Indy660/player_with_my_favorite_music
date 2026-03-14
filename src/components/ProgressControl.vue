@@ -109,13 +109,17 @@ function timeHandler(event: Event): void {
 <style scoped>
 .progress-control {
   width: 100%;
+  padding: 10px 12px 4px;
+  border-radius: 14px;
+  background: var(--panel-muted-bg);
+  border: 1px solid var(--main-border-color);
 }
 
 .time-display {
   display: flex;
   justify-content: space-between;
   font-size: 10px;
-  color: var(--main-color);
+  color: color-mix(in srgb, var(--main-color), transparent 18%);
   margin-top: 10px;
 }
 
@@ -133,18 +137,16 @@ input[type="range"]::-webkit-slider-thumb {
 /*  TODO: подумать как исправить, хочу изменить стиль ползунка, но надо учесть что цвет после проигрыша тоже должен быть свой */
 .input-wrapper input[type='range']::-webkit-slider-runnable-track {
   background: transparent;
-  //background: var(--main-color);
-  //opacity: 0.3;
 }
 
 .input-wrapper input[type='range']::-moz-range-track {
-  //background: transparent;
+  background: transparent;
 }
 
 .input-wrapper {
   position: relative;
   font-size: 0;
-  margin: 20px 0;
+  margin: 8px 0;
 
   .line {
     width: calc(100% - 16px);
@@ -158,7 +160,8 @@ input[type="range"]::-webkit-slider-thumb {
     position: absolute;
     top: 0;
     bottom: 0;
-    background-color: hsl(var(--active-color-btn), var(--color-lightness));
+    background-color: color-mix(in srgb, var(--accent-color), transparent 24%);
+    border-radius: 999px;
     cursor: pointer;
   }
 }

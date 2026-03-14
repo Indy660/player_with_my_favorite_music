@@ -228,8 +228,9 @@ watch(
   flex-direction: column;
   gap: 10px;
   padding: 10px;
-  background-color: var(--main-bg-color-secondary);
-  border-radius: 8px;
+  background-color: var(--panel-muted-bg);
+  border: 1px solid var(--main-border-color);
+  border-radius: 12px;
 }
 
 .preset-label {
@@ -263,8 +264,9 @@ watch(
   justify-content: space-between;
   gap: 8px;
   padding: 15px 10px;
-  background-color: var(--main-bg-color-secondary);
-  border-radius: 8px;
+  background-color: var(--panel-muted-bg);
+  border: 1px solid var(--main-border-color);
+  border-radius: 12px;
   overflow-x: auto;
 }
 
@@ -341,10 +343,10 @@ watch(
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background-color: var(--main-bg-color-secondary);
+  background-color: var(--panel-muted-bg);
   color: var(--main-color);
-  border: 1px solid var(--main-color);
-  border-radius: 5px;
+  border: 1px solid var(--main-border-color);
+  border-radius: 10px;
   cursor: pointer;
   font-size: var(--main-font-size);
   width: auto;
@@ -353,9 +355,9 @@ watch(
 }
 
 .reset-button:hover {
-  background-color: var(--main-color);
-  color: var(--main-bg-color);
-  transform: translateY(-2px);
+  background-color: color-mix(in srgb, var(--accent-color), transparent 84%);
+  border-color: color-mix(in srgb, var(--accent-color), transparent 56%);
+  transform: translateY(-1px);
 }
 
 .reset-button i {

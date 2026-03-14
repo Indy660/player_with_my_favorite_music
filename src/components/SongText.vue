@@ -245,18 +245,28 @@ function btnHandler(option: TabsOption): void {
 </template>
 
 <style scoped>
+:deep(.sidebar-content) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
 .tabs {
-  border-bottom: 1px solid;
-  border-bottom-color: var(--main-color);
+  border-bottom: 1px solid var(--main-border-color);
   z-index: 2;
-  padding: 10px;
-  background-color: var(--main-bg-color);
+  padding: 8px;
+  background-color: color-mix(in srgb, var(--main-bg-color), var(--panel-muted-bg) 24%);
+  position: sticky;
+  top: 0;
 }
 
 .song-text {
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  padding: 0 5px 10px;
+  padding: 8px 10px 12px;
+  line-height: 1.45;
 }
 
 .song-text span {
@@ -264,11 +274,14 @@ function btnHandler(option: TabsOption): void {
 }
 
 .text-with-timestamps span {
-  opacity: 0.4;
+  opacity: 0.45;
   cursor: pointer;
+  border-radius: 7px;
+  padding: 2px 4px;
 }
 
 .text-with-timestamps span.selected {
   opacity: 1;
+  background: color-mix(in srgb, var(--accent-color), transparent 84%);
 }
 </style>

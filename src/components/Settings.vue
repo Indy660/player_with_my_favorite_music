@@ -71,8 +71,8 @@ const themeIcon = computed(() => {
 .settings {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  padding: 10px 5px;
+  gap: 10px;
+  padding: 10px 8px;
 }
 
 .settings-item {
@@ -80,14 +80,16 @@ const themeIcon = computed(() => {
   align-items: center;
   gap: 15px;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 12px;
+  border: 1px solid transparent;
   transition: background-color 0.2s ease;
   cursor: pointer;
   user-select: none;
 }
 
 .settings-item:hover {
-  background-color: var(--main-bg-color-secondary);
+  background-color: var(--panel-muted-bg);
+  border-color: var(--main-border-color);
 }
 
 .settings-item:active {

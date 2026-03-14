@@ -57,15 +57,22 @@ function onIconVolumeClick(): void {
   align-items: center;
   justify-content: center;
   width: 100%;
+  gap: 8px;
 }
 
 .volume-control .player-button {
-  text-align: start;
-  min-width: 30px;
-  padding: 0;
+  text-align: center;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 6px;
+  border-radius: 12px;
 }
 
-.volume-cont.player-buttonrol .margin {
+.volume-control input[type='range'] {
+  max-width: 200px;
+}
+
+.margin {
   margin-right: 0.2vw;
 }
 </style>

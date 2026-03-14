@@ -48,7 +48,17 @@ const iconBar = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #a2a2a2;
-  margin: 20px 0;
+  color: color-mix(in srgb, var(--main-color), transparent 28%);
+  margin: 8px 0 14px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  border: 1px solid var(--main-border-color);
+  background: var(--panel-muted-bg);
+}
+
+.song-display {
+  font-size: calc(var(--main-font-size) + 2px);
+  font-weight: 700;
+  color: var(--main-color);
 }
 </style>
